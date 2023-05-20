@@ -1,0 +1,1025 @@
+<books>
+    <!-- 
+    <book>
+      <module type="bibl">
+        <title sort=""/>
+        <subtitle/>
+        <type>Monograph</type>
+        <author sort="">
+            <firstname/>
+            <lastname/>
+        </author>
+        <volume/>
+        <series/>
+        <edition/>
+        <editor/>
+        <place/>
+        <publisher/>
+        <date/>
+        <generalnote/>
+        <location/>
+        <IIIF>
+            <IIIFmanifest/>
+            <IIIFviewer/>
+        </IIIF>
+      </module>
+    </book>
+    -->
+    
+    <book id="o530758" type="EL">
+        <module type="bibl">
+            <author sort="Bolle">
+                <firstname>Fritz</firstname>
+                <lastname>Bolle</lastname>
+            </author>
+            <title sort="Wund">Wunder der Vererbung</title>
+            <subtitle/>
+            <type>Monograph</type>
+            <volume/>
+            <series/>
+            <edition/>
+            <editor/>
+            <place>Murnau</place>
+            <publisher>Sebastian Lux</publisher>
+            <date>1951</date>
+            <generalnote/>
+            <location>Wellcome Collection</location>
+            <IIIF>
+                <IIIFmanifest>https://iiif.wellcomecollection.org/presentation/v2/b18035723</IIIFmanifest>
+                <IIIFviewer>https://wellcomecollection.org/works/krqp99r9/items</IIIFviewer>
+            </IIIF>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>1</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>2</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0003.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>3</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0004.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>4</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0005.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>5</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0006.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>6</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0007.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>7</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0008.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>8</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0009.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>9</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0010.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>10</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0011.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>11</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0012.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>12</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0013.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>13</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0014.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>14</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0015.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>15</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0016.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>16</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0017.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>17</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0018.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>18</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0019.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>19</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0020.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>20</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0021.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>21</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0022.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>22</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0023.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>23</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0024.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>24</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0025.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>25</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0026.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>26</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0027.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>27</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0028.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>28</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0029.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>29</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0030.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>30</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0031.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>31</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0032.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>32</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0033.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>33</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0034.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>34</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0035.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>35</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0036.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>36</pagenumber>
+                <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0002.JP2/full/680,/0/default.jpg</facsimile>
+            </page>
+        </module>
+    </book>
+    
+    <book type="EL" id="DUC-MEC">
+        <module type="bibl">
+            <title sort="Livre des proprietes des choses">Mécanisme de la physionomie humaine, ou, Analyse électro-physiologique de l'expression des passions: Album</title>
+            <type>Monograph</type>
+            <author sort="Duchenne">
+                <firstname>G.-B.</firstname>
+                <lastname>Duchenne</lastname>
+            </author>
+            <volume/>
+            <series/>
+            <editor/>
+            <place>Paris</place>
+            <publisher>Veuve Renouard</publisher>
+            <date>1862</date>
+            <generalnote/>
+            <location>Cambridge University Library</location>
+            <IIIF>
+                <IIIFmanifest>https://cudl.lib.cam.ac.uk//iiif/PH-DAR-LIB-00160</IIIFmanifest>
+                <IIIFviewer>https://cudl.lib.cam.ac.uk/mirador/PH-DAR-LIB-00160/0</IIIFviewer>
+            </IIIF>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00001.jp2/full/680,/0/default.jpg</facsimile>   
+            </page>
+            <page>
+                <pagenumber>tp</pagenumber>
+                <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00003.jp2/full/680,/0/default.jpg</facsimile>   
+            </page>
+            <page>
+                <pagenumber>1</pagenumber>
+                <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00007.jp2/full/680,/0/default.jpg</facsimile> 
+                
+                <!-- zone -->
+                <zone>
+                    <number>1</number>
+                    <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00007.jp2/501,8507,2672,929/500,/0/default.jpg</facsimile>
+                    <position>815</position>
+                    <rn>
+                        <transcription>something</transcription>
+                        <writingtool/>
+                        <extracts>something</extracts>
+                    </rn>
+                </zone>
+                
+                <!-- zone -->
+                <zone>
+                    <number>2</number>
+                    <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00007.jp2/3163,8351,3549,1367/500,/0/default.jpg</facsimile>
+                    <position>800</position>
+                    <rn>
+                        <transcription><m>levator</m></transcription>
+                        <writingtool/>
+                        <extracts/>
+                    </rn>
+                    <type>marginalia</type>
+                </zone>
+            </page>
+            <page>
+                <pagenumber>2</pagenumber>
+                <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00008.jp2/full/680,/0/default.jpg</facsimile>
+
+            </page>
+            <page>
+                <pagenumber>19</pagenumber>
+                <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00025.jp2/full/680,/0/default.jpg</facsimile>   
+                
+                <zone>
+                    <number>1</number>               
+                    <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00025.jp2/319,3922,1109,728/500,/0/default.jpg</facsimile>
+                    <type>marginalia</type>
+                    <position>500</position>
+                    <rn>
+                        <transcription><m>both nerves from same main branch.</m></transcription>
+                        <writingtool>grey pencil</writingtool>
+                        <extracts>Le sourcilier (O, fig. 1), recouvert par l'orbiculaire supérieur, / ne peut être excité que par l'intermédiaire de son filet / moteur, en dehors des fibres les plus excentriques de l'orbiculaire / supérieur, filet qui vient du palpébral supérieur, et qui / est sous-cutané dans deux points (voy. I, fig. 2).</extracts>
+                    </rn>
+                </zone>
+                
+            </page>
+            <page>
+                <pagenumber>20</pagenumber>
+                <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00026.jp2/full/680,/0/default.jpg</facsimile>
+                <!-- zone -->
+                <zone>
+                    <number>1</number>
+                    <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00026.jp2/3758,2933,2651,501/500,/0/default.jpg</facsimile>
+                    <type>marginalia</type>
+                    <position>281</position>
+                    <rn>
+                        <transcription><m>Enfin</m></transcription>
+                        <writingtool/>
+                        <extracts>l'expérience</extracts>
+                    </rn>
+                </zone>
+            </page>
+            <page>
+                <pagenumber>29</pagenumber>
+                <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00035.jp2/full/680,/0/default.jpg</facsimile> 
+                <zone>
+                    <number>1</number>               
+                    <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00035.jp2/1003,5324,2369,639/500,/0/default.jpg</facsimile>
+                    <position>670</position>
+                    <rn>
+                        <transcription><u>tempérament lascif ou aux habitudes lubriques</u></transcription>
+                        <writingtool>grey pencil</writingtool>
+                        <extracts>représentant, en général, l'attitude du nez, chez les sujets / d'un tempérament lascif ou aux habitudes lubriques. / (Il existe des variétés individuelles qui dépendent de la / forme du nez.)</extracts>
+                    </rn>
+                </zone>
+                <zone>
+                    <number>2</number>               
+                    <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00035.jp2/762,7014,1597,710/500,/0/default.jpg</facsimile>
+                    <type>marginalia</type>
+                    <position>870</position>
+                    <rn>
+                        <transcription><m>Is not this fancy?</m></transcription>
+                        <writingtool>grey pencil</writingtool>
+                        <extracts>représentant, en général, l'attitude du nez, chez les sujets / d'un tempérament lascif ou aux habitudes lubriques. / (Il existe des variétés individuelles qui dépendent de la / forme du nez.)</extracts>
+                    </rn>
+                </zone>
+            </page>
+        </module>
+       </book>
+
+
+    
+    <book type="EL" id="ARA-LIB">
+        <module type="bibl">
+            <title sort="Le Libertinage">Le Libertinage</title>
+            <type>Monograph</type>
+            <author sort="Aragon">
+                <firstname>Louis</firstname>
+                <lastname>Aragon</lastname>
+            </author>
+            <volume/>
+            <editor/>
+            <place>Paris</place>
+            <publisher>Éditions de la Nouvelle Revue Française</publisher>
+            <date>1924</date>
+            <edition>1st</edition>
+            <generalnote/>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>ARA-LIB/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp</pagenumber>
+                <facsimile>ARA-LIB/tp.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>24</pagenumber>
+                <facsimile>ARA-LIB/24.jpg</facsimile>
+                <zone>
+                    <number>1</number>
+                    <facsimile>ARA-LIB/zones/24(1).jpg</facsimile>
+                    <type>marginalia</type>
+                    <position>457</position>
+                    <rn>
+                       <transcription><m>capharnaum</m> / un <u>capharnaüm</u> sensible</transcription>
+                        <writingtool>Red ink</writingtool>
+                        <extracts>Il faut comprendre qu'ainsi jamais un mot pour moi / ne fait tableau
+                            à lui tout seul, mais lié à une multitude / de pensées, de sons informes,
+                            de calembours, de cris, / d'images, d'animaux, de caresses, de magasins,
+                            de / journaux illustrés, tout un capharnaüm sensible, / duquel je refuse de
+                            faire une seule fois abstraction.</extracts>
+                    </rn>
+                </zone>
+            </page>
+        </module>
+    </book>
+
+    <book type="VL" id="ARD-SAI">
+        <module type="bibl">
+            <title sort="Saint Patrick AD 180">Saint Patrick AD 180</title>
+            <type>Monograph</type>
+            <author sort="Ardill">
+                <firstname>John Roche</firstname>
+                <lastname>Ardill</lastname>
+            </author>
+            <volume/>
+            <editor/>
+            <place>London</place>
+            <place>Dublin</place>
+            <!-- When a book is published by multiple publishers in multiple places
+                you can encode them like this: -->
+            <publisher place="London">John Murray</publisher>
+            <publisher place="Dublin">Hodges &amp; Figgis</publisher>
+            <date>n.d.</date>
+            <edition/>
+            <centimeters/>
+            <generalnote>This book has been labeled as "VIRTUAL", it is not extant, but the editor
+                has good reason to believe the writer read the book at some point.</generalnote>
+        </module>
+    </book>
+
+    <book type="EL" id="BEC-MOR">
+        <module type="bibl">
+            <title sort="More Pricks Than Kicks">More Pricks Than Kicks</title>
+            <type>Monograph</type>
+            <author sort="Beckett">
+                <firstname>Samuel</firstname>
+                <lastname>Beckett</lastname>
+            </author>
+            <volume/>
+            <editor/>
+            <place>London</place>
+            <publisher>Chatto and Windus</publisher>
+            <date>1934</date>
+            <generalnote/>
+            <imagecopyright>Image taken from http://www.abebooks.co.uk/</imagecopyright>
+        </module>
+        <module type="prop">
+            <library>
+                <name>University of Buffalo</name>
+                <cataloguenumber>PLJJ18</cataloguenumber>
+            </library>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>BEC-MOR/cover.jpg</facsimile>
+            </page>
+        </module>
+    </book>
+
+    <book type="EL" id="BOU-SOI">
+        <module type="bibl">
+            <title sort="Soirees du Grammaire-Club">Les Soirées du Grammaire-Club</title>
+            <type>Monograph</type>
+            <author sort="Boulenger">
+                <firstname>Jacques</firstname>
+                <lastname>Boulenger</lastname>
+            </author>
+            <author>
+                <firstname>André</firstname>
+                <lastname>Thérive</lastname>
+            </author>
+            <volume/>
+            <editor/>
+            <place>Paris</place>
+            <publisher>Librairie Plon. Plon-Nourrit et C<sup>ie</sup>, Imprimeurs-éditeurs</publisher>
+            <date>1924</date>
+            <edition/>
+            <publishersaddress>8, Rue Garancière - 6e, Paris</publishersaddress>
+            <generalnote>This book has two authors.</generalnote>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>BOU-SOI/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp</pagenumber>
+                <facsimile>BOU-SOI/tp.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>91</pagenumber>
+                <facsimile>BOU-SOI/91.jpg</facsimile>
+                <zone>
+                    <number>1</number>
+                    <facsimile>BOU-SOI/zones/91(1).jpg</facsimile>
+                    <type>marginalia</type>
+                    <position>412</position>
+                    <rn>
+                        <transcription><m>X</m> / <u>snobs</u> / <m>snobs</m></transcription>
+                        <writingtool>Red ink</writingtool>
+                        <extracts>Mais quels sont ces gens "distingués"? Des Hutins! / puis des
+                            demi-lettrés de toutes sortes, fiers de faire / paraître ainsi quelle est
+                            la qualité de leur culture; / mais surtout des snobs: ceux-là mêmes qui ne /
+                            manquent jamais de prononcer avec "le plus pur / accent britannique"
+                                <i>square, rail, clown, football association, / cross country, rallye
+                                paper</i> ou <i>garden party</i>, / au lieu de dire ces mots comme on
+                            les entend communément: / squâre, raille, cloune, foutebolle association, /
+                            etc. Prétention enfin, Prétention et Pédanterie!</extracts>
+                    </rn>
+                </zone>
+                <zone>
+                    <number>2</number>
+                    <facsimile>BOU-SOI/zones/91(2).jpg</facsimile>
+                    <position>788</position>
+                    <rn>
+                        <transcription><u>home</u> / <m>homme?</m></transcription>
+                        <writingtool>Red ink</writingtool>
+                        <extracts>J'ai lu cette promesse à l'entrée d'un asile fondé / par une société
+                            protestante de bienfaisance: / Les jeunes filles y trouveront un home.</extracts>
+                    </rn>
+                </zone>
+            </page>
+
+        </module>
+    </book>
+    
+    <book type="EL" id="CAS-ELE">
+        <module type="bibl">
+            <title sort="Elements of Euclid">Elements of Euclid</title>
+            <type>Monograph</type>
+            <author sort="Casey"><firstname>John</firstname> <lastname>Casey</lastname></author>
+            <volume/>
+            <editor/>
+            <place>Dublin</place>
+            <place>London</place>
+            <publisher place="Dublin">Hodges, Figgis &amp; Co., Ltd.</publisher>
+            <publisher place="London">Longmans, Green &amp; Co.</publisher>
+            <date>1907</date>
+            <firstedition>1892</firstedition>
+            <edition>18th</edition>
+            <centimeters/>
+            <publishersaddress>Curzon Street Mayfair</publishersaddress>
+            <generalnote>This book illustates how to encode the date of the first edition.</generalnote>
+            <uncutpages/>
+        </module>
+        <module type="prop">
+            <library><name>University of Buffalo</name><cataloguenumber>PLJJ36</cataloguenumber></library>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>CAS-ELE/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp</pagenumber>
+                <facsimile>CAS-ELE/tp.jpg</facsimile>
+            </page>
+        </module>
+    </book>
+    
+    <book type="VL" id="CHE-SCE">
+        <module type="bibl">
+            <title sort="Scenes from Irish History">Scenes from Irish History</title>
+            <type>Monograph</type>
+            <author sort="Cherry"><firstname>Maud Henrietta</firstname> <lastname>Cherry</lastname></author>
+            <volume/>
+            <editor/>
+            <place>Dublin</place>
+            <publisher>Hodges, Figgis &amp; Co.</publisher>
+            <date>1927</date>
+            <edition/>
+           <generalnote>This book has been labeled as "VIRTUAL", it is not extant, but the editor
+              has good reason to believe the writer read the book at some point.</generalnote>
+        </module>
+    </book>
+    
+    <book type="EL" id="DAR-ORI">
+        <module type="bibl">
+            <title sort="Origin of Species">On the Origin of Species by Means of Natural Selection or the Preservation of Favoured Races in the Struggle for Life</title>
+            <type>Monograph</type>
+            <author sort="Darwin"><firstname>Charles</firstname> <lastname>Darwin</lastname></author>
+            <place>London</place>
+            <publisher>Grant Richards</publisher>
+            <date>1902</date>
+            <edition/>
+            <generalnote/>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>DAR-ORI/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp1</pagenumber>
+                <facsimile>DAR-ORI/tp1.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp2</pagenumber>
+                <facsimile>DAR-ORI/tp2.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>56</pagenumber>
+                <facsimile>DAR-ORI/56.jpg</facsimile>
+                <zone>
+                    <number>1</number>
+                    <facsimile>DAR-ORI/zones/56(1).jpg</facsimile>
+                    <type>marginalia</type>
+                    <position>880</position>
+                    <rn><transcription><u>How have all those exquisite adaptations of / one part of the organisation to another part, and to the / conditions of life, and of one distinct organic being to / another being, been perfected?</u> / <m>woodpecker</m></transcription>
+                        <writingtool>Red ink</writingtool>
+                        <extracts>But the mere existence of individual / variability and of some few well-marked varieties, / though necessary as the foundation for the work, helps / us but little in understanding how species arise in / nature. How have all those exquisite adaptations of / one part of the organisation to another part, and to the / conditions of life, and of one distinct organic being to / another being, been perfected? We see these beautiful / co-adaptations most plainly in the woodpecker and
+                        </extracts>
+                    </rn>
+                </zone>
+            </page>
+        </module>
+    </book>
+    
+    <book type="EL" id="DAN-NOT">
+        <module type="bibl">
+            <title sort="Notturno">Notturno</title>
+            <type>Monograph</type>
+            <author sort="DAnnunzio"><firstname>Gabriele</firstname> <lastname>D'Annunzio</lastname></author>
+            <volume/>
+            <editor/>
+            <place>Milano</place>
+            <publisher>Presso I. Fratelli Treves</publisher>
+            <date>1921</date>
+            <edition/>
+            <centimeters/>
+            <generalnote/>
+        </module>
+        <module type="prop">
+            <type>received</type>
+            <dateofacquisition/>
+            <origin>Here you can describe the provenance of a book.</origin>
+            <dedication>This is a sample dedication.</dedication>
+        </module>
+    </book>
+    
+    <book type="EL" id="ELI-WAS">
+        <module type="bibl">
+            <title sort="The Waste Land">The Waste Land</title>
+            <type>Monograph</type>
+            <author sort="Eliot"><firstname>T.S.</firstname> <lastname>Eliot</lastname></author>
+            <place>New York</place>
+            <publisher>Boni and Liveright</publisher>
+            <date>1922</date>
+            <generalnote/>
+        </module>
+    </book>
+    
+    <book type="EL" id="FLE-BOU">
+        <module type="bibl">
+            <title sort="Boulogne-sur-mer: St. Patrick">Boulogne-sur-mer: St. Patrick's Native Town</title>
+            <type>Monograph</type>
+            <author sort="Fleming"><firstname>William Canon</firstname> <lastname>Fleming</lastname></author>
+            <volume/>
+            <editor/>
+            <place>London</place>
+            <publisher>R. &amp; T. Washbourne, London</publisher>
+            <date>1907</date>
+            <edition/>
+            <nrofpages>92</nrofpages>
+            <publishersaddress>12 &amp; 4 Paternoster Row, London</publishersaddress>
+            <generalnote/>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>FLE-BOU/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>28</pagenumber>
+                <facsimile>FLE-BOU/28.jpg</facsimile>
+                <zone>
+                    <number>1</number>
+                    <facsimile>FLE-BOU/zones/28(1).jpg</facsimile>
+                    <position>417</position>
+                    <rn><transcription><u>Armorica</u> / <u>Little Brittany</u></transcription>
+                        <handwriting>JJ</handwriting>
+                        <writingtool>lead pencil</writingtool>
+                        <extracts>"By this expression it is supposed," continues / Keating, "that Niall of the Nine Hostages waged war / against Britain or Wales, and perhaps made a conquest / of the country; <i>and it is more than probable</i> that, when the / Irish prince had finished his design upon the kingdom / of Wales, he carried his arms in a fleet to France and / invaded the country at the time called Armorica, but / now Little Brittany, and from thence he led St. Patrick / and his two sisters into captivity.</extracts>
+                    </rn>
+                </zone>
+            </page>
+        </module>
+    </book>
+    
+    <book type="VL" id="GWY-HIS">
+        <module type="bibl">
+            <title sort="History of Ireland">The History of Ireland</title>
+            <type>Monograph</type>
+            <author sort="Gwyn"><firstname>Stephen</firstname> <lastname>Gwynn</lastname></author>
+            <place>Dublin</place>
+            <publisher>Talbot Press</publisher>
+            <date>1924</date>
+            <generalnote/>
+        </module>
+    </book>
+    
+    <book type="EL" id="HEM-FAR">
+        <module type="bibl">
+            <title sort="Farewell to Arms">A Farewell to Arms</title>
+            <type>Monograph</type>
+            <author sort="Hemingway"><firstname>Ernest</firstname> <lastname>Hemingway</lastname></author>
+            <volume/>
+            <editor/>
+            <place>New York</place>
+            <publisher>Charles Scribner's Sons</publisher>
+            <date>1929</date>
+            <edition/>
+            <centimeters/>
+            <generalnote/>
+            <imagecopyright>Image taken from http://wwwmanhattanrarebooks-literature.com</imagecopyright>
+        </module>
+        <module type="pages">
+        <page>
+            <pagenumber>cover</pagenumber>
+            <facsimile>HEM-FAR/cover.jpg</facsimile></page>
+        </module>
+    </book>
+    
+    <book type="EL" id="IBS-PEE">
+        <module type="bibl">
+            <title sort="Peer Gynt">Peer Gynt</title>
+            <type>Monograph</type>
+            <author sort="Ibse"><firstname>Henrik</firstname> <lastname>Ibsen</lastname></author>
+            <place>London</place>
+            <publisher>J.M. Dent &amp; Sons, Ltd. (Everyman)</publisher>
+            <date>1934</date>
+            <editor type="translation">R. Farquharson Sharp</editor>
+            <generalnote>This book illustrates how to encode the translator of a book.</generalnote>
+            <uncutpages>no</uncutpages>
+        </module>
+        <module type="prop">
+            <library><name>University of Buffalo</name><cataloguenumber>PLJJ157</cataloguenumber></library>
+        </module>
+    </book>
+    
+    <book type="EL" id="JAN-BAI">
+        <module type="bibl"><title sort="Baigneuse">La Baigneuse</title>
+            <type>Monograph</type>
+            <author sort="Janvier"><firstname>Ludovic</firstname> <lastname>Janvier</lastname></author>
+            <place>Paris</place>
+            <publisher>Gallimard NRF</publisher>
+            <date>1968</date>
+            <edition/>
+            <generalnote/>
+            <uncutpages>no</uncutpages>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>JAN-BAI/cover.jpg</facsimile>
+            </page>
+        </module>
+    </book>
+    
+    <book type="EL" id="JOY-EXI">
+        <module type="bibl">
+            <title sort="Exiles">Exiles</title>
+            <subtitle>A Play in Three Acts</subtitle>
+            <type>Play</type>
+            <author sort="Joyce"><firstname>James</firstname> <lastname>Joyce</lastname></author>
+            <place>London</place>
+            <publisher>Grant Richards Ltd.</publisher>
+            <publishersaddress>St Martin's Street</publishersaddress>
+            <date>1918</date>
+            <edition/>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>JOY-EXI/cover.jpg</facsimile>
+            </page>
+        </module>
+    </book>
+    
+    <book type="VL" id="KNO-DIA">
+        <module type="bibl">
+            <title sort="Diary of a Young Lady of Fashion">Diary of a Young Lady of Fashion in the year 1764-1765</title>
+            <type>Monograph</type>
+            <author sort="Knox"><firstname>Cleone</firstname> <lastname>Knox</lastname></author>
+            <place>London</place>
+            <publisher>T. Butterworth</publisher>
+            <date>1925</date>
+            <generalnote>This book has been labeled as "VIRTUAL", it is not extant, but the editor
+                has good reason to believe the writer read the book at some point.</generalnote>
+
+        </module>
+    </book>
+    
+    <book type="EL" id="LEO-CAN">
+        <module type="bibl"><title sort="Canti">I Canti</title>
+            <type>Monograph</type>
+            <author sort="Leopardi"><firstname>Giacomo</firstname> <lastname>Leopardi</lastname></author>
+            <volume/>
+            <editor>Ettore Fabietti</editor>
+            <place>Milan</place>
+            <publisher>Casa per Edizioni Popolari</publisher>
+            <date>1936</date>
+            <edition/>
+            <generalnote/>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>LEO-CAN/cover.jpg</facsimile>
+            </page>
+        </module>
+    </book>
+    
+    <book type="EL" id="MCG-POE">
+        <module type="bibl">
+            <title sort="Poems">Poems</title>
+            <type>Collection of Poems</type>
+            <author sort="McGreevy"><firstname>Thomas</firstname> <lastname>McGreevy</lastname></author>
+            <volume/>
+            <editor/>
+            <place>London</place>
+            <publisher>William Heinemann Ltd.</publisher>
+            <date>1934</date>
+            <edition/>
+            <generalnote/>
+        </module>
+    </book>
+    
+    <book type="EL" id="IRE-OIL">
+        <module type="bibl">
+            <title sort="Catalogue of Oil Pictures in the General Collection">Catalogue of Oil Pictures in the General Collection</title>
+            <type>Monograph</type>
+            <author sort="National Gallery of Ireland">
+                <firstname/>
+                <lastname>National Gallery of Ireland</lastname>
+            </author>
+            <publisher>Stationary Office</publisher>
+            <place>Dublin</place>
+            <location>Lilly Library - Indiana University Bloomington</location>
+            <date>1932</date>
+           <generalnote>This entry illustrates how to encode the current location of a book.</generalnote>
+            <edition>Sixth and revised edition</edition>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>IRE-OIL/cover.jpg</facsimile></page>
+        </module>
+    </book>
+    
+    <book type="VL" id="ODO-VOC">
+        <module type="bibl">
+            <title sort="Vocations">Vocations</title>
+            <type>Monograph</type>
+            <author sort="O'Donovan"><firstname>Gerald</firstname> <lastname>O'Donovan</lastname></author>
+            <volume/>
+            <editor/>
+            <place>London</place>
+            <publisher>Martin Secker</publisher>
+            <date>1921</date>
+            <edition/>
+            <generalnote/>
+        </module>
+    </book>
+    
+    <book type="EL" id="PET-RIM-1">
+        <module type="bibl">
+            <title sort="Rime del Petrarca">Le Rime del Petrarca</title>
+            <type>Monograph</type>
+            <volume>1</volume>
+            <author sort="Petrarca"><firstname>Francesco</firstname> <lastname>Petrarca</lastname></author>
+            <place>Milan</place>
+            <publisher>Nicolò Bettoni</publisher>
+            <date>1824</date>
+            <location>The private collection of Anne Atik, Paris</location>
+            <generalnote>This entry illustrates how to encode the current location of a book.</generalnote>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>PET-RIM-1/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp</pagenumber>
+                <facsimile>PET-RIM-1/tp.jpg</facsimile></page>
+        </module>
+    </book>
+    
+    <book type="EL" id="QUI-MAR">
+        <module type="bibl">
+            <title sort="Marcel Proust sa vie son oeuvre">Marcel Proust, sa vie, son œuvre, suivi de: Le Comique et le mystère chez Proust</title>
+            <type>Monograph</type>
+            <author sort="Quint"><firstname>Léon–Pierre</firstname> <lastname>Quint</lastname></author>
+            <place>Paris</place>
+            <publisher>Simon Kra</publisher>
+            <date>1928</date>
+            <firstedition>1925</firstedition>
+            <edition>rev. ed.</edition>
+            <generalnote/>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>QUI-MAR/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp</pagenumber>
+                <facsimile>QUI-MAR/tp.jpg</facsimile>
+            </page>
+        </module>
+    </book>
+    
+    <book type="EL" id="REN-COR">
+        <module type="bibl">
+            <title sort="Correspondance de Jules Renard 1864 1910">Correspondance de Jules Renard 1864–1910</title>
+            <type>Monograph</type>
+            <author sort="Renard"><firstname>Jules</firstname> <lastname>Renard</lastname></author>
+            <place>Paris</place>
+            <publisher>François Bernouard</publisher>
+            <date>1928</date>
+            <edition/>
+            <generalnote>This is number 379 of 3075 copies</generalnote>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>REN-COR/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp</pagenumber>
+                <facsimile>REN-COR/tp.jpg</facsimile>
+            </page>
+        </module>
+    </book>
+    
+    <book type="EL" id="SUL-BOO">
+        <module type="bibl">
+            <title sort="Book of Kells">The Book of Kells</title>
+            <type>Monograph</type>
+            <author sort="Sullivan"><firstname>Edward</firstname> <lastname>Sullivan</lastname></author>
+            <volume/>
+            <editor/>
+            <place>London</place>
+            <place>Paris</place>
+            <place>New York</place>
+            <publisher>"The Studio" LTD</publisher>
+            <date>1920</date>
+            <edition>Second Edition</edition>
+            <generalnote>This is a book with one publisher and three placenames.</generalnote>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>SUL-BOO/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp</pagenumber>
+                <facsimile>SUL-BOO/tp.jpg</facsimile>
+            </page>
+        </module>
+    </book>
+    
+    <book type="EL" id="TOL-ESS">
+        <module type="bibl">
+            <title sort="Essays and Letters">Essays and Letters</title>
+            <type>Monograph</type>
+            <author sort="Tolstoy"><firstname>Leo</firstname> <lastname>Tolstoy</lastname></author>
+            <volume/>
+            <editor type="translation">Aylmer Maude</editor>
+            <place>London</place>
+            <publisher>Henry Frowde</publisher>
+            <date>1904</date>
+            <edition/>
+            <generalnote/>
+        </module>
+    </book>
+    
+    <book type="EL" id="VAL-SER">
+        <module type="bibl">
+            <title sort="Serpent">Le Serpent</title>
+            <type>Monograph</type>
+            <author sort="Valery"><firstname>Paul</firstname> <lastname>Valéry</lastname></author>
+            <volume/>
+            <editor/>
+            <place>Paris</place>
+            <publisher>Éditions de la Nouvelle Revue Française</publisher>
+            <date>1922</date>
+            <edition>1st</edition>
+            <nrofpages>20</nrofpages>
+            <generalnote>Inscribed to James Joyce by the author.</generalnote>
+        </module>
+        <module type="prop">
+            <type>received</type>
+            <origin>This book was sent to Joyce by Paul Valéry.</origin>
+            <dedication>A JAMES JOYCE <lb/> Paul Valéry <lb/> "JE MORDS CE QUE JE PUIS!"</dedication>
+            <library>
+                <name>University of Buffalo</name>
+                <cataloguenumber>PLJJ299</cataloguenumber>
+            </library>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>tp1</pagenumber>
+                <facsimile>VAL-SER/tp1.jpg</facsimile>
+            </page>
+        </module>
+    </book>
+    
+    <book type="EL" id="WES-APP">
+        <module type="bibl">
+            <title sort="Apple of the Eye">The Apple of the Eye</title>
+            <type>Monograph</type>
+            <author sort="Wescott"><firstname>Glenway</firstname> <lastname>Wescott</lastname></author>
+            <volume/>
+            <editor/>
+            <place>New York</place>
+            <publisher>The Dial Press</publisher>
+            <date>1924</date>
+            <edition/>
+            <generalnote/>
+        </module>
+        <images/>
+    </book>
+    
+    <book type="EL" id="YEA-COL">
+        <module type="bibl">
+            <title sort="Collected Poems">The Collected Poems</title>
+            <type>Collection of Poems</type>
+            <author sort="Yeats"><firstname>William Butler</firstname> <lastname>Yeats</lastname></author>
+            <volume/>
+            <editor/>
+            <place>London</place>
+            <publisher>Macmillan &amp; Co., Limited</publisher>
+            <date>1934</date>
+            <edition/>
+            <generalnote/>
+        </module>
+        <images/>
+    </book>
+    
+    <book type="VL" id="ZIM-PEL">
+        <module type="bibl">
+            <title sort="Pelagius in Irland">Pelagius in Irland</title>
+            <type>Monograph</type>
+            <author sort="Zimmer"><firstname>Heinrich</firstname> <lastname>Zimmer</lastname></author>
+            <volume/>
+            <editor/>
+            <place>Berlin</place>
+            <publisher>Weidmann</publisher>
+            <date>1901</date>
+            <edition/>
+            <generalnote>This book has been labeled as "VIRTUAL", it is not extant, but the editor
+                has good reason to believe the writer read the book at some point.</generalnote>
+        </module>
+        <images/>
+    </book>
+</books>

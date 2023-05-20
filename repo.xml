@@ -1,0 +1,12 @@
+<meta xmlns="http://exist-db.org/xquery/repo">
+  <description>Writer's Library</description>
+  <author>Antwerp Toolkit for Digital Scholarly Editing</author>
+  <website>https://www.uantwerpen.be/CMG</website>
+  <status>stable</status>
+  <license>AGPL-3.0</license>
+  <copyright>true</copyright>
+  <type>application</type>
+  <target>writerslibrary</target>
+  <prepare>pre-install.xq</prepare>
+  <finish>post-install.xq</finish>
+<deployed>2023-05-18T11:51:52.391+02:00</deployed></meta>

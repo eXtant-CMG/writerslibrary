@@ -1,0 +1,290 @@
+/* new book */
+
+#new-book-form label.input {
+    display: inline-block;
+    min-width:110px;
+}
+
+#new-book-form label.fieldset {
+    display: inline-block;
+    min-width:93px;
+}
+
+#new-book-form input:not([type="radio"]):not([type="checkbox"]) {
+    min-width: 200px;
+}
+
+#new-book-form input:not([type="radio"]).long {
+    min-width: 380px;
+}
+
+#new-book-form label.checkbox {
+display: inline-block;
+font-weight: bold;
+}
+
+#new-book-form textarea {
+    min-width: 380px;
+}
+
+.grid-container {
+         display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: 1fr;
+        grid-column-gap: 20px;
+        grid-row-gap: 0px;   
+}
+
+#form-div {
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+#textarea-div {
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+#new-book-textarea {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid black;
+        width:92%;
+        min-height:500px;
+
+    }
+
+.admin-tools-new-book-p {
+    margin: 8px;
+}
+
+.bold {
+    font-weight:bold;
+}
+
+#confirm-ID-button, #new-book-import-iiif {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: #2a7e70;
+    color: white;
+    cursor: pointer;
+}
+
+#confirm-ID-button:hover, #new-book-import-iiif:hover {
+        background-color: #003828;
+    }
+    
+.hidden {
+    display:none;
+}
+
+.error {
+    color:red;
+}
+
+.spacer {
+    min-height:300px;
+}
+
+/* import from IIIF manifest */
+
+#about {
+    margin-top:15px;
+}
+
+.admintools {
+    position:relative;
+    background-color: #eaf8f6;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px #888888;
+    padding: 10px;
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+.admintools h4 {
+    border-bottom: 1px solid black;
+}
+
+form.iiif-manifest-link {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        margin-bottom: 20px;
+        margin-top: 20px;
+        align-items: baseline;
+    }
+    #iiif-manifest-link-label {
+        margin-bottom: 10px;
+        margin-right: 10px;
+        color: #2a7e70;
+        font-weight: bold;
+        font-size:1.2em;
+    }
+    #iiif-manifest-link {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        width: 400px;
+    }
+    #iiif-manifest-link-submit {
+        padding: 10px 20px;
+        border-radius: 5px;
+        border: none;
+        margin-left: 10px;
+        background-color: #2a7e70;
+        color: white;
+        cursor: pointer;
+    }
+    #iiif-manifest-link-submit:hover {
+        background-color: #003828;
+    }
+    #link-container {
+        position: relative;
+        width:95%;
+    }
+    #copyButton {
+        position: absolute;
+        right: 0;
+        margin-top:15px;
+        padding: 10px 20px;
+        border-radius: 5px;
+        border: none;
+        background-color: #2a7e70;
+        color: white;
+        cursor: pointer;
+    }
+    #copyButton:hover {
+        background-color: #003828;
+    }
+    
+    #copyButtonNewBook {
+        position: absolute;
+        right: 42px;
+        margin-top:16px;
+        padding: 10px 20px;
+        border-radius: 5px;
+        border: none;
+        background-color: #2a7e70;
+        color: white;
+        cursor: pointer;
+    }
+    
+    #copyButtonNewBook:hover {
+        background-color: #003828;
+    }    
+
+    #iiif-manifest-link-textarea {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid black;
+        width:100%;
+        min-height:400px;
+
+    }
+    
+    code {
+    margin: 0px 2px;
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    padding: 1px 4px;
+    box-sizing: border-box;
+    font-weight: 500;
+    }
+    
+/*  Zone coordinates tool */
+
+      input.iiif_link { width:400px; vertical-align:5px; }
+      
+      .coordinates-selected { margin: 8px 0 8px 0; }
+      
+      .textarea-container { 
+          white-space: nowrap; 
+          position: relative;
+          }
+      
+      .crop-align{ width: 700px; }
+      
+      #cropping_tool {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: 1fr;
+        grid-column-gap: 20px;
+        grid-row-gap: 0px;}
+        
+      .cropping_image_container {width: 700px;}
+      
+      .nav-box {width: 400px;}
+      
+      #iiif_textarea {
+        width:400px;
+        min-height:250px;
+        padding: 10px;
+    border-radius: 5px;
+    border: 1px solid black;}
+        
+      .admin-tools-open-in-zone-tool {
+          margin-top:20px;
+          display:block;
+          margin-bottom:10px;
+      }
+      
+      .admin-tools-heading, .admin-tools-zone-tool-name {
+      color: #003828;
+      font-weight: bold;
+      
+      }
+      
+      #page-to-open {
+      font-weight: bold;
+      }
+      
+      #page-to-open-link {
+         /*  text-decoration: underline; */
+      }
+
+      .admin-tools-zone-tool-heading {
+          display:block;
+          width: 100%;
+          border: 1px solid #003828;
+          background-color: #003828;
+          padding: 10px;
+          color:#e9fff9;
+          font-weight:bold;
+      }
+      
+     .admin-tools-zone-tool-ID {
+          color: #00fcb4;
+     }
+      
+      .admin-tools-back-button, #zone-tool-previewButton {
+          padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: #2a7e70;
+    color: white;
+    cursor: pointer;
+      }
+      
+      .admin-tools-back-button:hover, #zone-tool-previewButton:hover {
+        background-color: #003828;
+    }
+    
+    #zone-tool-copyButton {
+            position: absolute;
+        right: 0;
+        margin-top:15px;
+        padding: 10px 20px;
+        border-radius: 5px;
+        border: none;
+        background-color: #2a7e70;
+        color: white;
+        cursor: pointer;
+    }
+    #zone-tool-copyButton:hover {
+        background-color: #003828;
+    }
+    
+    .notification {
+        border-left: 4px solid #003828;
+        padding: 10px;
+    }

@@ -1,0 +1,50 @@
+<div xmlns="http://www.w3.org/1999/xhtml" data-template="templates:surround" data-template-with="templates/library/library-page.html" data-template-at="content">
+    <div id="main">
+        
+        <div id="header">
+            <p style="float: right !important;padding-right:20px;margin: 0px 0px 0px 0px;">
+                <a style="text-decoration:none;color:black;cursor:pointer;" data-toggle="modal" data-target="#guideModal" title="Manual for the Library">
+                    <span class="library-functions:manualnav"/>
+                    <span class="glyphicon glyphicon-book" aria-hiddden="true"/>
+                </a>
+            </p>
+            <!-- sort and browse div -->
+            <div data-template="library-browse:navbar"/>
+            
+        </div>
+        
+<div id="body">
+
+  <div id="home-grid-container">
+    <div id="about">
+        <h4>Welcome to Bibundina</h4>
+        
+        <p>This writer's library application aims to provide an environment both to create and to publish an edition of a collection of books and the reading traces in them. Such an edition can contain not just the bibliographic details of those books, but also focus on the marginalia left in them by the writers, as well as include information about provenance of the books and when they were read.</p>
+        
+        <p>The book collection can be browsed through or searched. The upper horizontal bar serves as a browsing tool that can sort alphabetically among authors, titles and places of publication. It’s also possible to sort the library chronologically according to the date of publication. The last three fields in the browsing bar may be used to reduce the corpus according to the presence of an inscription, of reading traces or of marginalia. These options are customizable.</p>
+    <div id="documentation-tools-container">    
+      <div id="documentation">  
+          <p class="documentation-links"><a style="color: #003828; font-size:1.4em; font-weight:bold;" href="../documentation/">Documentation</a><br/>
+               ∟ <a href="../documentation/#toc_1">Getting started</a><br/>
+               ∟ <a href="../documentation/#toc_5">Encoding schema</a><br/>
+               ∟ <a href="../documentation/#toc_7">Including images</a><br/>
+               ∟ <a href="../documentation/#toc_11">Admin tools</a></p>
+          <p class="documentation-links"><a style="color: #003828; font-size:1.4em; font-weight:bold;" href="../usermanual/">User Manual</a></p>
+      </div><!--/documentation-->
+        
+        <span class="admin-tools:getAdmintools"/>
+        
+    </div><!--/documentation-tools-container-->           
+        <br/>
+        <p><span style="color:#003828;">To edit this home page, open <code>templates/library/home.html</code> in eXide.</span></p>
+        
+    </div><!--/about-->
+    <div id="home-image">
+        <img class="home" src="$resources/images/home.jpg" width="350"/>
+    </div>
+      
+  </div><!--/home-grid-container-->
+ </div>
+</div>
+
+</div>

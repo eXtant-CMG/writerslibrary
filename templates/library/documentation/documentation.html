@@ -1,0 +1,388 @@
+<div xmlns="http://www.w3.org/1999/xhtml" data-template="templates:surround" data-template-with="templates/library/library-page.html" data-template-at="content">
+    <div id="main">
+        
+        <div id="header">
+            <p style="float: right !important;padding-right:20px;margin: 0px 0px 0px 0px;">
+                <a style="text-decoration:none;color:black;cursor:pointer;" data-toggle="modal" data-target="#guideModal" title="Manual for the Library">
+                    <span class="library-functions:manualnav"/>
+                    <span class="glyphicon glyphicon-book" aria-hiddden="true"/>
+                </a>
+            </p>
+            <!-- sort and browse div -->
+            <div data-template="library-browse:navbar"/>
+            
+        </div>
+        
+        <div id="body" class="documentation" style="padding-left:0px;">
+            <div class="documentation-container">
+                <div class="left">
+                     <nav id="nav"/>
+                </div>
+                
+                <div class="right">
+            
+                    <h1 class="documentation" id="toc_0">Documentation</h1>
+                    
+                    <h2 class="documentation" id="toc_1">Getting Started</h2>
+                    
+                    <p>Adding data to this app is mainly done in the XML file <code>library.xml</code>, and some configuration can be customized in <code>config.xml</code>. The files can be found here:</p>
+                    
+                    <ul>
+                        <li><code>/db/apps/writerslibrarary/data/library/library.xml</code></li>
+                        <li><code>/db/apps/writerslibrarary/data/library/config.xml</code></li>
+                    </ul>
+                    
+                    <h3 class="documentation" id="toc_2">Editing the XML files in eXide</h3>
+                    
+                    <p>You can open and edit these two XML files in <code>eXide</code>, eXist-db's code editor. To open eXide, go to the eXist-db <strong>Dashboard</strong> and click on the eXide icon.</p>
+                    
+                    <p>To edit <code>library.xml</code> and <code>config.xml</code>, you’ll need to log in as an <strong>administrator</strong> (dba). To do this, click on the “Login” button in the top right corner of the eXide window and enter the admin username and password you provided during the eXist-db installation.</p>
+                    
+                    <h3 class="documentation" id="toc_3">Editing the XML files in oXygen</h3>
+                    
+                    <p>In addition to eXide, you can also edit the XML files in an eXist-db using <strong>oXygen XML Editor</strong>. oXygen is a powerful XML editor that provides many advanced features for working with XML data.</p>
+                    
+                    <p>To edit the files in oXygen, you’ll need to connect oXygen to your eXist-db. This can be done by creating a new connection to the eXist-db server in the oXygen “Data Source Explorer” view. Once the connection is established, you’ll be able to browse and edit the files in your eXist-db directly from oXygen.</p>
+                    
+                    <p>For more detailed instructions on how to connect oXygen to an eXist-db and edit files, see <a href="https://www.oxygenxml.com/doc/versions/25.1/ug-editor/topics/configure-exist-datasource.html">this page in the oXygen documentation</a>.</p>
+                    
+                    <h2 class="documentation" id="toc_4">Configuration: config.xml</h2>
+                    
+                    <p>As a first step in configuring the app to represent a particular collection of books, an admin can change the title and subtitle in <code>config.xml</code>.</p>
+                    
+                    <div><pre><code class="language-none">&lt;title&gt;Bibundina&lt;/title&gt;
+&lt;subtitle&gt;A Writer's Library App&lt;/subtitle&gt;</code></pre></div>
+                    
+                    <p>The subtitle field can of course be left blank.</p>
+                    
+                    <p>As the user manual states, the upper horizontal navigation bar of the writer's library app serves as a browsing tool that can sort alphabetically among <strong>authors</strong>, <strong>titles</strong> and <strong>places</strong> of publication. The number of items retrieved is shown under each letter to give an idea of how relevant or representative a specific search query is. It is also possible to sort the library chronologically according to the <strong>date</strong> of publication and to apply filters to the book collection to only display books with an <strong>inscription</strong>, with <strong>reading traces</strong>, or with <strong>marginalia</strong>.</p>
+                    
+                    <p>In case one or more of these options are not relevant to a collection of books (for instance when they contain no marginalia), items in the navigation can be easily removed by deleting (or commenting out) the <code>&lt;sortBy&gt;</code> element in <code>config.xml</code> that generates them. This, for instance, is the <code>&lt;sortBy&gt;</code> element that generates the "Marginalia only" option:</p>
+                    
+                    <div><pre><code class="language-none">&lt;!-- Marginalia only --&gt;
+&lt;sortBy id="Marginalia" browseCategory="Alphabet"&gt;
+    &lt;label&gt;Marginalia only&lt;/label&gt;
+    &lt;rangeQuery&gt;
+        &lt;fields&gt;("library-book-Marginalia","library-book-Author")&lt;/fields&gt;
+        &lt;operators&gt;("contains","starts-with")&lt;/operators&gt;
+        &lt;keys&gt;"*",$currentBrowseValue&lt;/keys&gt;
+    &lt;/rangeQuery&gt;
+    &lt;orderBy&gt;Author&lt;/orderBy&gt;
+    &lt;breadcrumbPhrase&gt;the presence of marginalia&lt;/breadcrumbPhrase&gt;
+&lt;/sortBy&gt;</code></pre></div>
+                    
+                    <p>When working with books published in other date ranges than the ones currently offered, the admin can add or modify date ranges using these syntax conventions:</p>
+                    
+                    <div><pre><code class="language-none">&lt;browseBy id="DateRange"&gt;
+    &lt;browse&gt;
+        &lt;value&gt;17&lt;/value&gt;
+        &lt;label&gt;1700→&lt;/label&gt;
+    &lt;/browse&gt;
+    &lt;browse&gt;
+        &lt;value&gt;18&lt;/value&gt;
+        &lt;label&gt;1800→&lt;/label&gt;
+    &lt;/browse&gt;
+    &lt;browse&gt;
+        &lt;value&gt;190&lt;/value&gt;
+        &lt;label&gt;1900→&lt;/label&gt;
+    &lt;/browse&gt;
+    &lt;browse&gt;
+        &lt;value&gt;191&lt;/value&gt;
+        &lt;label&gt;1910→&lt;/label&gt;
+    &lt;/browse&gt;
+&lt;/browseBy&gt;</code></pre></div>
+                    
+                    <p>Advanced users who are familiar with search indexes and range queries can add an index in <code>collection.xconf</code> and phrase the range index in this XML syntax to add another sorting option to the interface.</p>
+                    
+                    <h2 class="documentation" id="toc_5">Encoding Schema: library.xml</h2>
+                    
+                    <p>In <code>library.xml</code>, add book entries following the custom encoding scheme that is documented in the section “Encoding manual”.</p>
+                    
+                    <p>The root element is <code>&lt;book&gt;</code>, which has attributes <code>type</code> and <code>id</code>. The <code>type</code> attribute specifies the type of book (<code>EL</code> (extant library) <code>VL</code> (virtual entry), while the <code>id</code> attribute provides a unique identifier for the book.</p>
+                    
+                    <div><pre><code class="language-none">&lt;book id="ARA-LIB" type="EL"&gt;
+&lt;/book&gt;</code></pre></div>
+                    
+                    <h3 class="documentation" id="toc_6">Module 1: Bibliographic Info</h3>
+                    
+                    <p>This XML schema is used to encode a book's bibliographical data. </p>
+                    
+                    <div><pre><code class="language-none">&lt;module type="bibl"&gt;
+    &lt;title sort=""/&gt;
+    &lt;subtitle/&gt;
+    &lt;type&gt;&lt;/type&gt;
+    &lt;author sort=""&gt;
+        &lt;firstname/&gt;
+        &lt;lastname/&gt;
+    &lt;/author&gt;
+    &lt;volume/&gt;
+    &lt;series/&gt;
+    &lt;edition/&gt;
+    &lt;editor/&gt;
+    &lt;place/&gt;
+    &lt;publisher/&gt;
+    &lt;date/&gt;
+    &lt;generalnote/&gt;
+    &lt;location/&gt;
+    &lt;IIIF&gt;
+        &lt;IIIFmanifest/&gt;
+        &lt;IIIFviewer/&gt;
+    &lt;/IIIF&gt;
+&lt;/module&gt;</code></pre></div>
+                    
+                    <p>Within the <code>&lt;book&gt;</code> element is a <code>&lt;module&gt;</code> element with an attribute <code>type</code> set to <code>"bibl"</code>. This element contains the bibliographical information for the book.</p>
+                    
+                    <p>The <code>&lt;title&gt;</code> element contains the title of the book. The <code>sort</code> attribute can be used to specify a sort key for the title.</p>
+                    
+                    <p>The <code>&lt;type&gt;</code> element specifies the type of publication, such as "Monograph", "Journal", "Collection of Essays", "Collection of Stories", "Sheet Music", "Manuscript", or "Typescript".</p>
+                    
+                    <p>The <code>&lt;author&gt;</code> element contains information about the author of the book. The <code>sort</code> attribute can be used to specify a sort key for the author's name. Within the <code>&lt;author&gt;</code> element are <code>&lt;firstname&gt;</code> and <code>&lt;lastname&gt;</code> elements that contain the author's first and last names.</p>
+                    
+                    <p>The <code>&lt;volume/&gt;</code>, <code>&lt;series/&gt;</code>, <code>&lt;edition/&gt;</code>, <code>&lt;editor/&gt;</code>, <code>&lt;place&gt;</code>, <code>&lt;publisher&gt;</code>, <code>&lt;date&gt;</code>, and <code>&lt;generalnote/&gt;</code> elements contain information about the volume number, series, edition, editor, place of publication, publisher, date of publication, and any general notes about the book, respectively.</p>
+                    
+                    <p>The <code>&lt;location&gt;</code> element specifies where the book can be found.</p>
+                    
+                    <p>The <code>&lt;IIIF&gt;</code> element contains information about the International Image Interoperability Framework (IIIF) resources associated with the book. Within this element are <code>&lt;IIIFmanifest&gt;</code> and <code>&lt;IIIFviewer&gt;</code> elements that contain the URLs for the IIIF manifest and a stable identifier where the images can be seen in a IIIF viewer.</p>
+                    
+                    <h2 class="documentation" id="toc_7">Including Images</h2>
+                    
+                    <p>The writer's library app accommodates <strong>three</strong> different ways of incorporating images and the sample data and documentation in the app will demonstrate the three ways. Images can either be stored <strong>within the app</strong> itself (<em>which we do not recommend</em>); images can be loaded into the app from a <strong>static folder on the same server</strong>; and thirdly, images can be incorporated <strong>via IIIF</strong>. The methods can also be combined.</p>
+                    
+                    <h3 class="documentation" id="toc_8">Inside the app</h3>
+                    
+                    <p>The writer's library app contains sample book entries with images stored within the app.</p>
+                    
+                    <p>The book with id <code>ARA-LIB</code>, for instance, contains <code>&lt;page&gt;</code> elements such as this in <code>&lt;module type="pages"&gt;</code>:</p>
+                    
+                    <div><pre><code class="language-none">&lt;page&gt;
+    &lt;pagenumber&gt;cover&lt;/pagenumber&gt;
+    &lt;facsimile&gt;ARA-LIB/cover.jpg&lt;/facsimile&gt;
+&lt;/page&gt;</code></pre></div>
+                    
+                    <p>The app is set to search for the contents of the <code>&lt;facsimile&gt;</code> element (e.g., <code>ARA-LIB/cover.jpg</code>) in the <code>db/writerslibrary/resources/images/library/</code> folder. Admins can add images to this folder via eXide by clicking <code>Manage</code> under the <code>File</code> menu and navigating to the folder in the DB Manager window (click the upload icon to upload files or folders). Images can also be added by dropping them into the folder when using the app via oXygen. The <code>&lt;facsimile&gt;</code> element must reference the correct image location and file name.</p>
+                    
+                    <p><strong>Note</strong>: Storing large amounts of images in the writer’s library app is <strong>not recommended</strong>. This is because eXist-db is not designed to host images and doing so can increase the file size of the app instance. To incorporate a substantial collection of images in the app, it is preferable to host them in a static folder on the server (or local machine), or on a IIIF server.</p>
+                    
+                    <h3 class="documentation" id="toc_9">From a Static Folder</h3>
+                    
+                    <p>The app can be set up to retrieve images from a folder outside of eXist-db. However, this requires configuration in both eXist-db and the server’s Apache httpd or Nginx when run on a server.</p>
+                    
+                    <p>By following the outlined steps, the app can retrieve images from a static folder named <code>library-images</code> (on a computer or on a server).</p>
+                    
+                    <p>In the file <code>db/writerslibrary/controller.xq</code> the following statement specifies that paths to images in <code>&lt;facsimile&gt;</code> elements must be preceded by <code>db/writerslibrary/resources/images/library/</code>:</p>
+                    
+                    <div><pre><code class="language-none">    else if (contains($exist:path, "/$library-images/")) then
+    &lt;dispatch xmlns="http://exist.sourceforge.net/NS/exist"&gt;
+        &lt;forward url="{$exist:controller}/resources/images/library/{substring-after($exist:path, '/$library-images/')}"&gt;
+            &lt;set-header name="Cache-Control" value="max-age=3600, must-revalidate"/&gt;
+        &lt;/forward&gt;
+    &lt;/dispatch&gt;</code></pre></div>
+                    
+                    <p>This must be changed to the static folder outside of eXist-db:</p>
+                    
+                    <div><pre><code class="language-none">    else if (contains($exist:path, "/$library-images/")) then
+    &lt;dispatch xmlns="http://exist.sourceforge.net/NS/exist"&gt;
+        &lt;forward url="/library-images/{substring-after($exist:path, '/$library-images/')}"&gt;
+            &lt;set-header name="Cache-Control" value="max-age=3600, must-revalidate"/&gt;
+        &lt;/forward&gt;
+    &lt;/dispatch&gt;</code></pre></div>
+                    
+                    <p>eXist-db uses <strong>Jetty</strong> as its web server. Jetty is an open-source project providing an HTTP server, HTTP client, and <code>javax.servlet</code> container. To access images from a static folder outside of eXist-db within the app, a configuration file must be created for Jetty. This file specifies the folder from which Jetty should serve resources when running. The following can be used as a template for the file:</p>
+                    
+                    <div><pre><code class="language-none">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_0.dtd"&gt;
+&lt;Configure class="org.eclipse.jetty.server.handler.ContextHandler"&gt;
+      &lt;Set name="contextPath"&gt;/library-images&lt;/Set&gt;
+      &lt;Set name="handler"&gt;
+        &lt;New class="org.eclipse.jetty.server.handler.ResourceHandler"&gt;
+         &lt;Set name="resourceBase"&gt;/home/library-images&lt;/Set&gt;
+         &lt;Set name="directoriesListed"&gt;false&lt;/Set&gt;
+       &lt;/New&gt;
+      &lt;/Set&gt;
+&lt;/Configure&gt;</code></pre></div>
+                    
+                    <p>This XML configuration file is used It does this by configuring a <code>Jetty ContextHandler</code> to serve resources from the specified folder. </p>
+                    
+                    <p>This configuration file should be placed in the <code>$EXIST_HOME/etc/jetty</code> directory, where <code>$EXIST_HOME</code> is the root directory of your eXist-db installation. The file should have a .xml extension and its name should start with jetty. For example, you could name it <code>jetty-library-images.xml</code>.</p>
+                    
+                    <p>Here is a brief explanation of what each part of the configuration does:</p>
+                    
+                    <ul>
+                        <li><code>&lt;Set name="contextPath"&gt;/library-images&lt;/Set&gt;</code>: This line sets the context path for the ContextHandler to /library-images. This means that resources served by this ContextHandler will be available at URLs starting with /library-images.</li>
+                        <li><code>&lt;Set name="resourceBase"&gt;/home/library-images&lt;/Set&gt;</code>: This line sets the resourceBase property of the ResourceHandler to <code>/home/library-images</code>. This specifies the folder on the file system from which resources will be served.</li>
+                    </ul>
+                    
+                    <p>After placing this configuration file in the correct location, you will need to <strong>restart eXist-db</strong> for the changes to take effect. </p>
+                    
+                    <p>The configuration of the webserver will also need to include a reference to the image folder. If you have chosen to proxy eXist-db behind a Web Server (as explained <a href="http://exist-db.org/exist/apps/doc/production_web_proxying.xml?field=all&amp;id=D3.17.15#D3.17.15">here</a> in the eXist-db documentation), add the following lines to your <code>httpd.conf</code> in <strong>Apache httpd</strong>:</p>
+                    
+                    <div><pre><code class="language-none">ProxyPass           /library-images http://localhost:8080/library-images
+ProxyPassReverse    /library-images http://localhost:8080/library-images</code></pre></div>
+                    
+                    <p>In an <strong>Nginx</strong> configuration, add:</p>
+                    
+                    <div><pre><code class="language-none">location /library-images {
+    proxy_pass http://localhost:8080/library-images;
+}</code></pre></div>
+                    
+                    <p>Once eXist-db and Apache httpd or Nginx have been restarted, images from the <code>/home/library-images</code> folder on the server should be available at URLs starting with <code>/library-images</code>, to which <code>controller.xq</code> will then append the references given in the <code>&lt;facsimile&gt;</code> elements. In this way, <code>&lt;facsimile&gt;ARA-LIB/cover.jpg&lt;/facsimile&gt;</code> will correctly refer to an image stored as <code>/home/library-images/ARA-LIB/cover.jpg</code>.</p>
+                    
+                    <h3 class="documentation" id="toc_10">Via IIIF</h3>
+                    
+                    <p>If the <code>&lt;facsimile&gt;</code> element begins with “https”, the app will directly load the image from the specified URL. In this example:</p>
+                    
+                    <div><pre><code class="language-none">&lt;page&gt;
+    &lt;pagenumber&gt;1&lt;/pagenumber&gt;
+ &lt;facsimile&gt;https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/680,/0/default.jpg&lt;/facsimile&gt;
+&lt;/page&gt;</code></pre></div>
+                    
+                    <p>The <code>&lt;facsimile&gt;</code> element contains a IIIF-compliant image link that displays the image at a width of <strong>680 pixels</strong>, which is the width used in the app’s interface.</p>
+                    
+                    <p>The app provides an <strong>Admin tool</strong> to import image links from a IIIF manifest (see further).</p>
+                    
+                    <p>The IIIF method of including images can be easily combined with one of the two previously described methods of bringing images into the app.</p>
+                    
+                    <h2 class="documentation" id="toc_11">Admin Tools</h2>
+                    
+                    <p>When you are logged into eXist-db (via the dashboard or via eXide), a tab "Admin Tools" appears on the home page. There, admins can make use of three tools meant to facilitate the creation of a collection of book entries.  Two of the three tools are especially helpful to people incorporating images via IIIF. The three tools are:</p>
+                    
+                    <ul>
+                        <li>Create a new book entry</li>
+                        <li>Import image links from a IIIF manifest</li>
+                        <li>Zone coordinates tool (for IIIF images only)</li>
+                    </ul>
+                    
+                    <h3 class="documentation" id="toc_12">Create a New Book Entry</h3>
+                    
+                    <p>This tool helps you generate the XML for a new book entry. You can copy the result to your clipboard and paste it into <code>library.xml</code>.</p>
+                    
+                    <p><strong>Note</strong>: This tool doesn’t automatically insert or modify book elements in the publication interface. You must manually copy the generated XML into <code>library.xml</code>.</p>
+                    
+                    <p>First, choose a valid and unique ID that starts with a letter and contains only letters and numbers. Then enter the main bibliographic information and (optionally) import images from a IIIF manifest. This feature can also be used separately (see below).</p>
+                    
+                    <h3 class="documentation" id="toc_13">Import image links from a IIIF manifest</h3>
+                    
+                    <p>This tool extracts image links from a IIIF manifest and formats them into the correct XML schema (<code>&lt;module type="pages"&gt;</code>). You can then paste the result directly into a <code>&lt;book&gt;</code> entry in your library collection. However, due to structural differences in IIIF manifests, extraction may not always be successful.</p>
+                    
+                    <p>For every image declared in the manifest, the tool will create the following XML:</p>
+                    
+                    <div><pre><code class="language-none">&lt;page&gt;
+    &lt;pagenumber&gt;1&lt;/pagenumber&gt;
+ &lt;facsimile&gt;https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/680,/0/default.jpg&lt;/facsimile&gt;
+&lt;/page&gt;</code></pre></div>
+                    
+                    <p>Images are numbered consecutively in the <code>&lt;pagenumber&gt;</code> element. The <code>&lt;facsimile&gt;</code> element contains a IIIF compliant image link that renders the image at a width of <strong>680 pixels</strong>.</p>
+                    
+                    <h3 class="documentation" id="toc_14">Zone Coordinates Tool</h3>
+                    
+                    <p>This tool allows admins to draw a rectangular zone around a reading trace on a IIIF image. The tool generates a <code>&lt;zone&gt;</code> element, containing the correct coordinates for the zone, which can be pasted into a <code>&lt;page&gt;</code> element in <code>library.xml</code>. After making a selection, click the <code>preview zone image</code> button to magnify it.</p>
+                    
+                    <p>For every zone selection, the tool will create the following XML:</p>
+                    
+                    <div><pre><code class="language-none">&lt;!-- zone --&gt;
+&lt;zone&gt;
+   &lt;number&gt;1&lt;/number&gt;
+   &lt;facsimile&gt;https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/661,1118,1285,1012/500,/0/default.jpg&lt;/facsimile&gt;
+   &lt;position&gt;296&lt;/position&gt;
+   &lt;rn&gt;
+     &lt;transcription&gt;&lt;/transcription&gt;
+     &lt;writingtool&gt;&lt;/writingtool&gt;
+     &lt;extracts&gt;&lt;/extracts&gt;
+   &lt;/rn&gt;
+   &lt;type&gt;marginalia&lt;/type&gt;
+&lt;/zone&gt;</code></pre></div>
+                    
+                    <h2 class="documentation" id="toc_15">Structure of the App</h2>
+                    
+                    <ul>
+                        <li><code>collection.xconf</code>: This file is used to configure collection-specific settings, such as indexing options and triggers.</li>
+                        <li><code>controller.xq</code>: This file is used to control the flow of requests and responses within the app.</li>
+                        <li><code>data/library/config.xml</code>: This file contains configuration settings, such as the title of the app and the browsing and sorting options.</li>
+                        <li><code>data/library/library.xml</code>: The main library database file.</li>
+                        <li><code>modules/</code>: This folder contains XQuery modules, which contain the actual application code.</li>
+                        <li><code>modules/library-book-view.xql</code>: This module contains code that creates the book view.</li>
+                        <li><code>modules/library-browse.xql</code>: This module contains code for browsing the library.</li>
+                        <li><code>modules/library-functions.xql</code>: This module contains general-purpose functions used by <code>library-browse.xql</code> and <code>library-book-view.xql</code>.</li>
+                        <li><code>modules/search.xql</code>: This module contains code for searching within the app.</li>
+                        <li><code>modules/admin-tools.xql</code>: This module likely contains code for administrative tools within the app.</li>
+                        <li><code>modules/import-iiif.xql</code>: This module likely contains code for importing data using the IIIF (International Image Interoperability Framework) protocol.</li>
+                        <li><code>resources/</code>: This folder contains resources such as CSS files, images, JavaScript files, and XSLT files.</li>
+                        <li><code>templates/</code>: This folder contains HTML templates used to generate pages within the app.</li>
+                    </ul>
+                    
+                    
+                    
+                    
+            
+            
+                </div><!--/right-->
+            </div><!--/documentation-container-->
+            
+            
+            
+            
+            
+        </div>
+    </div>
+    <script>
+        const headers = document.querySelectorAll('h2, h3');
+        const toc = document.createElement('ul');
+        let currentList = toc;
+        headers.forEach(header =&gt; {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.textContent = header.textContent;
+        a.href = `#${header.id}`;
+        li.appendChild(a);
+        if (header.tagName === 'H2') {
+        currentList = toc;
+        currentList.appendChild(li);
+        } else if (header.tagName === 'H3') {
+        if (currentList.lastElementChild.tagName !== 'UL') {
+        const ul = document.createElement('ul');
+        currentList.lastElementChild.appendChild(ul);
+        }
+        currentList.lastElementChild.lastElementChild.appendChild(li);
+        }
+        });
+        const nav = document.querySelector('#nav');
+        nav.appendChild(toc);
+        
+        // highlight the current section in the table of contents
+        const observer = new IntersectionObserver(
+        (entries) =&gt; {
+        let topEntry;
+        entries.forEach((entry) =&gt; {
+        const id = entry.target.getAttribute("id");
+        if (entry.isIntersecting) {
+        if (!topEntry || entry.boundingClientRect.top &lt; topEntry.boundingClientRect.top) {
+        topEntry = entry;
+        }
+        }
+        document.querySelector(`#nav li a[href="#${id}"]`).parentElement.classList.remove("active");
+        });
+        if (topEntry) {
+        const id = topEntry.target.getAttribute("id");
+        document.querySelector(`#nav li a[href="#${id}"]`).parentElement.classList.add("active");
+        }
+        },
+        { threshold: [0] }
+        );
+        
+        // Track all sections that have an `id` applied
+        document.querySelectorAll('h2[id], h3[id]').forEach((section) =&gt; {
+        observer.observe(section);
+        });
+        
+        const leftDiv = document.querySelector(".left");
+        const leftDivOffset = leftDiv.offsetTop;
+        
+        window.addEventListener("scroll", () =&gt; {
+        if (window.pageYOffset &gt; leftDivOffset) {
+        leftDiv.classList.add("sticky");
+        } else {
+        leftDiv.classList.remove("sticky");
+        }
+        });
+    </script>
+</div>

@@ -1,0 +1,52 @@
+<div xmlns="http://www.w3.org/1999/xhtml" data-template="templates:surround" data-template-with="templates/library/library-page.html" data-template-at="content">
+    <div id="main">
+        
+        <div id="header">
+            <p style="float: right !important;padding-right:20px;margin: 0px 0px 0px 0px;">
+                <a style="text-decoration:none;color:black;cursor:pointer;" data-toggle="modal" data-target="#guideModal" title="Manual for the Library">
+                    <span class="library-functions:manualnav"/>
+                    <span class="glyphicon glyphicon-book" aria-hidden="true"/>
+                </a>
+            </p>
+            <!-- sort and browse div -->
+            <div data-template="library-browse:navbar"/>
+            
+        </div>
+        
+        <div id="body">
+            
+            
+            
+            <div id="about">
+                <h4>Import image links from a IIIF manifest</h4>
+                
+                 <div>
+                     <p>This tool will attempt to extract the links to images in a IIIF manifest and formats them into the correct XML schema that you can then paste directly into a <code>&lt;book&gt;</code> entry in your library collection.</p>
+                     
+                     <form onsubmit="return false;" class="iiif-manifest-link">
+                         <label for="iiif-manifest-link" id="iiif-manifest-link-label">IIIF manifest URL:</label>
+                         <input type="text" id="iiif-manifest-link" name="iiif-manifest-link"/>
+                         <input type="submit" value="IMPORT" id="iiif-manifest-link-submit"/>
+                    </form>
+                 </div>
+                
+                <div id="link-container" class="hidden">
+                    <button id="copyButton">copy to clipboard</button>
+                    <textarea id="iiif-manifest-link-textarea"/>
+                </div>
+                <!--<span data-template="admin-tools:IIIFLinksTextarea"/>-->
+                
+            </div><!--/about-->
+        </div><!--/body-->
+    </div><!--/main-->
+    
+    <script>
+        document.getElementById("copyButton").addEventListener("click", function() {
+        var textarea = document.getElementById("iiif-manifest-link-textarea");
+        textarea.select();
+        document.execCommand("copy");
+        });
+        
+        
+    </script>
+</div>

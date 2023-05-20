@@ -1,0 +1,53 @@
+<div xmlns="http://www.w3.org/1999/xhtml" data-template="templates:surround" data-template-with="templates/library/library-page.html" data-template-at="content">
+    <div class="bookview-container">
+       <div id="header">
+        <div class="nav">
+            <span data-template="library-book-view:navbar"/>
+            <!-- Manual, your comments and logout buttons -->
+            <p style="float: right !important;padding-right:20px;margin: 0px 0px 0px 0px;">
+                <a style="text-decoration:none;color:black;cursor:pointer;" data-toggle="modal" data-target="#guideModal" title="Manual for the Library">
+                    <span class="library-functions:manualnav"/>
+                    <span class="glyphicon glyphicon-book" aria-hiddden="true"/>
+                </a>
+            </p>
+            
+            <div id="booksearchdiv" style="float: right !important;padding-right:20px;padding-top:2px;">
+                <form name="searchform" id="searchform" action="search/index.html">
+                    <input type="text" name="q" id="booksearchterm" style="width:100px;" placeholder="Search" value=""/> in <span data-template="library-book-view:getSearchSelect"/> <input type="submit" value="Search!" id="submit"/>
+                 
+                <a href="javascript:void(0);" class="info-link-bookview"><span class="search-info-bookview"><b>Search tips</b>
+                    <br/>
+                        <br/>* search for "<b>marginalia</b>" in "this book (reading traces)" to find all marginalia in this book<br/> * search for "<b>Location</b>" in bibliography to find all books in archives and private collections<br/>* search for "<b>_ManuscriptLink</b>" in bibliography to find all books linked to manuscript passages<br/>* search for "<b>uncut</b>" in bibliography to find all books with uncut pages<br/>* search for "<b>postcard</b>" in bibliography to find all books with postcards inserted into them<br/>* search for "<b>private</b>" in bibliography to find all books currently held in private collections</span><span class="glyphicon glyphicon-info-sign"/></a></form>
+            </div>
+        </div>
+       </div>
+       <div class="bookbody-container">
+        <div id="bookbody">
+            <div class="book">
+                <span class="bibliobooktop">
+                 <div data-template="library-book-view:getBiblio"/>
+                 <div data-template="library-book-view:getMarginaliaLink"/>
+                    <br/>
+                </span>
+                
+                <div id="container">
+                    
+                        <span data-template="library-book-view:getImage"/>
+                    
+                    <div id="rt"/>
+                        
+                </div><!-- /container -->
+                
+                <span class="bibliobook">
+                    
+                    <span data-template="library-book-view:getFacList"/>
+                    
+                    <div id="rtcontainer"/>
+                    
+                    
+                </span>
+            </div><!-- /book -->
+        </div><!-- /bookbody -->
+       </div><!-- /bookbody-container -->
+    </div><!--/main-->
+</div>

@@ -1,0 +1,41 @@
+<div xmlns="http://www.w3.org/1999/xhtml" data-template="templates:surround" data-template-with="templates/library/library-page.html" data-template-at="content">
+
+    <div id="main">
+        
+        <div id="header">
+
+            <p style="float: right !important;padding-right:20px;margin: 0px 0px 0px 0px;">
+                <a style="text-decoration:none;color:black;cursor:pointer;" data-toggle="modal" data-target="#guideModal" title="Manual for the Library">
+                    <span class="library-functions:manualnav"/>
+                    <span class="glyphicon glyphicon-book" aria-hiddden="true"/>
+                </a>
+            </p>
+            <!-- sort and browse div -->
+            <div data-template="library-browse:navbar"/>
+            
+        </div>
+
+    <div class="search">
+        
+        <h1>Search Results</h1>
+
+        
+        <form action="index.html" method="get" class="form-search">
+            <input class="search-query templates:form-control" type="text" name="q"/> in <span data-template="search:indexField"/>
+            <input type="hidden" name="index" value="library"/>
+            <input value="search" type="submit"/> 
+            <a class="info-link" href="javascript:void(0);"><span class="search-info">
+                        <br/>use double quotes for exact phrases (eg. <b>"being given"</b>)<br/>
+                            <br/>
+                                <b>Wildcards</b>:<br/>
+                                    <b>triang*</b> finds 'triangle', 'triangles', 'triangular',...<br/>
+                                        <b>*and*</b> is not allowed (wildcard at start)<br/>
+                                            <b>prevent~1</b> finds 'prevent', 'prevents', 'present'<br/>
+                                                <b>prevent~2</b> finds 'présent', 'revient', 'recent', 'perdent',...</span><span class="glyphicon glyphicon-info-sign"/></a>
+        </form>
+        
+        <div class="results search:search"/>
+        
+    </div> 
+    </div>
+</div>

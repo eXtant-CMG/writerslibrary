@@ -1,0 +1,146 @@
+<script type="text/javascript">  
+    var json;
+    var readingtraces = [ <span data-template="library-book-view:getJS" data-template-component="readingtraces"/> ];
+    $(function() { 
+    
+    $.loadImage = function (opts) {
+    var loadedImage = new Image();
+    if (typeof opts !== 'object' || opts === null){
+    window.console &amp;&amp; console.log('loadImage(): Please pass valid options');
+    return;
+    }
+    typeof opts.beforeLoad === 'function' &amp;&amp; opts.beforeLoad({imgUrl:opts.imgUrl, customData:opts.customData});
+    $('#fac').addClass('filter');
+    $(loadedImage).one('load', function(){
+    var oData = {success:true,url:opts.imgUrl,imageElem:loadedImage, customData:opts.customData};
+    typeof opts.complete === 'function' &amp;&amp; opts.complete(oData);
+    typeof opts.success === 'function' &amp;&amp; opts.success(oData);
+    }).one('error', function(){
+    var oData = {success:false,url:opts.imgUrl,imageElem:loadedImage, customData:opts.customData};
+    typeof opts.complete === 'function' &amp;&amp; opts.complete(oData);
+    typeof opts.error === 'function' &amp;&amp; opts.error(oData);
+    }).attr({src:opts.imgUrl,id:'fac',width:'680'}).each(function(){
+    if(this.complete){  
+    $(this).trigger('load');
+    }
+    });
+    };
+    
+    var tmpFacs = <span data-template="library-book-view:getJS" data-template-component="tmpPagenumbers"/>;
+    var tmpLinks = [ <span data-template="library-book-view:getJS" data-template-component="tmpLinks"/> ];
+    
+    $('.faclink').click(function(){
+        $('#rt').empty();
+        $('#rtcontainer').empty();
+        var rt = [ <span data-template="library-book-view:getJS" data-template-component="yesno"/> ];
+        var imgID = $( this ).attr('data-image');
+        var link = $( this ).attr('href');
+    
+        (function () {
+            var oOpts, jqImageUrlInput, jqImageContainer;
+    
+            jqImageUrlInput  = link;
+            jqImageContainer = $('#imagecontainer');
+    
+            oOpts = {
+                imgUrl  : jqImageUrlInput,
+                beforeLoad : function (oEvent){
+                    $('<div class="loadingSpinner"/>').appendTo(jqImageContainer);
+                },
+                complete : function (oEvent){
+                    jqImageContainer.find('.loadingSpinner:first').remove();
+                },
+                success : function(oEvent){
+                jqImageContainer.html(oEvent.imageElem);    
+                },
+                error : function(oEvent){
+                  jqImageContainer.html('ERROR');
+                }
+            };
+        $.loadImage(oOpts);
+    })();
+    
+    var prettylink = imgID.split('.');
+    var prettylink2 = prettylink[0].split(',').pop();
+    var tmpFacsArray = tmpFacs.split(',');
+    var position;
+    
+    tmpFacsArray.forEach(function (item, i) { 
+    if (tmpFacsArray[i] == prettylink2) 
+    { 
+    json =  readingtraces[i];
+        if (rt[i] == "yes")  {
+            var rtdiv = $("#rt");
+            var rtcontainer = $("#rtcontainer");
+            var bookID = <span data-template="library-book-view:getJS" data-template-component="bookID"/>;
+            var imgUrl = <span data-template="library-book-view:getJS" data-template-component="imgUrl"/>;
+            $.each(json.rtr, function(){
+                if (this.Reftext) {
+                var reference = '<br/>\n<br/>\n<span class="writingtool"><b>Manuscript Link</b>: ' + this.Reftext + '</span>'} 
+                else {var reference = ''};
+                
+                if (!this.extract == '') {var extract = '<br/>\n<br/>[<span class="toggleextract" id="show' + this.nr + '">Full extract ▿</span>]<br/>\n <span class="extract" id="e' + this.nr + '">\n<br/>' + this.extract + '</span>'} else {var extract = ''};
+                
+                if (!this.WritingTool == '') {var wrtl = '<br/>\n<br/>\n<span class="writingtool">[Writing tool used: ' + this.WritingTool + ']</span>'} else {var wrtl = ''};
+                
+                rtdiv.append('<p id="rt' + this.nr + '" style="display:block;top:' + this.top + ';">\n<a class="results" id="' + this.nr + '">' + this.nr + '</a>\n</p>'); 
+                
+                rtcontainer.append('<span id="results' + this.nr + '" class="rt"><input type="checkbox" class="zoom" id="' + this.top + '"/><label for="' + this.top + '" class="toggle"><img class="zone" src="' + imgUrl + this.facsimile + '" width="' + this.img_width + '"/></label><span class="rthead">Zone ' + this.nr + '<a class="Zclose">[close]</a></span><span class="rtcontent">' + this.transcription + reference + wrtl + extract + '</span></span>');
+                
+                var nr = this.nr;
+                var scrolled = false;
+                
+                $("#" + nr).click(function(){
+                $(".rt").hide();
+                $("#results" + nr).css('display','block');
+                $(".faclistBody").hide();$("#FLcaret").removeClass( 'upcaret' );
+                });
+                $("#bookbody").mouseup(function (e)
+                {
+                var container = $("#results" + nr);
+                if (!container.is(e.target))
+                {
+                if ( container.has(e.target).length === 0)
+                    {container.hide();}
+                }
+                });
+                $( document ).on( 'keydown', function ( e ) {
+                if ( e.keyCode === 27 ) { // ESC
+                $( "#results" + nr ).hide();
+                }
+                });
+                $('.Zclose').click(function(){ 
+                $( "#results" + nr ).hide();
+                });
+                $("#show" + nr).click(function(){
+                $("#e" + nr).toggle();
+                });
+            });
+        } 
+        else {$("#rt").text("");$("#rtcontainer").text("")}
+    position = i;};
+    
+    });
+    // add data-image!!!
+
+    var nextDataImageAttValue = <span data-template="library-book-view:getJS" data-template-component="bookID"/> + ',' + tmpFacsArray[position + 1]
+    var prevDataImageAttValue = <span data-template="library-book-view:getJS" data-template-component="bookID"/> + ',' + tmpFacsArray[position - 1]
+    
+    $('#currentfac').text(prettylink[0].split(',').pop());
+    $('#page-to-open').text(prettylink[0].split(',').pop());
+    var newUrl = 'tools/zone-coordinates-tool?pageID=' + <span data-template="library-book-view:getJS" data-template-component="bookID"/> + ',' + prettylink[0].split(',').pop().replace(' ', '-_-');
+    $('#page-to-open-link').attr('href', newUrl);
+    
+    if (position != tmpFacsArray.length - 1) {$('#next').attr('href',tmpLinks[position + 1]).attr('data-image',nextDataImageAttValue)};
+    if (position != 0) {$('#prev').attr('href',tmpLinks[position - 1]).attr('data-image',prevDataImageAttValue)};
+    
+    return false;
+    
+    
+    });
+    
+    $('.faclistHeader').click(function(){$(".faclistBody").toggle();$("#FLcaret").toggleClass( 'upcaret' );});
+    
+    <span data-template="library-book-view:getJS" data-template-component="pageAndZoneLink"/>
+    });
+</script>

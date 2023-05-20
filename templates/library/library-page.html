@@ -1,0 +1,80 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title><span data-template="library-functions:getLibraryName"/></title>
+
+        
+        <link type="TEXT/CSS" href="$resources/css/library-structure.css" rel="STYLESHEET"/>
+        <link type="TEXT/CSS" href="$resources/css/library-biblio.css" rel="STYLESHEET"/>
+        <link type="TEXT/CSS" href="$resources/css/usermanual.css" rel="STYLESHEET"/> 
+        <link type="TEXT/CSS" href="$resources/css/admintools.css" rel="STYLESHEET"/> 
+        <link data-template="search:librarySearchCss"/>
+        <link rel="STYLESHEET" href="$resources/css/pagination.css" type="TEXT/CSS"/>
+        <link rel="STYLESHEET" href="$resources/css/modal.css" type="TEXT/CSS"/>
+        <link rel="STYLESHEET" href="$resources/css/bootstrap-select.min.css" type="TEXT/CSS"/>
+        <link data-template="admin-tools:getCss"/>
+
+
+        <!-- javascripts -->
+        <span data-template="admin-tools:setImageID"/>
+        <script src="$resources/scripts/library/jquery-1.9.1.js"/>
+        <script src="$resources/scripts/library/jquery-ui-1.10.3.custom.js"/>
+        <span data-template="library-book-view:checkView"><script class="templates:include?path=templates/library/bookview-script.html"/></span>
+        <script type="text/javascript" src="$resources/scripts/transition.js"/>
+        <script type="text/javascript" src="$resources/scripts/modal.js"/>
+        <script type="text/javascript" src="$resources/scripts/bootstrap-select.min.js"/>
+        <script src="$resources/scripts/search.js" type="text/javascript"/>
+        <script data-template="admin-tools:getJs"/>
+
+        
+
+        <!--[if !IE 7]><style type="text/css">#wrap {display:table;height:100%}</style><![endif]-->
+    </head>
+    <body>
+        <div id="wrap">
+            
+            <a name="top"/>
+            
+        <div class="container">
+            <div class="moduleheader">
+                <span data-template="library-functions:makeLibraryHomeLink"><span class="moduletitle"><span data-template="library-functions:getLibraryName"/></span><span data-template="library-functions:getSubtitle"/></span>
+            </div>
+            
+            <div id="content"/>
+        
+        </div><!--/main-->
+        
+        <div class="templates:include?path=templates/library/libraryfooter.html"/>
+            
+        </div><!--/wrap-->
+        
+        <!-- MANUAL -->
+        <!-- div containers for manual in modal -->
+        <div class="modal bs-example-modal-lg" id="guideModal" tabindex="-1" aria-labelledby="guideModal" role="dialog" aria-hidden="true">
+            <div class="modal-dialog  modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">Close</span></button><h4 class="modal-title" style="color:#003828;">User Manual</h4></div>
+                    <div class="modal-body">
+                        <div class="templates:include?path=templates/library/usermanual.html"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- preview zone image -->
+        <!-- div containers for preview in modal -->
+        <div class="modal bs-example-modal-lg" id="previewModal" tabindex="-1" aria-labelledby="previewModal" role="dialog" aria-hidden="true">
+            <div class="modal-dialog  modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">Close</span></button><h4 class="modal-title" style="color:#003828;">Zone Image Preview</h4></div>
+                    <div class="modal-body">
+                        <img src="" id="ZoneImagePreview"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

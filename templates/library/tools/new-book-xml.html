@@ -1,0 +1,136 @@
+<div xmlns="http://www.w3.org/1999/xhtml" data-template="templates:surround" data-template-with="templates/library/library-page.html" data-template-at="content">
+    <div id="main">
+        
+        <div id="header">
+            <p style="float: right !important;padding-right:20px;margin: 0px 0px 0px 0px;">
+                <a style="text-decoration:none;color:black;cursor:pointer;" data-toggle="modal" data-target="#guideModal" title="Manual for the Library">
+                    <span class="library-functions:manualnav"/>
+                    <span class="glyphicon glyphicon-book" aria-hidden="true"/>
+                </a>
+            </p>
+            <!-- sort and browse div -->
+            <div data-template="library-browse:navbar"/>
+            
+        </div>
+        
+        <div id="body">
+            
+            
+            
+            <div id="about">
+                <h4>New book entry</h4>
+                
+                <p>This tool can assist you in creating the XML of a new book entry. The result can be copied to the clipboard and then pasted in <code>library.xml</code>. Choose a valid and unique ID, then input the main bibliographical information, and (optionally) import the images from a IIIF manifest.</p>
+                
+                <div class="grid-container">
+                <div id="form-div">
+                  <form id="new-book-form" onsubmit="return false;">
+                  <div id="choose-ID">
+                    <p class="admin-tools-new-book-p bold">1. Choose an ID for the new book</p>
+                    <p class="admin-tools-new-book-p"><label class="input" for="bookID">Book ID:</label>
+                        <input type="text" id="bookID" name="bookID"/> <strong><span id="response"/></strong> (change as desired) </p>
+                    <p><label class="radio">
+                          <input type="radio" name="ELVL" value="EL" checked=""/>
+                              extant book
+                      </label>
+                      <label class="radio">
+                          <input type="radio" name="ELVL" value="VL"/>
+                                  non-extant book (virtual)
+                          </label></p>
+                    <p class="admin-tools-new-book-p"><button id="confirm-ID-button">Confirm ID</button>
+                    <input type="hidden" name="confirmed-bookID" id="confirmed-bookID"/>
+                    </p>
+                  </div>
+                  <div id="biblio-module" class="hidden">
+                    <p class="admin-tools-new-book-p bold">2. Input bibliographic info</p>
+                    <fieldset>
+                        <legend>Author</legend>
+                        <p class="admin-tools-new-book-p"><label class="fieldset" for="firstname">Firstname:</label>
+                        <input type="text" id="firstname" name="firstname"/></p>
+                        <p class="admin-tools-new-book-p"><label class="fieldset" for="lastname">Lastname:</label>
+                        <input type="text" id="lastname" name="lastname"/></p>
+                    </fieldset>
+                    <p class="admin-tools-new-book-p"><label class="input" for="title">Title:</label>
+                    <input class="long" type="text" id="title" name="title"/></p>
+                    <p class="admin-tools-new-book-p"><label class="input" for="subtitle">Subtitle:</label>
+                    <input class="long" type="text" id="subtitle" name="subtitle"/></p>
+                    <p class="admin-tools-new-book-p"><label class="input" for="type">Type:</label>
+                    <select name="type" id="type">
+                        <option>-</option>
+                        <option>Monograph</option>
+                        <option>Journal</option>
+                        <option>Coll. of Essays</option>
+                        <option>Coll. of Stories</option>
+                        <option>Sheet Music</option>
+                        <option>Manuscript</option>
+                        <option>Typescript</option>
+                    </select></p>
+                    <p class="admin-tools-new-book-p"><label class="input" for="volume">Volume:</label>
+                    <input type="text" id="volume" name="volume"/></p>
+                    <p class="admin-tools-new-book-p"><label class="input" for="series">Series:</label>
+                    <input class="long" type="text" id="series" name="series"/></p>
+                    <p class="admin-tools-new-book-p"><label class="input" for="edition">Edition:</label>
+                    <input type="text" id="edition" name="edition"/></p>
+                    <p class="admin-tools-new-book-p"><label class="input" for="editor">Editor:</label>
+                    <input type="text" id="editor" name="editor"/></p>
+                    <p class="admin-tools-new-book-p"><label class="input" for="place">Place:</label>
+                    <input type="text" id="place" name="place"/></p>
+                    <p class="admin-tools-new-book-p"><label class="input" for="publisher">Publisher:</label>
+                    <input type="text" id="publisher" name="publisher"/></p>
+                    <p class="admin-tools-new-book-p"><label class="input" for="date">Date:</label>
+                    <input type="text" id="date" name="date"/> (YYYY)</p>
+                    <p class="admin-tools-new-book-p"><label class="input" for="generalnote">General Note:</label>
+                    <textarea id="generalnote" name="generalnote"/></p>
+                    <p class="admin-tools-new-book-p"><label class="input" for="location">Location:</label>
+                    <input class="long" type="text" id="location" name="location"/></p> 
+                    
+                    <p class="admin-tools-new-book-p">
+                        <label class="checkbox">
+                            <input type="checkbox" name="addIIIF" id="addIIIF"/>
+                            Add IIIF images
+                        </label>
+                    </p>
+                    <fieldset id="IIIFfieldset" class="hidden">
+                        <legend>IIIF</legend>
+                           <p class="admin-tools-new-book-p"><label class="fieldset" for="IIIFmanifest">IIIF Manifest:</label>
+                           <input class="long" type="text" id="IIIFmanifest" name="IIIFmanifest"/></p>
+                           <p class="admin-tools-new-book-p"><label class="fieldset" for="IIIFviewer">IIIF Viewer:</label>
+                           <input class="long" type="text" id="IIIFviewer" name="IIIFviewer"/></p>
+                           <p><button id="new-book-import-iiif" class="hidden">Import images from IIIF manifest</button></p>
+                    </fieldset>
+                  </div>
+                </form>
+                </div>
+                    
+                <div id="textarea-div" class="hidden">
+                    <h4>Finished? Copy this XML to library.xml:</h4>
+                    <div id="link-container" style="width:100%;">
+                        <button id="copyButtonNewBook">copy to clipboard</button>
+                        <textarea id="new-book-textarea"/>
+                    </div>
+                </div>
+                </div>
+                
+                <div class="spacer"/>
+            </div><!--/about-->
+        </div><!--/body-->
+    </div><!--/main-->
+
+    <script>
+        function generateId() {
+        var result = '';
+        var characters = 'abcdefghijklmnopqrstuvwxyz';
+        var charactersLength = characters.length;
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        result += Math.floor(Math.random() * 900000) + 100000;
+        return result;
+        }
+        document.getElementById('bookID').value = generateId();
+        
+        document.getElementById("copyButtonNewBook").addEventListener("click", function() {
+        var textarea = document.getElementById("new-book-textarea");
+        textarea.select();
+        document.execCommand("copy");
+        });
+    </script>
+</div>

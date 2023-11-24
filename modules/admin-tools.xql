@@ -2,7 +2,6 @@ xquery version "3.1";
 
 module namespace admin-tools="http://exist-db.org/apps/writerslibrary/admin-tools";
 
-import module namespace templates="http://exist-db.org/xquery/templates" ;
 import module namespace config="http://exist-db.org/apps/writerslibrary/config" at "config.xqm";
 import module namespace library-functions="http://exist-db.org/apps/writerslibrary/library-functions" at "library-functions.xql";
 import module namespace library-book-view="http://exist-db.org/apps/writerslibrary/library-book-view" at "library-book-view.xql";

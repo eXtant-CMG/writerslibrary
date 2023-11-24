@@ -2,7 +2,7 @@ xquery version "3.1";
 
 module namespace search = "http://exist-db.org/apps/writerslibrary/search";
 
-import module namespace templates="http://exist-db.org/xquery/templates" ;
+import module namespace templates="http://exist-db.org/xquery/html-templating" ;
 import module namespace config = "http://exist-db.org/apps/writerslibrary/config" at "config.xqm";
 import module namespace app = "http://exist-db.org/apps/writerslibrary/templates" at "app.xqm";
 import module namespace library-book-view="http://exist-db.org/apps/writerslibrary/library-book-view" at "library-book-view.xql";

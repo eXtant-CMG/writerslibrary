@@ -3,7 +3,7 @@ xquery version "3.1";
 module namespace library-functions="http://exist-db.org/apps/writerslibrary/library-functions";
 
 import module namespace config="http://exist-db.org/apps/writerslibrary/config" at "config.xqm";
-import module namespace templates="http://exist-db.org/xquery/templates" ;
+import module namespace templates="http://exist-db.org/xquery/html-templating" ;
 
 declare option exist:serialize "method=html5 media-type=text/html";
 

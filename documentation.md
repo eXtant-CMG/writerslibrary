@@ -1,25 +1,25 @@
-#Documentation
+# Documentation
 
-##Getting Started
+## Getting Started
 
 Adding data to this app is mainly done in the XML file `library.xml`, and some configuration can be customized in `config.xml`. The files can be found here:
 
 - `/db/apps/writerslibrarary/data/library/library.xml`
 - `/db/apps/writerslibrarary/data/library/config.xml`
 
-###Editing the XML files in eXide
+### Editing the XML files in eXide
 You can open and edit these two XML files in `eXide`, eXist-db's code editor. To open eXide, go to the eXist-db **Dashboard** and click on the eXide icon.
 
 To edit `library.xml` and `config.xml`, you’ll need to log in as an **administrator** (dba). To do this, click on the “Login” button in the top right corner of the eXide window and enter the admin username and password you provided during the eXist-db installation.
 
-###Editing the XML files in oXygen
+### Editing the XML files in oXygen
 In addition to eXide, you can also edit the XML files in an eXist-db using **oXygen XML Editor**. oXygen is a powerful XML editor that provides many advanced features for working with XML data.
 
 To edit the files in oXygen, you’ll need to connect oXygen to your eXist-db. This can be done by creating a new connection to the eXist-db server in the oXygen “Data Source Explorer” view. Once the connection is established, you’ll be able to browse and edit the files in your eXist-db directly from oXygen.
 
 For more detailed instructions on how to connect oXygen to an eXist-db and edit files, see [this page in the oXygen documentation](https://www.oxygenxml.com/doc/versions/25.1/ug-editor/topics/configure-exist-datasource.html).
 
-##Configuration: config.xml
+## Configuration: config.xml
 As a first step in configuring the app to represent a particular collection of books, an admin can change the title and subtitle in `config.xml`.
 
     <title>Bibundina</title>
@@ -66,7 +66,7 @@ When working with books published in other date ranges than the ones currently o
 
 Advanced users who are familiar with search indexes and range queries can add an index in `collection.xconf` and phrase the range index in this XML syntax to add another sorting option to the interface.
 
-##Encoding Schema: library.xml
+## Encoding Schema: library.xml
 
 In `library.xml`, add book entries following the custom encoding scheme that is documented in the section “Encoding manual”.
 
@@ -75,7 +75,7 @@ The root element is `<book>`, which has attributes `type` and `id`. The `type` a
 	<book id="ARA-LIB" type="EL">
 	</book>
 
-###Module 1: Bibliographic Info
+### Module 1: Bibliographic Info
 This XML schema is used to encode a book's bibliographical data. 
 
 	<module type="bibl">
@@ -124,7 +124,7 @@ The `<location>` element specifies where the book can be found.
 The `<IIIF>` element contains information about the International Image Interoperability Framework (IIIF) resources associated with the book. Within this element are `<IIIFmanifest>` and `<IIIFviewer>` elements that contain the URLs for the IIIF manifest and a stable identifier where the images can be seen in a IIIF viewer.
 
 
-##Including Images
+## Including Images
 The writer's library app accommodates **three** different ways of incorporating images and the sample data and documentation in the app will demonstrate the three ways. Images can either be stored **within the app** itself (*which we do not recommend*); images can be loaded into the app from a **static folder on the same server**; and thirdly, images can be incorporated **via IIIF**. The methods can also be combined.
 
 ###Inside the app
@@ -141,7 +141,7 @@ The app is set to search for the contents of the `<facsimile>` element (e.g., `A
 
 **Note**: Storing large amounts of images in the writer’s library app is **not recommended**. This is because eXist-db is not designed to host images and doing so can increase the file size of the app instance. To incorporate a substantial collection of images in the app, it is preferable to host them in a static folder on the server (or local machine), or on a IIIF server.
 
-###From a Static Folder
+### From a Static Folder
 The app can be set up to retrieve images from a folder outside of eXist-db. However, this requires configuration in both eXist-db and the server’s Apache httpd or Nginx when run on a server.
 
 By following the outlined steps, the app can retrieve images from a static folder named `library-images` (on a computer or on a server).
@@ -203,7 +203,7 @@ In an **Nginx** configuration, add:
 Once eXist-db and Apache httpd or Nginx have been restarted, images from the `/home/library-images` folder on the server should be available at URLs starting with `/library-images`, to which `controller.xq` will then append the references given in the `<facsimile>` elements. In this way, `<facsimile>ARA-LIB/cover.jpg</facsimile>` will correctly refer to an image stored as `/home/library-images/ARA-LIB/cover.jpg`.
 
 
-###Via IIIF
+### Via IIIF
 If the `<facsimile>` element begins with “https”, the app will directly load the image from the specified URL. In this example:
 
 	<page>

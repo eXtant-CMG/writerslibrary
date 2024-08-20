@@ -1,6 +1,6 @@
-#User Manual
+# User Manual
 
-##Navigating the website: browsing
+## Navigating the website: browsing
 
 This edition can be used either by browsing or by searching through it. The upper horizontal bar serves as a browsing tool that can sort alphabetically among authors, titles and places of publication. The number of items retrieved is shown under each letter to give an idea of how relevant or representative a specific search query is.
 
@@ -19,7 +19,7 @@ The following information is provided for each book volume:
 - The **inscription** field signals the presence of a dedication in the author's hand or an inscription of a previous owner.
 - If there are **reading traces** in the book, a list of the page numbers on which they occur is given. The page numbers appear in red to help identify books with reading traces more easily.
 
-##Book view
+## Book view
 
 All books in the index for which scans are available can be clicked to enter the "**book view**". In this view the screen is split in two, with facsimiles on the left side and a description on the right.
 
@@ -27,7 +27,7 @@ By default the cover of the book will be the opening facsimile on the left. In t
 
 In the book view, some parts of the bibliographical information above the facsimile can be clicked to produce a list of volumes that share the same author, place or date of publication.
 
-##Reading traces
+## Reading traces
 
 Reading traces may consist of underlined or marked passages, dog-eared pages, and "**marginalia**", i.e. words or drawings in the margins or on separate pieces of paper, written by Beckett or by a previous owner of the book.
 
@@ -36,7 +36,7 @@ Clicking on a zone number will activate two pop-up windows on the right side of 
 
 When browsing through a marked book, it is possible to look for keywords among its reading traces by entering terms into the "Search" box at the top of the webpage and setting the filter to "**This book (reading traces)**". When searching through a book's reading traces, you can always type in "**marginalia**" to bring up all the marginal annotations contained in that book.
 
-##Navigating the website: searching
+## Navigating the website: searching
 
 The search function of the module extends to the various fields of the bibliographical entry (author, title, place, date) or to the transcriptions of the reading traces.
 

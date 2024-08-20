@@ -1,25 +1,25 @@
-# Documentation
+#Documentation
 
-## Getting Started
+##Getting Started
 
 Adding data to this app is mainly done in the XML file `library.xml`, and some configuration can be customized in `config.xml`. The files can be found here:
 
 - `/db/apps/writerslibrarary/data/library/library.xml`
 - `/db/apps/writerslibrarary/data/library/config.xml`
 
-### Editing the XML files in eXide
+###Editing the XML files in eXide
 You can open and edit these two XML files in `eXide`, eXist-db's code editor. To open eXide, go to the eXist-db **Dashboard** and click on the eXide icon.
 
 To edit `library.xml` and `config.xml`, you’ll need to log in as an **administrator** (dba). To do this, click on the “Login” button in the top right corner of the eXide window and enter the admin username and password you provided during the eXist-db installation.
 
-### Editing the XML files in oXygen
+###Editing the XML files in oXygen
 In addition to eXide, you can also edit the XML files in an eXist-db using **oXygen XML Editor**. oXygen is a powerful XML editor that provides many advanced features for working with XML data.
 
 To edit the files in oXygen, you’ll need to connect oXygen to your eXist-db. This can be done by creating a new connection to the eXist-db server in the oXygen “Data Source Explorer” view. Once the connection is established, you’ll be able to browse and edit the files in your eXist-db directly from oXygen.
 
 For more detailed instructions on how to connect oXygen to an eXist-db and edit files, see [this page in the oXygen documentation](https://www.oxygenxml.com/doc/versions/25.1/ug-editor/topics/configure-exist-datasource.html).
 
-## Configuration: config.xml
+##Configuration: config.xml
 As a first step in configuring the app to represent a particular collection of books, an admin can change the title and subtitle in `config.xml`.
 
     <title>Bibundina</title>
@@ -66,16 +66,17 @@ When working with books published in other date ranges than the ones currently o
 
 Advanced users who are familiar with search indexes and range queries can add an index in `collection.xconf` and phrase the range index in this XML syntax to add another sorting option to the interface.
 
-## Encoding Schema: library.xml
+##Encoding Schema: library.xml
 
 In `library.xml`, add book entries following the custom encoding scheme that is documented in the section “Encoding manual”.
 
 The root element is `<book>`, which has attributes `type` and `id`. The `type` attribute specifies the type of book (`EL` (extant library) `VL` (virtual entry), while the `id` attribute provides a unique identifier for the book.
 
 	<book id="ARA-LIB" type="EL">
+		<!-- Module elements go here -->
 	</book>
 
-### Module 1: Bibliographic Info
+###Module 1: Bibliographic Info
 This XML schema is used to encode a book's bibliographical data. 
 
 	<module type="bibl">
@@ -115,16 +116,106 @@ If a book has **no author**, the `<author>` element can be left empty, and the s
 	<Author sort="Collier"><firstname/><lastname/></Author>
 	<Editor>L.D. Collier</Editor> 
 
-If a book has **several authors**, 
+If a book has **multiple authors**, each author should be enclosed in their own `<author>` element:
+
+	<author sort="Smith">
+		<firstname>John</firstname>
+		<lastname>Smith</lastname>
+	</author>
+	<author>
+		<firstname>Jane</firstname>
+		<lastname>Doe</lastname>
+	</author>
 
 The `<volume/>`, `<series/>`, `<edition/>`, `<editor/>`, `<place>`, `<publisher>`, `<date>`, and `<generalnote/>` elements can contain information about the volume number, series, edition, editor, place of publication, publisher, date of publication, and any general notes about the book, respectively.
 
-The `<location>` element specifies where the book can be found.
+The `<location>` element specifies the current location of the book.
 
 The `<IIIF>` element contains information about the International Image Interoperability Framework (IIIF) resources associated with the book. Within this element are `<IIIFmanifest>` and `<IIIFviewer>` elements that contain the URLs for the IIIF manifest and a stable identifier where the images can be seen in a IIIF viewer.
 
+	<IIIF>
+		<IIIFmanifest>http://example.com/manifest.json</IIIFmanifest>
+		<IIIFviewer>http://example.com/viewer</IIIFviewer>
+	</IIIF>
 
-## Including Images
+### Module 2: Proprietary History
+
+The proprietary history module is used to encode the ownership and provenance details of a book.
+
+	<module type="prop">
+	    <type>received</type>
+	    <dateofacquisition>1934-05-15</dateofacquisition>
+	    <origin>Here you can describe the provenance of a book.</origin>
+	    <dedication>This is a sample dedication.</dedication>
+	</module>
+
+
+Within the `<book>` element, the `<module>` element with an attribute `type` set to `"prop"` contains the proprietary history of the book. This module provides information about how and when the book was acquired, its origin, and any dedications associated with it.
+
+The `<type>` element specifies the nature of the acquisition. Common values might include:
+
+- received
+- purchased
+- gifted
+- inherited
+
+The `<dateofacquisition>` element contains the date when the book was acquired. This should be formatted in a standard date format (e.g., YYYY-MM-DD).
+
+The `<origin>` element provides a detailed description of the book's provenance, such as previous owners, acquisition source, or historical context.
+
+The `<dedication>` element includes any dedications written in or associated with the book. This could be a personal note from the giver or an inscription found within the book.
+
+### Module 3: Pages and Reading Traces
+
+The Pages and Reading Traces module is used to encode information about individual pages of a book and any reading traces or annotations found on those pages.
+
+
+	<module type="pages">
+	    <page>
+	        <pagenumber>cover</pagenumber>
+	        <facsimile>DAR-ORI/cover.jpg</facsimile>
+	    </page>
+	    <page>
+	        <pagenumber>tp</pagenumber>
+	        <facsimile>DAR-ORI/tp.jpg</facsimile>
+	    </page>
+	    <page>
+	        <pagenumber>56</pagenumber>
+	        <facsimile>DAR-ORI/56.jpg</facsimile>
+	        <zone>
+	            <number>1</number>
+	            <facsimile>DAR-ORI/zones/56(1).jpg</facsimile>
+	            <type>marginalia</type>
+	            <position>880</position>
+	            <rn>
+	                <transcription>
+	                    <m>woodpecker</m> / <u>How have all those exquisite adaptations of / one part of the organisation to another part, and to the / conditions of life, and of one distinct organic being to / another being, been perfected?</u>
+	                </transcription>
+	                <writingtool>Red ink</writingtool>
+	                <extracts>But the mere existence of individual / variability and of some few well-marked varieties, / though necessary as the foundation for the work, helps / us but little in understanding how species arise in / nature. How have all those exquisite adaptations of / one part of the organisation to another part, and to the / conditions of life, and of one distinct organic being to / another being, been perfected? We see these beautiful / co-adaptations most plainly in the woodpecker and
+	                </extracts>
+	            </rn>
+	        </zone>
+	    </page>
+	</module>
+
+
+The `<module>` element with the attribute `type` set to `"pages"` contains the details of individual pages within the book. Each `<page>` element includes a `<pagenumber>` and a `<facsimile>`. The `<pagenumber>` element specifies the page number or identifier (e.g., "cover", "tp" for title page), while the `<facsimile>` element provides a reference to an image file of the page, which can be a local file path or a IIIF image URL (see the "Including Images" section).
+
+A page can have one or more reading traces, which are encoded within `<zone>` elements. Each `<zone>` element represents an individual reading trace, with several sub-elements to provide detailed information.
+
+The `<number>` element within a `<zone>` specifies the order of the reading trace on the page, transcribed from top to bottom.
+
+The `<facsimile>` element within a `<zone>` provides a reference to an image file of the specific reading trace.
+
+A `<type>` element with the value "marginalia" **must** be added if the reading trace contains actual words written by the reader.
+
+The `<position>` element indicates the position of the reading trace on the page, expressed in pixels down from the top of the image.
+
+The `<rn>` element (reading note) contains the detailed content of the reading trace, including the transcription, writing tool, and the extract associated with the trace. The `<transcription>` element holds the transcribed text, with emphasis tags such as `<u>` for underlined text and `<m>` for marginalia notes. The `<writingtool>` element specifies the tool used to create the trace, such as "Red ink". The `<extracts>` element contains the text excerpts related to the reading trace.
+
+
+##Including Images
 The writer's library app accommodates **three** different ways of incorporating images and the sample data and documentation in the app will demonstrate the three ways. Images can either be stored **within the app** itself (*which we do not recommend*); images can be loaded into the app from a **static folder on the same server**; and thirdly, images can be incorporated **via IIIF**. The methods can also be combined.
 
 ###Inside the app
@@ -141,7 +232,7 @@ The app is set to search for the contents of the `<facsimile>` element (e.g., `A
 
 **Note**: Storing large amounts of images in the writer’s library app is **not recommended**. This is because eXist-db is not designed to host images and doing so can increase the file size of the app instance. To incorporate a substantial collection of images in the app, it is preferable to host them in a static folder on the server (or local machine), or on a IIIF server.
 
-### From a Static Folder
+###From a Static Folder
 The app can be set up to retrieve images from a folder outside of eXist-db. However, this requires configuration in both eXist-db and the server’s Apache httpd or Nginx when run on a server.
 
 By following the outlined steps, the app can retrieve images from a static folder named `library-images` (on a computer or on a server).
@@ -203,7 +294,7 @@ In an **Nginx** configuration, add:
 Once eXist-db and Apache httpd or Nginx have been restarted, images from the `/home/library-images` folder on the server should be available at URLs starting with `/library-images`, to which `controller.xq` will then append the references given in the `<facsimile>` elements. In this way, `<facsimile>ARA-LIB/cover.jpg</facsimile>` will correctly refer to an image stored as `/home/library-images/ARA-LIB/cover.jpg`.
 
 
-### Via IIIF
+###Via IIIF
 If the `<facsimile>` element begins with “https”, the app will directly load the image from the specified URL. In this example:
 
 	<page>

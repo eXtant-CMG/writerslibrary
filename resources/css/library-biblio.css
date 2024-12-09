@@ -3,6 +3,36 @@ exist\:match {
     background-color:yellow;
 }
 
+.readingHistory {
+	border-left: 1px solid #668B8B;
+	border-bottom: 1px solid #668B8B;
+	border-right: 1px solid #668B8B;
+	display:block;
+	padding: 0px 5px 0px 5px;
+	width:400px;
+	background-color: #F7F7F7;
+	float:right;
+	z-Index:100;
+	position:relative;
+	margin-right: 10px;
+	right:0px;
+}
+
+.readingHistoryHeader {
+	background-color: #668B8B;
+	width:100%;
+	color:white;
+	display:block;
+	padding:5px 5px 5px 5px;
+	left:-5px;
+	position:relative;
+	cursor:pointer;
+}
+
+.reading-period {
+    font-weight:700;
+}
+
 
 .VLstudent, .VL {
 	border-bottom: 1px dashed black;
@@ -24,19 +54,6 @@ exist\:match {
 	background-color: #F7F7F7;
 }
 
-.vlsourcebook {
-	border-left: 1px solid #668B8B;
-	border-bottom: 1px solid #668B8B;
-	border-right: 1px solid #668B8B;
-	display:block;
-	padding: 0px 5px 0px 5px;
-	width:400px;
-	background-color: #F7F7F7;
-	float:right;
-	z-Index:100;
-	position:relative;
-	right:0px;
-}
 
 .FLcaret {
        display:inline-block;
@@ -219,7 +236,12 @@ background-color:black;}
 	opacity:0.7;
 }
 
-.vltitle {
+.rhtitle {
+	color:#668B8B;	
+	font-weight:bold;
+}
+
+.field-title {
 	color:#668B8B;	
 	font-weight:bold;
 }

@@ -29,7 +29,7 @@ In the book view, some parts of the bibliographical information above the facsim
 
 ## Reading traces
 
-Reading traces may consist of underlined or marked passages, dog-eared pages, and "**marginalia**", i.e. words or drawings in the margins or on separate pieces of paper, written by Beckett or by a previous owner of the book.
+Reading traces may consist of underlined or marked passages, dog-eared pages, and "**marginalia**", i.e. words or drawings in the margins or on separate pieces of paper, written by a previous owner of the book.
 
 If a page contains reading traces, zone numbers appear in the left margin of the image, at the same level as their corresponding trace.
 Clicking on a zone number will activate two pop-up windows on the right side of the screen. The first window is a cropped picture of the reading trace in question, while the second is a text box with a transcription of the reading trace. Clicking the zone image will **magnify** it, clicking again will undo the magnification. To hide the zone popups, click the "close" button in the top-right corner of the text box or anywhere on the left-hand facsimile.

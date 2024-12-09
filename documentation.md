@@ -146,7 +146,7 @@ The proprietary history module is used to encode the ownership and provenance de
 	    <type>received</type>
 	    <dateofacquisition>1934-05-15</dateofacquisition>
 	    <origin>Here you can describe the provenance of a book.</origin>
-	    <dedication>This is a sample dedication.</dedication>
+	    <inscription>This is a sample dedication.</inscription>
 	</module>
 
 
@@ -163,9 +163,101 @@ The `<dateofacquisition>` element contains the date when the book was acquired. 
 
 The `<origin>` element provides a detailed description of the book's provenance, such as previous owners, acquisition source, or historical context.
 
-The `<dedication>` element includes any dedications written in or associated with the book. This could be a personal note from the giver or an inscription found within the book.
+The `<inscription>` element includes any inscription written in or associated with the book. 
 
-### Module 3: Pages and Reading Traces
+### Module 3: Reading History
+
+The reading history module is used to encode details about the reading history of a book, including whether it has been read, the time period(s) during which it was read, and the evidence substantiating this claim.
+
+```xml
+<module type="reading">
+    <status>read</status>
+    <readingdate>
+        <from type="season">
+            <season>Summer</season>
+            <year>1934</year>
+        </from>
+        <to type="exact">
+            <day>5</day>
+            <month>2</month>
+            <year>1935</year>
+        </to>
+        <source>Letters and journal entries from the time.</source>
+    </readingdate>
+</module>
+```
+
+Within the `<book>` element, the `<module>` element with an attribute `type` set to `"reading"` contains the reading history of the book. This module provides information about whether the book was read, the dates or periods of reading, and any evidence supporting the reading history.
+
+1. **`<status>`**
+   - Indicates the reading status of the book.
+   - Possible values:
+     - `read`: The book has been read.
+     - `unread`: The book has not been read.
+     - `unknown`: The reading status is unknown.
+
+2. **`<readingdate>`**
+   - Encodes the date range during which the book was read.
+   - Contains:
+     - `<from>`: The starting point of the reading period.
+     - `<to>`: The ending point of the reading period.
+     - `<source>`: Evidence substantiating the reading history.
+
+3. **`<from>` and `<to>`**
+   - The `@type` attribute specifies the level of detail provided:
+     - `exact`: Specifies a full date (e.g., `YYYY-MM-DD`).
+     - `season`: Specifies a season and year (e.g., `Summer 1934`).
+     - `year`: Specifies only the year (e.g., `1934`).
+   - Content structure:
+     - If `@type="exact"`, include `<day>`, `<month>`, and `<year>`.
+     - If `@type="season"`, include `<season>` and `<year>`.
+     - If `@type="year"`, include only `<year>`.
+
+4. **`<source>`**
+   - Provides evidence or substantiation for the reading history.
+
+**Example of an Exact Date Range**:
+
+  ```xml
+  <from type="exact">
+      <day>15</day>
+      <month>7</month>
+      <year>1934</year>
+  </from>
+  <to type="exact">
+      <day>20</day>
+      <month>7</month>
+      <year>1934</year>
+  </to>
+  ```
+
+**Example of a Seasonal Period**:
+
+  ```xml
+  <from type="season">
+      <season>Spring</season>
+      <year>1934</year>
+  </from>
+  <to type="season">
+      <season>Summer</season>
+      <year>1934</year>
+  </to>
+  ```
+
+**Example of a Year-Only Period**:
+
+  ```xml
+  <from type="year">
+      <year>1934</year>
+  </from>
+  <to type="year">
+      <year>1935</year>
+  </to>
+  ```
+
+The `<readingdate>` element can be used multiple times if the book was known to have been read more than once. To encode one period (e.g. "Summer 1934") instead of a range, fill in the same info in both `<from>` and `<to>`. If these two fields are identical, only `<from>` will be visualized.
+
+### Module 4: Pages and Reading Traces
 
 The Pages and Reading Traces module is used to encode information about individual pages of a book and any reading traces or annotations found on those pages.
 

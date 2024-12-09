@@ -2,7 +2,7 @@
   <index xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <lucene>
       <text qname="module" index="no">
-        <field name="library-book-biblio" if="@type='bibl' or @type='prop'"/>
+        <field name="library-book-biblio" if="@type='bibl' or @type='prop' or @type='reading'"/>
         <field name="bookID" expression="parent::book/@id"/>
         <facet dimension="document" expression="'library-bibliography'"/>
         <facet dimension="module" expression="substring-after(util:collection-name(.),'data/')"/>
@@ -45,12 +45,14 @@
         <field name="library-book-Title" type="xs:string" match="module/title/@sort"/>
         <field name="library-book-Date" type="xs:string" match="module/date"/>
         <field name="library-book-Place" type="xs:string" match="module/place"/>
-        <field name="library-book-Dedication" type="xs:string" match="module/dedication"/>
+        <field name="library-book-inscription" type="xs:string" match="module/inscription"/>
+        <field name="library-book-origin" type="xs:string" match="module/origin"/>
+        <field name="library-book-dateofacquisition" type="xs:string" match="module/dateofacquisition"/>
         <field name="library-book-readingTraces" type="xs:string" match="module/page"/>
         <field name="library-book-Marginalia" type="xs:string" match="module//m"/>
+        <field name="library-book-source" type="xs:string" match="module/readingdate/source"/>
       </create>
-      
-      
+     
     </range>
   </index>
   <triggers>

@@ -52,10 +52,10 @@
             <breadcrumbPhrase>date of publication</breadcrumbPhrase>
         </sortBy>
         <!-- Inscription -->
-        <sortBy id="Dedication" browseCategory="Alphabet">
+        <sortBy id="Inscription" browseCategory="Alphabet">
             <label>Inscription</label>
             <rangeQuery>
-                <fields>("library-book-Dedication","library-book-Author")</fields>
+                <fields>("library-book-inscription","library-book-Author")</fields>
                 <operators>("contains","starts-with")</operators>
                 <keys>"*",$currentBrowseValue</keys>
             </rangeQuery>

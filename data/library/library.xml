@@ -23,10 +23,46 @@
             <IIIFviewer/>
         </IIIF>
       </module>
-    </book>
-    -->
-
-
+      <module type="prop">
+            <type/>
+            <dateofacquisition/>
+            <origin/>
+            <inscription/>
+       </module>
+       <module type="reading">
+            <status/>
+            <readingdate>
+                <from type="season">
+                    <season/>
+                    <year/>
+                </from>
+                <to type="exact">
+                    <day/>
+                    <month/>
+                    <year/>
+                </to>
+               <source/>
+            </readingdate>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber/>
+                <facsimile/>
+                <zone>
+                    <number/>
+                    <facsimile/>
+                    <type/>
+                    <position/>
+                    <rn>
+                       <transcription><m>marginal comment</m></transcription>
+                        <writingtool/>
+                        <extracts/>
+                    </rn>
+                </zone>
+            </page>
+        </module>
+    </book> -->
+    
 
     <!-- Start of sample data -->    
     <book type="EL" id="ARA-LIB">
@@ -44,6 +80,36 @@
             <date>1924</date>
             <edition>1st</edition>
             <generalnote/>
+        </module>
+        <module type="prop">
+            <type>received</type>
+            <dateofacquisition>1934-05-15</dateofacquisition>
+            <origin>Here you can describe the provenance of a book.</origin>
+            <inscription>This is a sample inscription.</inscription>
+        </module>
+        <module type="reading">
+            <status>read</status><!-- possible values: read, unread, unknown -->
+            <readingdate>
+                <from type="season"><!-- possible values for @type: exact, season, year -->
+                    <season>Summer</season>
+                    <year>1934</year>
+                </from>
+                <to type="exact"><!-- possible values for @type: exact, season, year -->
+                    <day>5</day>
+                    <month>2</month>
+                    <year>1935</year>
+                </to>
+               <source>Any type of substantiation.</source><!-- the evidence for claiming that the book was read during this period -->
+            </readingdate>
+            <readingdate>
+                <from type="year"><!-- possible values for @type: exact, season, year -->
+                    <year>1944</year>
+                </from>
+                <to type="year"><!-- possible values for @type: exact, season, year -->
+                    <year>1945</year>
+                </to>
+                <source>Any type of substantiation.</source><!-- the evidence for claiming that the book was read during this period -->
+            </readingdate>
         </module>
         <module type="pages">
             <page>
@@ -113,14 +179,9 @@
             <place>London</place>
             <publisher>Chatto and Windus</publisher>
             <date>1934</date>
+            <location>University of Buffalo, catalogue number PLJJ18</location>
             <generalnote/>
             <imagecopyright>Image taken from http://www.abebooks.co.uk/</imagecopyright>
-        </module>
-        <module type="prop">
-            <library>
-                <name>University of Buffalo</name>
-                <cataloguenumber>PLJJ18</cataloguenumber>
-            </library>
         </module>
         <module type="pages">
             <page>
@@ -129,6 +190,7 @@
             </page>
         </module>
     </book>
+    
     
     <book id="o530758" type="EL">
         <module type="bibl">
@@ -157,6 +219,7 @@
             <page>
                 <pagenumber>1</pagenumber>
                 <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0001.JP2/full/680,/0/default.jpg</facsimile>
+
             </page>
             <page>
                 <pagenumber>2</pagenumber>
@@ -165,6 +228,7 @@
             <page>
                 <pagenumber>3</pagenumber>
                 <facsimile>https://iiif.wellcomecollection.org/image/b18035723_0004.JP2/full/680,/0/default.jpg</facsimile>
+
             </page>
             <page>
                 <pagenumber>4</pagenumber>
@@ -384,11 +448,9 @@
             <edition>18th</edition>
             <centimeters/>
             <publishersaddress>Curzon Street Mayfair</publishersaddress>
+            <location>University of Buffalo, catalogue number PLJJ36</location>
             <generalnote>This book illustates how to encode the date of the first edition.</generalnote>
             <uncutpages/>
-        </module>
-        <module type="prop">
-            <library><name>University of Buffalo</name><cataloguenumber>PLJJ36</cataloguenumber></library>
         </module>
         <module type="pages">
             <page>
@@ -476,134 +538,8 @@
         </module>
         <module type="prop">
             <type>received</type>
-            <dateofacquisition/>
             <origin>Here you can describe the provenance of a book.</origin>
-            <dedication>This is a sample dedication.</dedication>
-        </module>
-    </book>
-    
-    <book type="EL" id="DUC-MEC">
-        <module type="bibl">
-            <title sort="Livre des proprietes des choses">Mécanisme de la physionomie humaine, ou, Analyse électro-physiologique de l'expression des passions: Album</title>
-            <type>Monograph</type>
-            <author sort="Duchenne">
-                <firstname>G.-B.</firstname>
-                <lastname>Duchenne</lastname>
-            </author>
-            <volume/>
-            <series/>
-            <editor/>
-            <place>Paris</place>
-            <publisher>Veuve Renouard</publisher>
-            <date>1862</date>
-            <generalnote/>
-            <location>Cambridge University Library</location>
-            <IIIF>
-                <IIIFmanifest>https://cudl.lib.cam.ac.uk//iiif/PH-DAR-LIB-00160</IIIFmanifest>
-                <IIIFviewer>https://cudl.lib.cam.ac.uk/mirador/PH-DAR-LIB-00160/0</IIIFviewer>
-            </IIIF>
-        </module>
-        <module type="pages">
-            <page>
-                <pagenumber>cover</pagenumber>
-                <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00001.jp2/full/680,/0/default.jpg</facsimile>   
-            </page>
-            <page>
-                <pagenumber>tp</pagenumber>
-                <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00003.jp2/full/680,/0/default.jpg</facsimile>   
-            </page>
-            <page>
-                <pagenumber>1</pagenumber>
-                <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00007.jp2/full/680,/0/default.jpg</facsimile> 
-                
-                <!-- zone -->
-                <zone>
-                    <number>1</number>
-                    <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00007.jp2/501,8507,2672,929/500,/0/default.jpg</facsimile>
-                    <position>815</position>
-                    <rn>
-                        <transcription>Verander</transcription>
-                        <writingtool/>
-                        <extracts>something</extracts>
-                    </rn>
-                </zone>
-                
-                <!-- zone -->
-                <zone>
-                    <number>2</number>
-                    <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00007.jp2/3163,8351,3549,1367/500,/0/default.jpg</facsimile>
-                    <position>800</position>
-                    <rn>
-                        <transcription><m>levator</m></transcription>
-                        <writingtool/>
-                        <extracts/>
-                    </rn>
-                    <type>marginalia</type>
-                </zone>
-            </page>
-            <page>
-                <pagenumber>2</pagenumber>
-                <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00008.jp2/full/680,/0/default.jpg</facsimile>
-                
-            </page>
-            <page>
-                <pagenumber>19</pagenumber>
-                <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00025.jp2/full/680,/0/default.jpg</facsimile>   
-                
-                <zone>
-                    <number>1</number>               
-                    <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00025.jp2/319,3922,1109,728/500,/0/default.jpg</facsimile>
-                    <type>marginalia</type>
-                    <position>500</position>
-                    <rn>
-                        <transcription><m>both nerves from same main branch.</m></transcription>
-                        <writingtool>grey pencil</writingtool>
-                        <extracts>Le sourcilier (O, fig. 1), recouvert par l'orbiculaire supérieur, / ne peut être excité que par l'intermédiaire de son filet / moteur, en dehors des fibres les plus excentriques de l'orbiculaire / supérieur, filet qui vient du palpébral supérieur, et qui / est sous-cutané dans deux points (voy. I, fig. 2).</extracts>
-                    </rn>
-                </zone>
-                
-            </page>
-            <page>
-                <pagenumber>20</pagenumber>
-                <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00026.jp2/full/680,/0/default.jpg</facsimile>
-                <!-- zone -->
-                <zone>
-                    <number>1</number>
-                    <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00026.jp2/3758,2933,2651,501/500,/0/default.jpg</facsimile>
-                    <type>marginalia</type>
-                    <position>281</position>
-                    <rn>
-                        <transcription><m>Enfin</m></transcription>
-                        <writingtool/>
-                        <extracts>l'expérience</extracts>
-                    </rn>
-                </zone>
-            </page>
-            <page>
-                <pagenumber>29</pagenumber>
-                <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00035.jp2/full/680,/0/default.jpg</facsimile> 
-                <zone>
-                    <number>1</number>               
-                    <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00035.jp2/1003,5324,2369,639/500,/0/default.jpg</facsimile>
-                    <position>670</position>
-                    <rn>
-                        <transcription><u>tempérament lascif ou aux habitudes lubriques</u></transcription>
-                        <writingtool>grey pencil</writingtool>
-                        <extracts>représentant, en général, l'attitude du nez, chez les sujets / d'un tempérament lascif ou aux habitudes lubriques. / (Il existe des variétés individuelles qui dépendent de la / forme du nez.)</extracts>
-                    </rn>
-                </zone>
-                <zone>
-                    <number>2</number>               
-                    <facsimile>https://images.lib.cam.ac.uk/iiif/PH-DAR-LIB-00160-000-00035.jp2/762,7014,1597,710/500,/0/default.jpg</facsimile>
-                    <type>marginalia</type>
-                    <position>870</position>
-                    <rn>
-                        <transcription><m>Is not this fancy?</m></transcription>
-                        <writingtool>grey pencil</writingtool>
-                        <extracts>représentant, en général, l'attitude du nez, chez les sujets / d'un tempérament lascif ou aux habitudes lubriques. / (Il existe des variétés individuelles qui dépendent de la / forme du nez.)</extracts>
-                    </rn>
-                </zone>
-            </page>
+            <inscription>This is a sample inscription.</inscription>
         </module>
     </book>
     
@@ -701,9 +637,6 @@
             <editor type="translation">R. Farquharson Sharp</editor>
             <generalnote>This book illustrates how to encode the translator of a book.</generalnote>
             <uncutpages>no</uncutpages>
-        </module>
-        <module type="prop">
-            <library><name>University of Buffalo</name><cataloguenumber>PLJJ157</cataloguenumber></library>
         </module>
     </book>
     
@@ -956,16 +889,13 @@
             <date>1922</date>
             <edition>1st</edition>
             <nrofpages>20</nrofpages>
+            <location>University of Buffalo, catalogue number PLJJ299</location>
             <generalnote>Inscribed to James Joyce by the author.</generalnote>
         </module>
         <module type="prop">
             <type>received</type>
             <origin>This book was sent to Joyce by Paul Valéry.</origin>
-            <dedication>A JAMES JOYCE <lb/> Paul Valéry <lb/> "JE MORDS CE QUE JE PUIS!"</dedication>
-            <library>
-                <name>University of Buffalo</name>
-                <cataloguenumber>PLJJ299</cataloguenumber>
-            </library>
+            <inscription>A JAMES JOYCE <lb/> Paul Valéry <lb/> "JE MORDS CE QUE JE PUIS!"</inscription>
         </module>
         <module type="pages">
             <page>

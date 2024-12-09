@@ -146,7 +146,7 @@ let $EditorLine := if ($biblModule/editor and $biblModule/editor[1] ne "")
             else ()
 
 (: Location :)
-let $LocationLine := if ($biblModule/location ne "") then ("Location: ",$biblModule/location/node(),<br/>) else ()
+let $LocationLine := if ($biblModule/location ne "") then (<span class="field-title">Location</span>,": ",$biblModule/location/node(),<br/>) else ()
 
 (: Now return everything :)
 return
@@ -158,17 +158,107 @@ $AuthorLine, $TitleLine, $PlaceAndPublisherLine, $DateLine, <br/>, $EditionLine,
 
 };
 
-(: This function gets the inscription(s) for the browse and book views
- : For this the (optional) second module <module n="2" type="prop"></module> gets passed into the function.
+(: This function gets the information from the (optional) second module <module type="prop"></module> Proprietary History.
  : Again with the $highlight value to put inscriptions into bold if they are the active sorting thing in the browse view. 
  :)
-declare function library-functions:getInscriptions($propModule as node(), $highlight as xs:string?) {
-    
-         for $dedication in $propModule/dedication
-         return
-            <span class="library-dedication{if ($highlight eq "Dedication") then 'current' else ()}">Inscription: {$dedication}<br/></span>
-
+declare function library-functions:getProprietaryHistory($propModule as node(), $highlight as xs:string?) {
+    let $months := map {
+        "01": "January", "02": "February", "03": "March", "04": "April",
+        "05": "May", "06": "June", "07": "July", "08": "August",
+        "09": "September", "10": "October", "11": "November", "12": "December"
+    }
+    return
+        for $element in $propModule/*[name() != 'type']
+        where fn:normalize-space($element) != ''
+        return
+            <span class="library-element {if ($highlight eq $element/name()) then 'current' else ()}">
+                <span class="field-title">
+                    {if (fn:name($element) eq 'dateofacquisition') then
+                        "Date of acquisition"
+                    else
+                        fn:concat(fn:upper-case(fn:substring(fn:name($element), 1, 1)), fn:substring(fn:name($element), 2))}
+                </span>:
+                {if (fn:name($element) eq 'dateofacquisition') then
+                    let $date := fn:tokenize($element, '-')
+                    return
+                        if (fn:count($date) eq 3) then
+                            fn:concat($date[3], ' ', $months($date[2]), ' ', $date[1])
+                        else if (fn:count($date) eq 2) then
+                            fn:concat('MM ', $months($date[2]), ' ', $date[1])
+                        else if (fn:count($date) eq 1) then
+                            fn:concat('YYYY ', $date[1])
+                        else
+                            'Invalid date format'
+                else
+                    $element}<br/>
+            </span>
 };
+
+(: This function gets the information from the (optional) third module <module type="reading"></module> Reading History.
+ :)
+declare function library-functions:getReadingHistory($readingModule as node(), $highlight as xs:string?) {
+    let $months := map {
+        "1": "January", "2": "February", "3": "March", "4": "April",
+        "5": "May", "6": "June", "7": "July", "8": "August",
+        "9": "September", "10": "October", "11": "November", "12": "December"
+    }
+    let $status := $readingModule/status
+    let $readingDates := $readingModule/readingdate
+    return
+
+            <span class="readingHistory"><span class="readingHistoryHeader">Reading history</span>
+
+            {
+                for $readingDate in $readingDates
+                let $from := $readingDate/from
+                let $to := $readingDate/to
+                let $source := $readingDate/source
+                return
+                    <span>
+                        <span class="reading-period {if ($highlight eq 'readingdate') then 'highlight' else ()}">
+                            {if ($from = $to) then
+                                (: If <from> and <to> are identical, display only <from> :)
+                                <span>
+                                    {if ($from/@type = "exact") then
+                                        fn:concat($from/day, " ", $months($from/month), " ", $from/year)
+                                    else if ($from/@type = "season") then
+                                        fn:concat($from/season, " ", $from/year)
+                                    else if ($from/@type = "year") then
+                                        $from/year
+                                    else
+                                        "Invalid date format"}
+                                </span>
+                            else
+                                (: If <from> and <to> are different, display both :)
+                                <span>
+                                    {if ($from/@type = "exact") then
+                                        fn:concat($from/day, " ", $months($from/month), " ", $from/year)
+                                    else if ($from/@type = "season") then
+                                        fn:concat($from/season, " ", $from/year)
+                                    else if ($from/@type = "year") then
+                                        $from/year
+                                    else
+                                        "Invalid date format"} —  
+                                    {if ($to/@type = "exact") then
+                                        fn:concat($to/day, " ", $months($to/month), " ", $to/year)
+                                    else if ($to/@type = "season") then
+                                        fn:concat($to/season, " ", $to/year)
+                                    else if ($to/@type = "year") then
+                                        $to/year
+                                    else
+                                        "Invalid date format"}
+                                </span>
+                            }
+                        </span><br/>
+                        <span><span class="field-title">Source</span>: <span class="{if ($highlight eq 'source') then 'highlight' else ()}">{$source}</span></span><br/><br/>
+                    </span>
+            }
+            </span>
+};
+
+
+
+
 
 (: This function gets the list of pages with reading traces for the browse view.
  : For this the reading traces module (<module type="pages"></module>) node gets passed 
@@ -176,7 +266,7 @@ declare function library-functions:getInscriptions($propModule as node(), $highl
  :)
 declare function library-functions:getReadingTracesList($rtModule as node(), $highlight as xs:string?) {
 <span>
-    <span class="library-readingtraces{if ($highlight eq "readingTraces") then 'current' else ()}">Reading traces on: </span>
+    <span class="library-readingtraces{if ($highlight eq "readingTraces") then 'current' else ()}"><span class="field-title">Reading traces on</span>: </span>
     <span class="library-rt-pagenumbers">
        {let $nrOfPages := count($rtModule/page[zone])
         for $page at $pos in $rtModule/page[zone]
@@ -192,7 +282,7 @@ declare function library-functions:getReadingTracesList($rtModule as node(), $hi
 
 (: This function returns the value of the <GeneralNote> tag in the biblio module :)
 declare function library-functions:getGeneralNotes($GeneralNote as node()) {
-<span>Notes: {$GeneralNote} <br/></span>
+<span><span class="field-title">Notes</span>: {$GeneralNote} <br/></span>
 };
 
 

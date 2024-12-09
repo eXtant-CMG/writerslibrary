@@ -37,12 +37,18 @@ let $bookNode := if ($book) then $book else library-book-view:getBookNode($bookI
 
 return 
        <span>
+                      { (: 2.2: check for the Reading History <module> tag and render its contents :)
+                        if ($bookNode/module[@type eq "reading"]) then 
+                            library-functions:getReadingHistory($bookNode/module[@type eq "reading"], "") else ()
+                       }
                       { (: 1: call to getBibliography to get the main bibliographic lines :)
                         library-functions:getBibliography($bookNode/module[@type eq "bibl"], "")
                        }
-                       { (: 2: check if there is one, then call to getInscriptions to get the inscription(s) :)
-                        if ($bookNode/module/dedication[1] and $bookNode/module/dedication[1] ne "") then library-functions:getInscriptions($bookNode/module[@type eq "prop"],"")  else()
+                       { (: 2.1: check for the Proprietary History <module> tag and render its contents :)
+                        if ($bookNode/module[@type eq "prop"]) then 
+                            library-functions:getProprietaryHistory($bookNode/module[@type eq "prop"], "") else ()
                        }
+                       
                        { (: 3: get GeneralNotes :)
                         if ($bookNode/module/generalnote and $bookNode/module/generalnote ne "") then library-functions:getGeneralNotes($bookNode/module/generalnote) else ()
                        }

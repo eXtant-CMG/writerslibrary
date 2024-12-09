@@ -206,8 +206,11 @@ declare function library-browse:getEntries($node as node(), $model as map(*)){
                        { (: 1: call to getBibliography to get the main bibliographic lines :)
                         library-functions:getBibliography($result/module[@type eq "bibl"], $currentSortValue)
                        }
-                       { (: 2: check if there is one, then call to getInscriptions to get the inscription(s) :)
-                        if ($result/module/dedication[1] and $result/module/dedication[1] ne "") then library-functions:getInscriptions($result/module[@type eq "prop"], $currentSortValue)  else()
+                       { (: Function to check for the Proprietary History <module> tag and render its contents :)
+                        if ($result/module[@type eq "prop"]) then 
+                            library-functions:getProprietaryHistory($result/module[@type eq "prop"], "")
+                        else
+                            ()
                        }
                        { (: 3: check if there are reading traces, then send to function getReadingTracesList :)
                         if ($result/module/page/zone[1]) then library-functions:getReadingTracesList($result/module[@type eq "pages"], $currentSortValue)  else()

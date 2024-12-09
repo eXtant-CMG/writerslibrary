@@ -50,7 +50,7 @@ declare function search:search($node as node(), $model as map(*), $q as xs:strin
         let $configDoc :=doc($config:data-root || '/library/config.xml')
         let $imgUrl := $configDoc//imgUrl/serverPath
         
-        (: for the bibliography + dedications it's the field library-book-biblio that needs to be queried :)
+        (: for the bibliography + inscriptions it's the field library-book-biblio that needs to be queried :)
         let $fieldQueryLibraryBiblio := concat('library-book-biblio:(',$q,')')
         let $biblioQuery := 
           if ($doc eq "" or $doc eq "library-bibliography") then
@@ -146,7 +146,7 @@ declare function search:search($node as node(), $model as map(*), $q as xs:strin
                 (: library bibliography hits :)
                 if ($moduleID eq "library" and local-name($highlightedResults) eq "book") then 
                   <a class="booklinkssearch" href="../../library/{$highlightedResults/data(@id)}.html">
-                    <table class="library">
+                    <table class="library" style="width:100%;">
                          <tr>
                             <td valign="top" width="90">
                                 {if ($highlightedResults//facsimile) then 
@@ -201,7 +201,7 @@ declare function search:search($node as node(), $model as map(*), $q as xs:strin
                 </div>
             <div class="pagination-div">{$pagination-links}</div>
 
-            <table cellpadding="0" cellspacing="0" class="results" style="font-size:inherit;">
+            <table cellpadding="0" cellspacing="0" class="results" style="font-size:inherit;width:100%;">
             {$results}
             </table>
             <div class="pagination-div">{$pagination-links}</div><br/><br/>

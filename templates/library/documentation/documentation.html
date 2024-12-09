@@ -195,7 +195,114 @@
 
 <p>The <code>&lt;dedication&gt;</code> element includes any dedications written in or associated with the book. This could be a personal note from the giver or an inscription found within the book.</p>
 
-<h3 class="documentation" id="toc_8">Module 3: Pages and Reading Traces</h3>
+<h3 class="documentation" id="toc_8">Module 3: Reading History</h3>
+
+<p>The reading history module is used to encode details about the reading history of a book, including whether it has been read, the time period(s) during which it was read, and the evidence substantiating this claim.</p>
+
+<div><pre><code class="language-markup">&lt;module type="reading"&gt;
+    &lt;status&gt;read&lt;/status&gt;
+    &lt;readingdate&gt;
+        &lt;from type="season"&gt;
+            &lt;season&gt;Summer&lt;/season&gt;
+            &lt;year&gt;1934&lt;/year&gt;
+        &lt;/from&gt;
+        &lt;to type="exact"&gt;
+            &lt;day&gt;5&lt;/day&gt;
+            &lt;month&gt;2&lt;/month&gt;
+            &lt;year&gt;1935&lt;/year&gt;
+        &lt;/to&gt;
+        &lt;source&gt;Letters and journal entries from the time.&lt;/source&gt;
+    &lt;/readingdate&gt;
+&lt;/module&gt;</code></pre></div>
+
+<p>Within the <code>&lt;book&gt;</code> element, the <code>&lt;module&gt;</code> element with an attribute <code>type</code> set to <code>"reading"</code> contains the reading history of the book. This module provides information about whether the book was read, the dates or periods of reading, and any evidence supporting the reading history.</p>
+
+<ol>
+<li><p><strong><code>&lt;status&gt;</code></strong></p>
+
+<ul>
+<li>Indicates the reading status of the book.</li>
+<li>Possible values:
+
+<ul>
+<li><code>read</code>: The book has been read.</li>
+<li><code>unread</code>: The book has not been read.</li>
+<li><code>unknown</code>: The reading status is unknown.</li>
+</ul></li>
+</ul></li>
+<li><p><strong><code>&lt;readingdate&gt;</code></strong></p>
+
+<ul>
+<li>Encodes the date range during which the book was read.</li>
+<li>Contains:
+
+<ul>
+<li><code>&lt;from&gt;</code>: The starting point of the reading period.</li>
+<li><code>&lt;to&gt;</code>: The ending point of the reading period.</li>
+<li><code>&lt;source&gt;</code>: Evidence substantiating the reading history.</li>
+</ul></li>
+</ul></li>
+<li><p><strong><code>&lt;from&gt;</code> and <code>&lt;to&gt;</code></strong></p>
+
+<ul>
+<li>The <code>@type</code> attribute specifies the level of detail provided:
+
+<ul>
+<li><code>exact</code>: Specifies a full date (e.g., <code>YYYY-MM-DD</code>).</li>
+<li><code>season</code>: Specifies a season and year (e.g., <code>Summer 1934</code>).</li>
+<li><code>year</code>: Specifies only the year (e.g., <code>1934</code>).</li>
+</ul></li>
+<li>Content structure:
+
+<ul>
+<li>If <code>@type="exact"</code>, include <code>&lt;day&gt;</code>, <code>&lt;month&gt;</code>, and <code>&lt;year&gt;</code>.</li>
+<li>If <code>@type="season"</code>, include <code>&lt;season&gt;</code> and <code>&lt;year&gt;</code>.</li>
+<li>If <code>@type="year"</code>, include only <code>&lt;year&gt;</code>.</li>
+</ul></li>
+</ul></li>
+<li><p><strong><code>&lt;source&gt;</code></strong></p>
+
+<ul>
+<li>Provides evidence or substantiation for the reading history.</li>
+</ul></li>
+</ol>
+
+<p><strong>Example of an Exact Date Range</strong>:</p>
+
+<div><pre><code class="language-markup">  &lt;from type="exact"&gt;
+      &lt;day&gt;15&lt;/day&gt;
+      &lt;month&gt;7&lt;/month&gt;
+      &lt;year&gt;1934&lt;/year&gt;
+  &lt;/from&gt;
+  &lt;to type="exact"&gt;
+      &lt;day&gt;20&lt;/day&gt;
+      &lt;month&gt;7&lt;/month&gt;
+      &lt;year&gt;1934&lt;/year&gt;
+  &lt;/to&gt;</code></pre></div>
+
+<p><strong>Example of a Seasonal Period</strong>:</p>
+
+<div><pre><code class="language-markup">  &lt;from type="season"&gt;
+      &lt;season&gt;Spring&lt;/season&gt;
+      &lt;year&gt;1934&lt;/year&gt;
+  &lt;/from&gt;
+  &lt;to type="season"&gt;
+      &lt;season&gt;Summer&lt;/season&gt;
+      &lt;year&gt;1934&lt;/year&gt;
+  &lt;/to&gt;</code></pre></div>
+
+<p><strong>Example of a Year-Only Period</strong>:</p>
+
+<div><pre><code class="language-markup">  &lt;from type="year"&gt;
+      &lt;year&gt;1934&lt;/year&gt;
+  &lt;/from&gt;
+  &lt;to type="year"&gt;
+      &lt;year&gt;1935&lt;/year&gt;
+  &lt;/to&gt;</code></pre></div>
+
+<p>The <code>&lt;readingdate&gt;</code> element can be used multiple times if the book was known to have been read more than once. To encode one period (e.g. "Summer 1934") instead of a range, fill in the same info in both <code>&lt;from&gt;</code> and <code>&lt;to&gt;</code>. If these two fields are identical, only <code>&lt;from&gt;</code> will be visualized.</p>
+
+<h3 class="documentation" id="toc_11">Module 4: Pages and Reading Traces</h3>
 
 <p>The Pages and Reading Traces module is used to encode information about individual pages of a book and any reading traces or annotations found on those pages.</p>
 
@@ -218,7 +325,7 @@
             &lt;position&gt;880&lt;/position&gt;
             &lt;rn&gt;
                 &lt;transcription&gt;
-                    &lt;m&gt;woodpecker&lt;/m&gt; / &lt;u&gt;How have all those exquisite adaptations of / one part of the organisation to another part, and to the / conditions of life, and of one distinct organic being to / another being, been perfected?&lt;/u&gt; 
+                    &lt;m&gt;woodpecker&lt;/m&gt; / &lt;u&gt;How have all those exquisite adaptations of / one part of the organisation to another part, and to the / conditions of life, and of one distinct organic being to / another being, been perfected?&lt;/u&gt;
                 &lt;/transcription&gt;
                 &lt;writingtool&gt;Red ink&lt;/writingtool&gt;
                 &lt;extracts&gt;But the mere existence of individual / variability and of some few well-marked varieties, / though necessary as the foundation for the work, helps / us but little in understanding how species arise in / nature. How have all those exquisite adaptations of / one part of the organisation to another part, and to the / conditions of life, and of one distinct organic being to / another being, been perfected? We see these beautiful / co-adaptations most plainly in the woodpecker and
@@ -242,11 +349,11 @@
 
 <p>The <code>&lt;rn&gt;</code> element (reading note) contains the detailed content of the reading trace, including the transcription, writing tool, and the extract associated with the trace. The <code>&lt;transcription&gt;</code> element holds the transcribed text, with emphasis tags such as <code>&lt;u&gt;</code> for underlined text and <code>&lt;m&gt;</code> for marginalia notes. The <code>&lt;writingtool&gt;</code> element specifies the tool used to create the trace, such as "Red ink". The <code>&lt;extracts&gt;</code> element contains the text excerpts related to the reading trace.</p>
 
-<h2 class="documentation" id="toc_9">Including Images</h2>
+<h2 class="documentation" id="toc_12">Including Images</h2>
 
 <p>The writer's library app accommodates <strong>three</strong> different ways of incorporating images and the sample data and documentation in the app will demonstrate the three ways. Images can either be stored <strong>within the app</strong> itself (<em>which we do not recommend</em>); images can be loaded into the app from a <strong>static folder on the same server</strong>; and thirdly, images can be incorporated <strong>via IIIF</strong>. The methods can also be combined.</p>
 
-<h3 class="documentation" id="toc_10">Inside the app</h3>
+<h3 class="documentation" id="toc_13">Inside the app</h3>
 
 <p>The writer's library app contains sample book entries with images stored within the app.</p>
 
@@ -261,7 +368,7 @@
 
 <p><strong>Note</strong>: Storing large amounts of images in the writer’s library app is <strong>not recommended</strong>. This is because eXist-db is not designed to host images and doing so can increase the file size of the app instance. To incorporate a substantial collection of images in the app, it is preferable to host them in a static folder on the server (or local machine), or on a IIIF server.</p>
 
-<h3 class="documentation" id="toc_11">From a Static Folder</h3>
+<h3 class="documentation" id="toc_14">From a Static Folder</h3>
 
 <p>The app can be set up to retrieve images from a folder outside of eXist-db. However, this requires configuration in both eXist-db and the server’s Apache httpd or Nginx when run on a server.</p>
 
@@ -325,7 +432,7 @@ ProxyPassReverse    /library-images http://localhost:8080/library-images</code><
 
 <p>Once eXist-db and Apache httpd or Nginx have been restarted, images from the <code>/home/library-images</code> folder on the server should be available at URLs starting with <code>/library-images</code>, to which <code>controller.xq</code> will then append the references given in the <code>&lt;facsimile&gt;</code> elements. In this way, <code>&lt;facsimile&gt;ARA-LIB/cover.jpg&lt;/facsimile&gt;</code> will correctly refer to an image stored as <code>/home/library-images/ARA-LIB/cover.jpg</code>.</p>
 
-<h3 class="documentation" id="toc_12">Via IIIF</h3>
+<h3 class="documentation" id="toc_15">Via IIIF</h3>
 
 <p>If the <code>&lt;facsimile&gt;</code> element begins with “https”, the app will directly load the image from the specified URL. In this example:</p>
 
@@ -340,7 +447,7 @@ ProxyPassReverse    /library-images http://localhost:8080/library-images</code><
 
 <p>The IIIF method of including images can be easily combined with one of the two previously described methods of bringing images into the app.</p>
 
-<h2 class="documentation" id="toc_13">Admin Tools</h2>
+<h2 class="documentation" id="toc_16">Admin Tools</h2>
 
 <p>When you are logged into eXist-db (via the dashboard or via eXide), a tab "Admin Tools" appears on the home page. There, admins can make use of three tools meant to facilitate the creation of a collection of book entries.  Two of the three tools are especially helpful to people incorporating images via IIIF. The three tools are:</p>
 
@@ -350,7 +457,7 @@ ProxyPassReverse    /library-images http://localhost:8080/library-images</code><
 <li>Zone coordinates tool (for IIIF images only)</li>
 </ul>
 
-<h3 class="documentation" id="toc_14">Create a New Book Entry</h3>
+<h3 class="documentation" id="toc_17">Create a New Book Entry</h3>
 
 <p>This tool helps you generate the XML for a new book entry. You can copy the result to your clipboard and paste it into <code>library.xml</code>.</p>
 
@@ -358,7 +465,7 @@ ProxyPassReverse    /library-images http://localhost:8080/library-images</code><
 
 <p>First, choose a valid and unique ID that starts with a letter and contains only letters and numbers. Then enter the main bibliographic information and (optionally) import images from a IIIF manifest. This feature can also be used separately (see below).</p>
 
-<h3 class="documentation" id="toc_15">Import image links from a IIIF manifest</h3>
+<h3 class="documentation" id="toc_18">Import image links from a IIIF manifest</h3>
 
 <p>This tool extracts image links from a IIIF manifest and formats them into the correct XML schema (<code>&lt;module type="pages"&gt;</code>). You can then paste the result directly into a <code>&lt;book&gt;</code> entry in your library collection. However, due to structural differences in IIIF manifests, extraction may not always be successful.</p>
 
@@ -371,7 +478,7 @@ ProxyPassReverse    /library-images http://localhost:8080/library-images</code><
 
 <p>Images are numbered consecutively in the <code>&lt;pagenumber&gt;</code> element. The <code>&lt;facsimile&gt;</code> element contains a IIIF compliant image link that renders the image at a width of <strong>680 pixels</strong>.</p>
 
-<h3 class="documentation" id="toc_16">Zone Coordinates Tool</h3>
+<h3 class="documentation" id="toc_19">Zone Coordinates Tool</h3>
 
 <p>This tool allows admins to draw a rectangular zone around a reading trace on a IIIF image. The tool generates a <code>&lt;zone&gt;</code> element, containing the correct coordinates for the zone, which can be pasted into a <code>&lt;page&gt;</code> element in <code>library.xml</code>. After making a selection, click the <code>preview zone image</code> button to magnify it.</p>
 
@@ -390,7 +497,7 @@ ProxyPassReverse    /library-images http://localhost:8080/library-images</code><
    &lt;type&gt;marginalia&lt;/type&gt;
 &lt;/zone&gt;</code></pre></div>
 
-<h2 class="documentation" id="toc_17">Structure of the App</h2>
+<h2 class="documentation" id="toc_20">Structure of the App</h2>
 
 <ul>
 <li><code>collection.xconf</code>: This file is used to configure collection-specific settings, such as indexing options and triggers.</li>
@@ -407,6 +514,8 @@ ProxyPassReverse    /library-images http://localhost:8080/library-images</code><
 <li><code>resources/</code>: This folder contains resources such as CSS files, images, JavaScript files, and XSLT files.</li>
 <li><code>templates/</code>: This folder contains HTML templates used to generate pages within the app.</li>
 </ul>
+
+
 
                     
             

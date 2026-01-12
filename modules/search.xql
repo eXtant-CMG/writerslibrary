@@ -145,7 +145,7 @@ declare function search:search($node as node(), $model as map(*), $q as xs:strin
             let $processedResult := 
                 (: library bibliography hits :)
                 if ($moduleID eq "library" and local-name($highlightedResults) eq "book") then 
-                  <a class="booklinkssearch" href="../../library/{$highlightedResults/data(@id)}.html">
+                  <a class="booklinkssearch" href="../{$highlightedResults/data(@id)}/index.html">
                     <table class="library" style="width:100%;">
                          <tr>
                             <td valign="top" width="90">

@@ -101,7 +101,7 @@ var croptool = {
         '                    <div class="textarea-container"><textarea class="iiif_link" type="text" name="iiif_textarea" id="iiif_textarea" readonly="readonly"></textarea><button id="zone-tool-copyButton">copy to clipboard</button></div>' +
         '            </div>' +
         '        </form>' +
-        '        <p><a href="../' + bookID + '.html?page=' + pageID + '"><button class="admin-tools-back-button">back to book view</button></a></p>' +
+        '        <p><a href="../index.html?page=' + pageID + '"><button class="admin-tools-back-button">back to book view</button></a></p>' +
         '        <p><span style="font-weight:bold;">Other pages in this book: </span><select onchange="javascript:location.href = this.value;" id="select-page"><option>-</option></p>' +
         '    </div>';
         

@@ -51,7 +51,7 @@ declare function library-browse:navbar($node as node(), $model as map(*)){
                     if ($sortByID eq $currentSortValue) then
                         <span><span class="current">{$sortByLabel}</span> <span>{if ($pos lt $countSorting) then " - " else ()}</span></span>
                     else
-                        <span><a href="../{$sortByID}/{$browseValueLink}">{$sortByLabel}</a> <span>{if ($pos lt $countSorting) then " - " else ()}</span></span>
+                        <span><a href="../browse/{$sortByID}-{$browseValueLink}.html">{$sortByLabel}</a> <span>{if ($pos lt $countSorting) then " - " else ()}</span></span>
                }
             </p>
             <!--<div class="spacer"></div>-->
@@ -76,7 +76,7 @@ declare function library-browse:navbar($node as node(), $model as map(*)){
                             </span>
                          else
                            <span>
-                             <a href="../{$currentSortValue}/{$browseBy/value/text()}">{$browseBy/label/text()}</a> <br/>
+                             <a href="../browse/{$currentSortValue}-{$browseBy/value/text()}.html">{$browseBy/label/text()}</a> <br/>
                              <span class="hits">({$hits})</span>
                            </span>
                         }</td>}
@@ -190,19 +190,19 @@ declare function library-browse:getEntries($node as node(), $model as map(*)){
                    <td width="90px" valign="top">
                     <a name="{$bookID}"/>
                      { if (util:eval-with-context($pathToThumbnail,$imgUrlContext,false()) ne "") then
-                      <a class="booklinks" href="../{$bookID}.html">
+                      <a class="booklinks" href="../{$bookID}/index.html">
                         <div class="imagecontainer">
                           <img class="thumb" src="{if (starts-with(util:eval-with-context($pathToThumbnail,$imgUrlContext,false()),'https')) then '' else $imgUrl/serverPath/text()}{util:eval-with-context($pathToThumbnail,$imgUrlContext,false())}"/>
                           {if ($result/data(@type) eq "VL") then <span class="virtualthumb">V<br/>I<br/>R<br/>T<br/>U<br/>A<br/>L</span> else ()}
                         </div>
                         </a>
                       else 
-                        <a class="booklinks" href="../{$bookID}.html"><!--<a class="booknolink">--><div class="imagecontainer"><span class="noscan"/>{if ($result/data(@type) eq "VL") then <span class="virtualthumb">V<br/>I<br/>R<br/>T<br/>U<br/>A<br/>L</span> else ()}</div></a>
+                        <a class="booklinks" href="../{$bookID}/index.html"><!--<a class="booknolink">--><div class="imagecontainer"><span class="noscan"/>{if ($result/data(@type) eq "VL") then <span class="virtualthumb">V<br/>I<br/>R<br/>T<br/>U<br/>A<br/>L</span> else ()}</div></a>
                       }
                    </td>
                    <td valign="top">
                    <span class="biblio">
-                     <a class="booklinks" href="../{$bookID}.html">
+                     <a class="booklinks" href="../{$bookID}/index.html">
                        { (: 1: call to getBibliography to get the main bibliographic lines :)
                         library-functions:getBibliography($result/module[@type eq "bibl"], $currentSortValue)
                        }
@@ -237,7 +237,7 @@ declare function library-browse:getEntries($node as node(), $model as map(*)){
                 </div> }
   
            </div> 
-        {if ($currentBrowseValue eq "") then () else <a class="nextpage" href="{$configDoc//browse[preceding-sibling::browse[1][value/text() eq $currentBrowseValue]]/value/text()}">Continue to next page</a>}
+        {if ($currentBrowseValue eq "" or $currentBrowseValue eq "Z" or $currentBrowseValue eq "n.d.") then () else <a class="nextpage" href="{$currentSortValue}-{$configDoc//browse[preceding-sibling::browse[1][value/text() eq $currentBrowseValue]]/value/text()}.html">Continue to next page</a>}
         </div>
     
 };

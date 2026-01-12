@@ -48,7 +48,7 @@
         <field name="library-book-inscription" type="xs:string" match="module/inscription"/>
         <field name="library-book-origin" type="xs:string" match="module/origin"/>
         <field name="library-book-dateofacquisition" type="xs:string" match="module/dateofacquisition"/>
-        <field name="library-book-readingTraces" type="xs:string" match="module/page"/>
+        <field name="library-book-readingTraces" type="xs:string" match="module//zone"/>
         <field name="library-book-Marginalia" type="xs:string" match="module//m"/>
         <field name="library-book-source" type="xs:string" match="module/readingdate/source"/>
       </create>

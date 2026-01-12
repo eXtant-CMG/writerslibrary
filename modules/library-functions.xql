@@ -294,7 +294,7 @@ return
     {if ($viewParam ne "book") then
          $ManuscriptLinksBookLevel
     else
-      let $output := for $child in $ManuscriptLinksBookLevel/node() return if (name($child) eq "ref") then <a style="color:#999967;" href="../{substring-before($child/@target,':')}/{substring-before(substring-after($child/@target,':'),',')}/{if ($child/@type eq "pagelink") then concat(substring-before(substring-after($child/@target,','),'['),"?view=imagetext#Ann_",substring-before(substring-after($child/@target,'['),']')) else if ($child/@type eq "sentencelink") then substring-after($child/@target,',') else ()}">{$child}</a> else $child
+      let $output := for $child in $ManuscriptLinksBookLevel/node() return if (name($child) eq "ref") then <a style="color:#999967;" href="../../{substring-before($child/@target,':')}/{substring-before(substring-after($child/@target,':'),',')}/{if ($child/@type eq "pagelink") then concat(substring-before(substring-after($child/@target,','),'['),"?view=imagetext#Ann_",substring-before(substring-after($child/@target,'['),']')) else if ($child/@type eq "sentencelink") then substring-after($child/@target,',') else ()}">{$child}</a> else $child
       return
          $output
      }
@@ -310,7 +310,7 @@ declare function library-functions:ManuscriptLinksZoneLevel($rtModule as node(),
   let $pageNr := $MsLink/ancestor::page/pagenumber/text()
   let $zoneNr := $MsLink/ancestor::zone/number/text()
   let $output := concat($pageNr,' [zone ',$zoneNr,']')
-  let $outputWithLink := <a href="{$bookID}.html?page={$pageNr}&amp;zone={$zoneNr}" style="color:#999967;">{$output}</a>
+  let $outputWithLink := <a href="{$bookID}/index.html?page={$pageNr}&amp;zone={$zoneNr}" style="color:#999967;">{$output}</a>
   let $finalOutput := if ($bookID eq "nolink") then $output else if (request:get-parameter("view","") ne "book") then $output else $outputWithLink
 
   return
@@ -365,7 +365,7 @@ let $imgUrl := $configDoc//imgUrl/serverPath/text()
 let $xsl := doc($config:app-root || "/resources/xslt/library-search-results-readingtraces.xsl")
 
 return
-    <div><a style="text-decoration:none;" href="../../library/{$bookID}.html?page={$pagenumber}&amp;zone={$zone/number/text()}">{if ($author ne " " and $author ne "") then concat($author,": ") else ()}<i>{$title}{if ($subtitle ne "") then <span>: {$subtitle}</span> else ()}</i>, p. {$pagenumber}<br/>
+    <div><a style="text-decoration:none;" href="../../library/{$bookID}/index.html?page={$pagenumber}&amp;zone={$zone/number/text()}">{if ($author ne " " and $author ne "") then concat($author,": ") else ()}<i>{$title}{if ($subtitle ne "") then <span>: {$subtitle}</span> else ()}</i>, p. {$pagenumber}<br/>
       <table class="libraryrt">
         <tr>
             <td valign="top"><img src="{if (starts-with($zone/facsimile/text(),'https')) then "" else $imgUrl}{$zone/facsimile/text()}"/></td>
@@ -382,32 +382,13 @@ return
     </div>
 };
 
-(: Since there is a directory difference between paths to book view (library/PRO-ALA-1.html) and
- : browse view (library/Author/A), some of the links in the navigation bar need to be changed depending
- : on the current view. Here: the BDMP home link. :)
-declare function library-functions:makeBDMPHomeLink($node as node(), $model as map(*)) {
-let $view := request:get-parameter("view","")
-return
-    <a href="{if ($view ne "book") then "../" else()}../home" style="margin-left:20px;display:inline-block;" class="SBDMP changeviz">{templates:process($node/node(), $model)}</a>
-};
 
-(: Since there is a directory difference between paths to book view (library/PRO-ALA-1.html) and
- : browse view (library/Author/A), some of the links in the navigation bar need to be changed depending
- : on the current view. Here: the library home link. :)
 declare function library-functions:makeLibraryHomeLink($node as node(), $model as map(*)) {
 let $view := request:get-parameter("view","")
 return
-    <a href="{if ($view ne "book") then "../" else()}home/welcome" style="text-decoration:none;color:#999967;">{templates:process($node/node(), $model)}</a>
+    <a href="../home/welcome.html" style="text-decoration:none;color:#999967;">{templates:process($node/node(), $model)}</a>
 };
 
-(: Since there is a directory difference between paths to book view (library/PRO-ALA-1.html) and
- : browse view (library/Author/A), some of the links in the navigation bar need to be changed depending
- : on the current view. Here: the logout button link. :)
-declare function library-functions:logoutButton($node as node(), $model as map(*)) {
-    <a href="{if (request:get-parameter("view","") ne "book") then "../" else ()}../home?logout=true" title="Log out">
-        <span class="glyphicon glyphicon-log-out" aria-hiddden="true"/>
-    </a>
-};
 
 (: Small difference in the nav between browse view and book view: the word "Manual" next to the icon in browse and search view :)
 declare function library-functions:manualnav($node as node(), $model as map(*)) {

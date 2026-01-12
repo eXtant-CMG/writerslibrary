@@ -154,13 +154,13 @@ declare function library-book-view:navbar($node as node(), $model as map(*)) {
 let $bookID := request:get-parameter("bookID","")
 let $bookNode := library-book-view:getBookNode($bookID)
 
-let $AuthorSortLink := <span style="margin-right:20px;"><a href="Author/{substring($bookNode/module/author[1]/data(@sort),1,1)}">Author <span class="current">{substring($bookNode/module/author[1]/data(@sort),1,1)}</span></a> </span>
-let $TitleSortLink := <span style="margin-right:20px;"><a href="Title/{substring($bookNode/module/title/data(@sort),1,1)}">Title <span class="current">{substring($bookNode/module/title/data(@sort),1,1)}</span></a> </span>
-let $PlaceSortLink := <span style="margin-right:20px;"><a href="Place/{substring($bookNode/module/place[1]/text(),1,1)}">Place <span class="current">{substring($bookNode/module/place[1]/text(),1,1)}</span></a> </span>
+let $AuthorSortLink := <span style="margin-right:20px;"><a href="../browse/Author-{substring($bookNode/module/author[1]/data(@sort),1,1)}.html">Author <span class="current">{substring($bookNode/module/author[1]/data(@sort),1,1)}</span></a> </span>
+let $TitleSortLink := <span style="margin-right:20px;"><a href="../browse/Title-{substring($bookNode/module/title/data(@sort),1,1)}.html">Title <span class="current">{substring($bookNode/module/title/data(@sort),1,1)}</span></a> </span>
+let $PlaceSortLink := <span style="margin-right:20px;"><a href="../browse/Place-{substring($bookNode/module/place[1]/text(),1,1)}.html">Place <span class="current">{substring($bookNode/module/place[1]/text(),1,1)}</span></a> </span>
 
 return 
     <span>
-      <span class="back"><a href="javascript:history.back()" class="back">← back</a></span><a style="margin-right:20px;" title="Home" href="home/welcome"><span aria-hiddden="true" class="glyphicon glyphicon-home"></span></a>
+      <span class="back"><a href="javascript:history.back()" class="back">← back</a></span><a style="margin-right:20px;" title="Home" href="../home/welcome.html"><span aria-hiddden="true" class="glyphicon glyphicon-home"></span></a>
        {($AuthorSortLink,$TitleSortLink,$PlaceSortLink)}
     </span>
 };
@@ -273,7 +273,7 @@ let $bookID := request:get-parameter("bookID","")
 let $bookNode := library-book-view:getBookNode($bookID)
 return
     if ($bookNode//m) then
-    <span>&gt; <a class="show-all-marginalia"  href="../library/search/index.html?q=marginalia&amp;index=library&amp;doc=library-readingtraces-{$bookID}">Show <b>all marginalia</b> in this book</a><br/></span>
+    <span>&gt; <a class="show-all-marginalia"  href="../../library/search/index.html?q=marginalia&amp;index=library&amp;doc=library-readingtraces-{$bookID}">Show <b>all marginalia</b> in this book</a><br/></span>
     else ()
 };
 

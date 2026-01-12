@@ -17,7 +17,7 @@ if ($exist:path eq '') then
 else if ($exist:path eq "/") then
     (: forward root path to index.xql :)
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-        <redirect url="library/home/welcome"/>
+        <redirect url="library/home/welcome.html"/>
     </dispatch>
     
         (: forwards all paths to images to resources/images/library/   :)
@@ -51,7 +51,7 @@ else if (contains($exist:path, "/$app/")) then
     </dispatch>
 
 
-    else if (contains($exist:path,"usermanual/")) then
+    else if (contains($exist:path,"usermanual/index.html")) then
                 <dispatch
                         xmlns="http://exist.sourceforge.net/NS/exist">
                         <forward
@@ -72,7 +72,7 @@ else if (contains($exist:path, "/$app/")) then
                         </view>
                     </dispatch>
                     
-     else if (contains($exist:path,"documentation/")) then
+     else if (contains($exist:path,"documentation/index.html")) then
                 <dispatch
                         xmlns="http://exist.sourceforge.net/NS/exist">
                         <forward
@@ -95,7 +95,7 @@ else if (contains($exist:path, "/$app/")) then
         
 
     (: home page :)
-    else if (starts-with($exist:path,"/library/home")) then
+    else if (contains($exist:path,"/home/welcome.html")) then
                 <dispatch
                     xmlns="http://exist.sourceforge.net/NS/exist">
                     <!-- forward to  template bookview.html -->
@@ -119,7 +119,7 @@ else if (contains($exist:path, "/$app/")) then
                 </dispatch> 
                 
       (: search engine :)
-    else if (contains($exist:path,"/library/search/")) then
+    else if (contains($exist:path,"/search/index.html")) then
                 <dispatch
                     xmlns="http://exist.sourceforge.net/NS/exist">
                     <!-- forward to  template search.html -->
@@ -143,7 +143,7 @@ else if (contains($exist:path, "/$app/")) then
                 </dispatch>
                 
     (: admin tool: import images from IIIF manifest :)
-    else if (starts-with($exist:path,"/library/tools/import-from-IIIFmanifest")) then
+    else if (contains($exist:path,"/tools/import-from-IIIFmanifest")) then
                 <dispatch
                     xmlns="http://exist.sourceforge.net/NS/exist">
                     <!-- forward to  template bookview.html -->
@@ -167,7 +167,7 @@ else if (contains($exist:path, "/$app/")) then
                 </dispatch>
                 
     (: admin tool: zone coordinates tool :)
-    else if (starts-with($exist:path,"/library/tools/zone-coordinates-tool")) then
+    else if (contains($exist:path,"/tools/zone-coordinates-tool")) then
                 <dispatch
                     xmlns="http://exist.sourceforge.net/NS/exist">
                     <!-- forward to  template bookview.html -->
@@ -192,7 +192,7 @@ else if (contains($exist:path, "/$app/")) then
                 </dispatch>
     
     (: admin tool: new book :)
-    else if (starts-with($exist:path,"/library/tools/new-book-xml")) then
+    else if (contains($exist:path,"/tools/new-book-xml")) then
                 <dispatch
                     xmlns="http://exist.sourceforge.net/NS/exist">
                     <!-- forward to  template bookview.html -->
@@ -216,7 +216,7 @@ else if (contains($exist:path, "/$app/")) then
                 </dispatch>
 
     (: browse view:)
-    else if (contains($exist:path,"/library/") and not(contains($exist:path,".html"))) then
+    else if (contains($exist:path,"/browse/")) then
                 <dispatch
                     xmlns="http://exist.sourceforge.net/NS/exist">
                     <!-- forward to  template browse.html -->
@@ -231,7 +231,7 @@ else if (contains($exist:path, "/$app/")) then
                         <forward
                             url="{$exist:controller}/modules/view.xq">
                         <add-parameter name="view" value=""/>
-                        <add-parameter name="sortAndBrowse" value="{substring-after($exist:path,'library/')}"/>
+                        <add-parameter name="sortAndBrowse" value="{replace(substring-before(substring-after($exist:path,'/browse/'), '.html'), '-', '/')}"/>
                         <add-parameter name="moduleID" value="/library"/>
                             <set-header
                                 name="Cache-Control"
@@ -240,8 +240,8 @@ else if (contains($exist:path, "/$app/")) then
                     </view>
                 </dispatch>
       
-      (: 5: book view :)
-    else if (contains($exist:path,"/library/") and not(contains($exist:path,"search/")) and contains($exist:path,".html")) then
+      (: book view :)
+    else if (not(contains($exist:path,"search/")) and not(contains($exist:path,"documentation/")) and not(contains($exist:path,"browse/")) and not(contains($exist:path,"usermanual/")) and not(contains($exist:path,"home/")) and contains($exist:path,"/index.html")) then
                 <dispatch
                     xmlns="http://exist.sourceforge.net/NS/exist">
                     <!-- forward to  template bookview.html -->
@@ -256,7 +256,7 @@ else if (contains($exist:path, "/$app/")) then
                         <forward
                             url="{$exist:controller}/modules/view.xq">
                         <add-parameter name="view" value="book"/>
-                        <add-parameter name="bookID" value="{substring-before(substring-after($exist:path,'library/'),'.html')}"/>
+                        <add-parameter name="bookID" value="{tokenize($exist:path, '/')[last() - 1]}"/>
                         <add-parameter name="moduleID" value="/library"/>
                             <set-header
                                 name="Cache-Control"

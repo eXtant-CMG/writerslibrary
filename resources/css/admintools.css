@@ -288,3 +288,219 @@ form.iiif-manifest-link {
         border-left: 4px solid #003828;
         padding: 10px;
     }
+    
+/* manage library collections feature */
+.manage-button {
+    float:right; 
+    background-color: #003828; 
+    border-radius: 10px; 
+    padding: 10px; 
+    margin-top:20px; 
+    margin-right: 30px;
+    font-size: 1.1em;
+    cursor:pointer;
+    color:white;
+}
+
+/* === Library collections table === */
+
+#library-collections-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9rem;
+}
+
+/* Header */
+#library-collections-table thead th {
+  background-color: #f6f7f9;
+  color: #444;
+  font-weight: 600;
+  border-bottom: 2px solid #dee2e6;
+  padding: 0.5rem 0.6rem;
+  vertical-align: middle;
+}
+
+/* Body cells */
+#library-collections-table tbody td {
+  padding: 0.45rem 0.6rem;
+  vertical-align: middle;
+  border-top: 1px solid #e6e8eb;
+}
+
+/* Stripes: softer than default Bootstrap */
+#library-collections-table.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #fafbfc;
+}
+
+/* Hover state */
+#library-collections-table tbody tr:hover {
+  background-color: #eef3ff;
+}
+
+/* Active library row */
+#library-collections-table tbody tr[data-library-id].is-active {
+  background-color: #e8f4ec !important;
+}
+
+#library-collections-table tbody tr.is-active td {
+  font-weight: 500;
+}
+
+/* Code-style IDs */
+#library-collections-table code {
+  background-color: #f1f3f5;
+  padding: 0.15em 0.35em;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+
+/* Badges */
+#library-collections-table .badge {
+  font-size: 0.75rem;
+  padding: 0.3em 0.5em;
+}
+
+/* Button group tweaks */
+#library-collections-table .btn-group .btn {
+  padding: 0.2rem 0.45rem;
+  line-height: 1.2;
+}
+
+/* Disabled action buttons */
+#library-collections-table .btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Radio button alignment */
+#library-collections-table input[type="radio"] {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+/* Empty-state hint (if you add one later) */
+#library-collections-table tbody:empty::after {
+  content: "No libraries available.";
+  display: block;
+  padding: 1rem;
+  color: #777;
+  font-style: italic;
+}
+
+/* Responsive tightening for small modals */
+@media (max-width: 768px) {
+  #library-collections-table {
+    font-size: 0.85rem;
+  }
+
+  #library-collections-table thead th,
+  #library-collections-table tbody td {
+    padding: 0.35rem 0.45rem;
+  }
+}
+
+#library-collections-table a.btn {
+  display: inline-flex;
+  align-items: center;
+}
+
+td .check {
+    display: block;
+    text-align: center;
+}
+
+/* === Add a new library form === */
+
+#add-library-form {
+  background: #f8fafc;
+  border: 1px solid #e6e8eb;
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+}
+
+#add-library-form h5 {
+  margin-bottom: 0.6rem;
+}
+
+#add-library-form .form-row {
+  align-items: flex-start;
+}
+
+#add-library-form .form-control {
+  border-radius: 8px;
+  border: 1px solid #d7dbe0;
+  padding: 0.45rem 0.6rem;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+#add-library-form .form-control:focus {
+  border-color: #90b4ff;
+  box-shadow: 0 0 0 0.2rem rgba(33, 117, 243, 0.18);
+  outline: none;
+}
+
+#add-library-form .form-control::placeholder {
+  color: #9aa3ad;
+}
+
+#add-library-form .form-text {
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: #6c757d;
+}
+
+#add-library-form .btn {
+  border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 0.45rem 0.7rem;
+}
+
+#add-library-form .btn-block {
+  width: 100%;
+}
+
+#add-library-form .form-check {
+  background: #ffffff;
+  border: 1px dashed #d7dbe0;
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+}
+
+#add-library-form .form-check-input {
+  margin-top: 0.15rem;
+  transform: scale(1.05);
+}
+
+#add-library-form .form-check-label {
+  font-size: 0.9rem;
+  color: #444;
+}
+
+/* Error / success states (optional; add .is-invalid / .is-valid via JS) */
+#add-library-form .form-control.is-invalid {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.16);
+}
+
+#add-library-form .form-control.is-valid {
+  border-color: #28a745;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.14);
+}
+
+#add-library-form label {
+    display: inline-block;
+    width: 100px; /* Adjust to fit your longest label */
+  }
+  
+/* Tighten spacing on small screens inside modal */
+@media (max-width: 768px) {
+  #add-library-form {
+    padding: 0.75rem 0.85rem;
+  }
+
+  #add-library-form .btn {
+    padding: 0.45rem 0.6rem;
+  }
+}
+```

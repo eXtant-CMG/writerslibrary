@@ -22,7 +22,8 @@ declare option exist:serialize "method=html5 media-type=text/html";
    the book ID. This function is used by a number of functions on this page to quickly grab things 
    from the book node. :)
 declare function library-book-view:getBookNode($bookID as xs:string) {
-let $libraryDoc := doc($config:data-root || '/library/library.xml')
+let $libraryID := request:get-parameter("libraryID", "sample-library")
+let $libraryDoc := doc($config:data-root || '/' || $libraryID || '/library.xml')
 let $bookNode := $libraryDoc/range:field-eq("library-book-ID",$bookID)
 return
     $bookNode
@@ -85,7 +86,8 @@ declare function library-book-view:getImage($node as node(), $model as map(*)) {
 let $bookID := request:get-parameter("bookID","")
 let $bookNode := library-book-view:getBookNode($bookID)
 
-let $configDoc :=doc($config:data-root || '/library/config.xml')
+let $libraryID := request:get-parameter("libraryID", "sample-library")
+let $configDoc := doc($config:data-root || '/' || $libraryID || '/config.xml')
 let $imgUrl := $configDoc//imgUrl
 let $imgUrlContext := <static-context><variable name="bookNode">{$bookNode}</variable></static-context>
 let $pathToFirstImage :=  concat('$bookNode/',$imgUrl/pathToList/text(),'/',$imgUrl/pathToItem/text(),'[1]/facsimile')
@@ -120,7 +122,8 @@ declare function library-book-view:getFacList($node as node(), $model as map(*))
 let $bookID := request:get-parameter("bookID","")
 let $bookNode := library-book-view:getBookNode($bookID)
 
-let $configDoc :=doc($config:data-root || '/library/config.xml')
+let $libraryID := request:get-parameter("libraryID", "sample-library")
+let $configDoc := doc($config:data-root || '/' || $libraryID || '/config.xml')
 let $imgUrl := $configDoc//imgUrl
 let $imgUrlContext := <static-context><variable name="bookNode">{$bookNode}</variable></static-context>
 let $pathToImages := concat('$bookNode/',$imgUrl/pathToList/text(),'/',$imgUrl/pathToItem/text())
@@ -190,7 +193,8 @@ if (request:get-parameter("view","") eq "book") then
     let $pageParam := replace(request:get-parameter("page",""),"-_-", " ")
     let $zoneParam := request:get-parameter("zone","")
     
-    let $configDoc :=doc($config:data-root || '/library/config.xml')
+    let $libraryID := request:get-parameter("libraryID", "sample-library")
+    let $configDoc := doc($config:data-root || '/' || $libraryID || '/config.xml')
     let $imgUrl := $configDoc//imgUrl
     let $imgUrlContext := <static-context><variable name="bookNode">{$bookNode}</variable></static-context>
     let $pathToImages := concat('$bookNode/',$imgUrl/pathToList/text(),'/',$imgUrl/pathToItem/text())
@@ -269,11 +273,12 @@ return
    creates a link under the bibliography to do a search for the marginalia in the book. :)
 declare function library-book-view:getMarginaliaLink($node as node(), $model as map(*)) {
 
+let $libraryID := request:get-parameter("libraryID","")
 let $bookID := request:get-parameter("bookID","")
 let $bookNode := library-book-view:getBookNode($bookID)
 return
     if ($bookNode//m) then
-    <span>&gt; <a class="show-all-marginalia"  href="../../library/search/index.html?q=marginalia&amp;index=library&amp;doc=library-readingtraces-{$bookID}">Show <b>all marginalia</b> in this book</a><br/></span>
+    <span>&gt; <a class="show-all-marginalia"  href="../../{$libraryID}/search/index.html?q=marginalia&amp;index=library&amp;doc=library-readingtraces-{$bookID}">Show <b>all marginalia</b> in this book</a><br/></span>
     else ()
 };
 

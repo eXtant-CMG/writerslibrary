@@ -26,7 +26,8 @@ declare function search:search($node as node(), $model as map(*), $q as xs:strin
         
         
         (: manually add the path to the library xml              :)
-        let $libraryPath := $config:data-root || "/library"
+        let $libraryID := request:get-parameter("libraryID", "sample-library")
+        let $libraryPath := $config:data-root || '/' || $libraryID
 
 
         (: put together a collection from this list:)
@@ -47,7 +48,7 @@ declare function search:search($node as node(), $model as map(*), $q as xs:strin
                     <filter-rewrite>yes</filter-rewrite>
                 </options>
                 
-        let $configDoc :=doc($config:data-root || '/library/config.xml')
+        let $configDoc := doc($config:data-root || '/' || $libraryID || '/config.xml')
         let $imgUrl := $configDoc//imgUrl/serverPath
         
         (: for the bibliography + inscriptions it's the field library-book-biblio that needs to be queried :)
@@ -138,36 +139,35 @@ declare function search:search($node as node(), $model as map(*), $q as xs:strin
             </ul>
 
         (: create results page for subset of 10 hits :)
-        let $results := 
-            for $hit at $pos in $sorted-hits[position() = ($start + 1 to $end)]
-            let $moduleID := substring-after(util:collection-name($hit),'data/')
-            let $highlightedResults := if ($q eq "_ManuscriptLink") then $hit else util:expand($hit)
-            let $processedResult := 
-                (: library bibliography hits :)
-                if ($moduleID eq "library" and local-name($highlightedResults) eq "book") then 
-                  <a class="booklinkssearch" href="../{$highlightedResults/data(@id)}/index.html">
+       let $results := 
+        for $hit at $pos in $sorted-hits[position() = ($start + 1 to $end)]
+        let $highlightedResults := if ($q eq "_ManuscriptLink") then $hit else util:expand($hit)
+        let $processedResult := 
+            (: library bibliography hits :)
+            if (local-name($highlightedResults) eq "book") then 
+                <a class="booklinkssearch" href="../{$highlightedResults/data(@id)}/index.html">
                     <table class="library" style="width:100%;">
-                         <tr>
+                        <tr>
                             <td valign="top" width="90">
                                 {if ($highlightedResults//facsimile) then 
-                                   <img height="100" style="max-width:80px;" src="{if (starts-with($highlightedResults//facsimile[1]/text(),'https')) then "" else $imgUrl}{$highlightedResults//page[1]/facsimile/text()}"/>
-                                 else
+                                    <img height="100" style="max-width:80px;" src="{if (starts-with($highlightedResults//facsimile[1]/text(),'https')) then "" else $imgUrl}{$highlightedResults//page[1]/facsimile/text()}"/>
+                                else
                                     if ($highlightedResults/@type eq "VL") then <div class="imagecontainer"><span class="noscan"></span><span class="virtualthumb">V<br/>I<br/>R<br/>T<br/>U<br/>A<br/>L</span></div> else <span class="noscan"></span>}
                             </td>
                             <td valign="top">
                                 {library-book-view:getBiblio($node, $model, $highlightedResults) }
                             </td>
-                         </tr>
+                        </tr>
                     </table>
-                   </a>
-                 (: library marginalia hits :)
-                else if ($moduleID eq "library" and local-name($highlightedResults) eq "m") then
-                   library-functions:readingTracesSearch($hit/ancestor::zone, ft:field($hit, "library-book-marginalia-bookID"), ft:field($hit, "library-book-marginalia-pagenumber"), ft:field($hit, "library-book-marginalia-author"), ft:field($hit, "library-book-marginalia-title"), ft:field($hit, "library-book-marginalia-subtitle"))
-                 (: library reading trace hits :)
-                else if ($moduleID eq "library" and local-name($highlightedResults) eq "zone") then
-                   library-functions:readingTracesSearch($highlightedResults, ft:field($hit, "library-book-zone-bookID"), ft:field($hit, "library-book-zone-pagenumber"), ft:field($hit, "library-book-zone-author"), ft:field($hit, "library-book-zone-title"), ft:field($hit, "library-book-zone-subtitle"))
+                </a>
+            (: library marginalia hits :)
+            else if (local-name($highlightedResults) eq "m") then
+                library-functions:readingTracesSearch($hit/ancestor::zone, ft:field($hit, "library-book-marginalia-bookID"), ft:field($hit, "library-book-marginalia-pagenumber"), ft:field($hit, "library-book-marginalia-author"), ft:field($hit, "library-book-marginalia-title"), ft:field($hit, "library-book-marginalia-subtitle"))
+            (: library reading trace hits :)
+            else if (local-name($highlightedResults) eq "zone") then
+                library-functions:readingTracesSearch($highlightedResults, ft:field($hit, "library-book-zone-bookID"), ft:field($hit, "library-book-zone-pagenumber"), ft:field($hit, "library-book-zone-author"), ft:field($hit, "library-book-zone-title"), ft:field($hit, "library-book-zone-subtitle"))
+            (: genetic modules hits :)
 
-                (: genetic modules hits :)
                 else 
                     ()
                     

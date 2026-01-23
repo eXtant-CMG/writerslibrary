@@ -1,4 +1,4 @@
-<books>
+<books id="sample-library">
     <!-- Template
     <book>
       <module type="bibl">

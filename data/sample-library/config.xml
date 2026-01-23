@@ -15,7 +15,7 @@
                 <operators>("starts-with")</operators>
                 <keys>$currentBrowseValue</keys>
             </rangeQuery>
-            <orderBy>Author</orderBy>
+            <orderBy>author</orderBy>
             <breadcrumbPhrase>author</breadcrumbPhrase>
         </sortBy>
         <!-- Title -->
@@ -26,7 +26,7 @@
                 <operators>("starts-with")</operators>
                 <keys>$currentBrowseValue</keys>
             </rangeQuery>
-            <orderBy>Title</orderBy>
+            <orderBy>title</orderBy>
             <breadcrumbPhrase>title</breadcrumbPhrase>
         </sortBy>
         <!-- Place -->
@@ -37,7 +37,7 @@
                 <operators>("starts-with")</operators>
                 <keys>$currentBrowseValue</keys>
             </rangeQuery>
-            <orderBy>Place</orderBy>
+            <orderBy>place</orderBy>
             <breadcrumbPhrase>place of publication</breadcrumbPhrase>
         </sortBy>
         <!-- Date -->
@@ -48,7 +48,7 @@
                 <operators>("starts-with")</operators>
                 <keys>$currentBrowseValue</keys>
             </rangeQuery>
-            <orderBy>Date</orderBy>
+            <orderBy>date</orderBy>
             <breadcrumbPhrase>date of publication</breadcrumbPhrase>
         </sortBy>
         <!-- Inscription -->
@@ -59,7 +59,7 @@
                 <operators>("contains","starts-with")</operators>
                 <keys>"*",$currentBrowseValue</keys>
             </rangeQuery>
-            <orderBy>Author</orderBy>
+            <orderBy>author</orderBy>
             <breadcrumbPhrase>the presence of an inscription</breadcrumbPhrase>
         </sortBy>
         <!-- All Reading Traces -->
@@ -70,7 +70,7 @@
                 <operators>("contains","starts-with")</operators>
                 <keys>"*",$currentBrowseValue</keys>
             </rangeQuery>
-            <orderBy>Author</orderBy>
+            <orderBy>author</orderBy>
             <breadcrumbPhrase>the presence of reading traces</breadcrumbPhrase>
         </sortBy>
         <!-- Marginalia only -->
@@ -81,7 +81,7 @@
                 <operators>("contains","starts-with")</operators>
                 <keys>"*",$currentBrowseValue</keys>
             </rangeQuery>
-            <orderBy>Author</orderBy>
+            <orderBy>author</orderBy>
             <breadcrumbPhrase>the presence of marginalia</breadcrumbPhrase>
         </sortBy>
     </sorting>

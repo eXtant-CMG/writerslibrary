@@ -1,0 +1,30 @@
+<div id="home-grid-container">
+    <div id="about">
+        <h4>Welcome to Bibundina</h4>
+        
+        <p>This writer's library application aims to provide an environment both to create and to publish an edition of a collection of books and the reading traces in them. Such an edition can contain not just the bibliographic details of those books, but also focus on the marginalia left in them by the writers, as well as include information about provenance of the books and when they were read.</p>
+        
+        <p>The book collection can be browsed through or searched. The upper horizontal bar serves as a browsing tool that can sort alphabetically among authors, titles and places of publication. It’s also possible to sort the library chronologically according to the date of publication. The last three fields in the browsing bar may be used to reduce the corpus according to the presence of an inscription, of reading traces or of marginalia. These options are customizable.</p>
+        <div id="documentation-tools-container">    
+            <div id="documentation">  
+                <p class="documentation-links"><a style="color: #003828; font-size:1.4em; font-weight:bold;" href="../documentation/index.html">Documentation</a><br/>
+                     ∟ <a href="../documentation/index.html#toc_1">Getting started</a><br/>
+                     ∟ <a href="../documentation/index.html#toc_5">Encoding schema</a><br/>
+                     ∟ <a href="../documentation/index.html#toc_10">Including images</a><br/>
+                     ∟ <a href="../documentation/index.html#toc_14">Admin tools</a></p>
+                <p class="documentation-links"><a style="color: #003828; font-size:1.4em; font-weight:bold;" href="../usermanual/index.html">User Manual</a></p>
+            </div><!--/documentation-->
+            
+            <!-- Do not remove, this line generates the admin tools -->
+            <span class="admin-tools:getAdmintools"/>
+            
+        </div><!--/documentation-tools-container-->           
+        <br/>
+        <p><span style="color:#003828;">To edit this home page, open <code>data/sample-library/home.xml</code> in eXide.</span></p>
+        
+    </div><!--/about-->
+    <div id="home-image">
+        <img class="home" src="$resources/images/home.jpg" width="350"/>
+    </div>
+    
+</div><!--/home-grid-container-->

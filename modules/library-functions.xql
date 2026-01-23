@@ -27,7 +27,7 @@ declare function library-functions:getBibliography($biblModule as node(), $highl
 (: $biblModule: this function gets passed the node <module type="bibl">...</module>.
  :
  : $highlight: in the browse views the current sorting choice (author, title, date, place,...) 
- : is highlighted in bold. This is done through the $highlight param. Eg: the url "/library/Title/O"
+ : is highlighted in bold. This is done through the $highlight param. Eg: the url "/sample-library/browse/Title-O.html"
  : passes along a value "Title" of the $highlight param.
  :
  : There is a slight difference in css between browse view and book view. 
@@ -323,27 +323,23 @@ declare function library-functions:ManuscriptLinksZoneLevel($rtModule as node(),
  : and inserts it in the module header.
  :)
 declare function library-functions:getLibraryName($node as node(), $model as map(*)) {
-
-let $configDoc :=doc($config:data-root || '/library/config.xml')
-let $libraryName := $configDoc//title/text()
-
-
-return
-    $libraryName
+    let $libraryID := request:get-parameter("libraryID", ())
+    let $configDoc := doc($config:data-root || '/' || $libraryID || '/config.xml')
+    let $libraryName := $configDoc//title/text()
+    return
+        $libraryName
 };
 
 (: This function retrieves the Library subtitle as specified in the <subtitle> element in config.xml
  : and inserts it in the module header.
  :)
 declare function library-functions:getSubtitle($node as node(), $model as map(*)) {
-
-let $configDoc :=doc($config:data-root || '/library/config.xml')
-let $librarySubtitle := if ($configDoc//subtitle/text() ne '') then <span class="modulesubtitle">{$configDoc//subtitle/text()}</span> else ""
-
-return
-    $librarySubtitle
+    let $libraryID := request:get-parameter("libraryID", "sample-library")
+    let $configDoc := doc($config:data-root || '/' || $libraryID || '/config.xml')
+    let $librarySubtitle := if ($configDoc//subtitle/text() ne '') then <span class="modulesubtitle">{$configDoc//subtitle/text()}</span> else ""
+    return
+        $librarySubtitle
 };
-
 
 
 (: This function is called in the search engine (search.xql) 
@@ -357,7 +353,8 @@ return
 declare function library-functions:readingTracesSearch($zone as node(), $bookID as xs:string, $pagenumber as xs:string, $author as xs:string, $title as xs:string, $subtitle as xs:string?) {
 
 (: look in the config file for the server path to the images :)
-let $configDoc :=doc($config:data-root || '/library/config.xml')
+let $libraryID := request:get-parameter("libraryID", "sample-library")
+let $configDoc := doc($config:data-root || '/' || $libraryID || '/config.xml')
 let $imgUrl := $configDoc//imgUrl/serverPath/text()
 (: to process all of the tags that can occur inside of the "Extracts" element, 
  : as well as replace all occurrences of "/" by <br/>, I send the Extracts node to be processed
@@ -365,7 +362,7 @@ let $imgUrl := $configDoc//imgUrl/serverPath/text()
 let $xsl := doc($config:app-root || "/resources/xslt/library-search-results-readingtraces.xsl")
 
 return
-    <div><a style="text-decoration:none;" href="../../library/{$bookID}/index.html?page={$pagenumber}&amp;zone={$zone/number/text()}">{if ($author ne " " and $author ne "") then concat($author,": ") else ()}<i>{$title}{if ($subtitle ne "") then <span>: {$subtitle}</span> else ()}</i>, p. {$pagenumber}<br/>
+    <div><a style="text-decoration:none;" href="../../{$libraryID}/{$bookID}/index.html?page={$pagenumber}&amp;zone={$zone/number/text()}">{if ($author ne " " and $author ne "") then concat($author,": ") else ()}<i>{$title}{if ($subtitle ne "") then <span>: {$subtitle}</span> else ()}</i>, p. {$pagenumber}<br/>
       <table class="libraryrt">
         <tr>
             <td valign="top"><img src="{if (starts-with($zone/facsimile/text(),'https')) then "" else $imgUrl}{$zone/facsimile/text()}"/></td>
@@ -395,8 +392,13 @@ declare function library-functions:manualnav($node as node(), $model as map(*)) 
 if (request:get-parameter("view","") ne "book") then <span class="manualnav">User Manual</span> else ()
 };
 
-
-
+(: This function fetches the html code for the home page of each library collection from "sample-library/home.xml" :)
+declare function library-functions:createHomepage($node as node(), $model as map(*)) {
+    let $libraryID := request:get-parameter("libraryID", ())
+    let $homeDoc := doc($config:data-root || '/' || $libraryID || '/home.xml')
+    return
+            templates:process($homeDoc/*, $model)
+};
 
 
 

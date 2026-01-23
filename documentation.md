@@ -2,15 +2,18 @@
 
 ## Getting Started
 
-Adding data to this app is mainly done in the XML file `library.xml`, and some configuration can be customized in `config.xml`. The files can be found here:
+After installation, Bibundina opens with a welcome page and loads a **sample library collection** containing example records that demonstrate the encoding schema. This sample library is fully functional and can be used to encode your own material, but we recommend creating a **separate library collection** for production use. Bibundina supports working with **multiple library collections**, and you can switch between them at any time using the admin tools (see the *Admin Tools* section for details). Throughout this documentation, the sample library (`sample-library`) is used to illustrate the app’s features.
 
-- `/db/apps/writerslibrarary/data/library/library.xml`
-- `/db/apps/writerslibrarary/data/library/config.xml`
+Data entry in Bibundina is primarily done by editing the XML file `library.xml`. Some library-specific settings can be configured in `config.xml` and the contents of the home page can be edited in `home.xml`. In the case of the sample library, these files are located at:
+
+- `/db/apps/writerslibrarary/data/sample-library/library.xml`
+- `/db/apps/writerslibrarary/data/sample-library/config.xml`
+- `/db/apps/writerslibrarary/data/sample-library/home.xml`
 
 ### Editing the XML files in eXide
 You can open and edit these two XML files in `eXide`, eXist-db's code editor. To open eXide, go to the eXist-db **Dashboard** and click on the eXide icon.
 
-To edit `library.xml` and `config.xml`, you’ll need to log in as an **administrator** (dba). To do this, click on the “Login” button in the top right corner of the eXide window and enter the admin username and password you provided during the eXist-db installation.
+To edit `library.xml`, `config.xml` and `home.xml` you’ll need to log in as an **administrator** (dba). To do this, click on the “Login” button in the top right corner of the eXide window and enter the admin username and password you provided during the eXist-db installation.
 
 ### Editing the XML files in oXygen
 In addition to eXide, you can also edit the XML files in an eXist-db using **oXygen XML Editor**. oXygen is a powerful XML editor that provides many advanced features for working with XML data.
@@ -112,9 +115,9 @@ The `<author>` element contains information about the author of the book. Within
 
 If a book has **no author**, the `<author>` element can be left empty, and the sort attribute can be used to make the book appear in the author lists on the basis of its title or editor:
 
-	<Title sort="Everyday Spanish">Everyday Spanish</Title>
-	<Author sort="Collier"><firstname/><lastname/></Author>
-	<Editor>L.D. Collier</Editor> 
+	<title sort="Everyday Spanish">Everyday Spanish</title>
+	<author sort="Collier"><firstname/><lastname/></author>
+	<editor>L.D. Collier</editor> 
 
 If a book has **multiple authors**, each author should be enclosed in their own `<author>` element:
 
@@ -320,7 +323,7 @@ The book with id `ARA-LIB`, for instance, contains `<page>` elements such as thi
 		<facsimile>ARA-LIB/cover.jpg</facsimile>
 	</page>
 
-The app is set to search for the contents of the `<facsimile>` element (e.g., `ARA-LIB/cover.jpg`) in the `db/writerslibrary/resources/images/library/` folder. Admins can add images to this folder via eXide by clicking `Manage` under the `File` menu and navigating to the folder in the DB Manager window (click the upload icon to upload files or folders). Images can also be added by dropping them into the folder when using the app via oXygen. The `<facsimile>` element must reference the correct image location and file name.
+The app is set to search for the contents of the `<facsimile>` element (e.g., `ARA-LIB/cover.jpg`) in the `db/writerslibrary/resources/images/sample-library/` folder. Admins can add images to this folder via eXide by clicking `Manage` under the `File` menu and navigating to the folder in the DB Manager window (click the upload icon to upload files or folders). Images can also be added by dropping them into the folder when using the app via oXygen. The `<facsimile>` element must reference the correct image location and file name.
 
 **Note**: Storing large amounts of images in the writer’s library app is **not recommended**. This is because eXist-db is not designed to host images and doing so can increase the file size of the app instance. To incorporate a substantial collection of images in the app, it is preferable to host them in a static folder on the server (or local machine), or on a IIIF server.
 
@@ -329,11 +332,11 @@ The app can be set up to retrieve images from a folder outside of eXist-db. Howe
 
 By following the outlined steps, the app can retrieve images from a static folder named `library-images` (on a computer or on a server).
 
-In the file `db/writerslibrary/controller.xq` the following statement specifies that paths to images in `<facsimile>` elements must be preceded by `db/writerslibrary/resources/images/library/`:
+In the file `db/writerslibrary/controller.xq` the following statement specifies that paths to images in `<facsimile>` elements must be preceded by `db/writerslibrary/resources/images/sample-library/`:
 
 	    else if (contains($exist:path, "/$library-images/")) then
         <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-            <forward url="{$exist:controller}/resources/images/library/{substring-after($exist:path, '/$library-images/')}">
+            <forward url="{$exist:controller}/resources/images/sample-library/{substring-after($exist:path, '/$library-images/')}">
                 <set-header name="Cache-Control" value="max-age=3600, must-revalidate"/>
             </forward>
         </dispatch>
@@ -342,7 +345,7 @@ This must be changed to the static folder outside of eXist-db:
 
 	    else if (contains($exist:path, "/$library-images/")) then
         <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-            <forward url="/library-images/{substring-after($exist:path, '/$library-images/')}">
+            <forward url="/sample-library-images/{substring-after($exist:path, '/$library-images/')}">
                 <set-header name="Cache-Control" value="max-age=3600, must-revalidate"/>
             </forward>
         </dispatch>
@@ -352,10 +355,10 @@ eXist-db uses **Jetty** as its web server. Jetty is an open-source project provi
 	<?xml version="1.0" encoding="UTF-8"?>
 	<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_0.dtd">
 	<Configure class="org.eclipse.jetty.server.handler.ContextHandler">
-		  <Set name="contextPath">/library-images</Set>
+		  <Set name="contextPath">/sample-library-images</Set>
 		  <Set name="handler">
 		    <New class="org.eclipse.jetty.server.handler.ResourceHandler">
-	         <Set name="resourceBase">/home/library-images</Set>
+	         <Set name="resourceBase">/home/sample-library-images</Set>
 	         <Set name="directoriesListed">false</Set>
    		   </New>
 	      </Set>
@@ -363,27 +366,27 @@ eXist-db uses **Jetty** as its web server. Jetty is an open-source project provi
 
 This XML configuration file is used It does this by configuring a `Jetty ContextHandler` to serve resources from the specified folder. 
 
-This configuration file should be placed in the `$EXIST_HOME/etc/jetty` directory, where `$EXIST_HOME` is the root directory of your eXist-db installation. The file should have a .xml extension and its name should start with jetty. For example, you could name it `jetty-library-images.xml`.
+This configuration file should be placed in the `$EXIST_HOME/etc/jetty` directory, where `$EXIST_HOME` is the root directory of your eXist-db installation. The file should have a .xml extension and its name should start with jetty. For example, you could name it `jetty-sample-library-images.xml`.
 
 Here is a brief explanation of what each part of the configuration does:
 
-- `<Set name="contextPath">/library-images</Set>`: This line sets the context path for the ContextHandler to /library-images. This means that resources served by this ContextHandler will be available at URLs starting with /library-images.
-- `<Set name="resourceBase">/home/library-images</Set>`: This line sets the resourceBase property of the ResourceHandler to `/home/library-images`. This specifies the folder on the file system from which resources will be served.
+- `<Set name="contextPath">/sample-library-images</Set>`: This line sets the context path for the ContextHandler to /sample-library-images. This means that resources served by this ContextHandler will be available at URLs starting with /sample-library-images.
+- `<Set name="resourceBase">/home/sample-library-images</Set>`: This line sets the resourceBase property of the ResourceHandler to `/home/sample-library-images`. This specifies the folder on the file system from which resources will be served.
 
 After placing this configuration file in the correct location, you will need to **restart eXist-db** for the changes to take effect. 
 
 The configuration of the webserver will also need to include a reference to the image folder. If you have chosen to proxy eXist-db behind a Web Server (as explained [here](http://exist-db.org/exist/apps/doc/production_web_proxying.xml?field=all&id=D3.17.15#D3.17.15) in the eXist-db documentation), add the following lines to your `httpd.conf` in **Apache httpd**:
 
-	ProxyPass           /library-images http://localhost:8080/library-images
-	ProxyPassReverse    /library-images http://localhost:8080/library-images
+	ProxyPass           /sample-library-images http://localhost:8080/sample-library-images
+	ProxyPassReverse    /sample-library-images http://localhost:8080/sample-library-images
 
 In an **Nginx** configuration, add:
 
-	location /library-images {
-	    proxy_pass http://localhost:8080/library-images;
+	location /sample-library-images {
+	    proxy_pass http://localhost:8080/sample-library-images;
 	}
 
-Once eXist-db and Apache httpd or Nginx have been restarted, images from the `/home/library-images` folder on the server should be available at URLs starting with `/library-images`, to which `controller.xq` will then append the references given in the `<facsimile>` elements. In this way, `<facsimile>ARA-LIB/cover.jpg</facsimile>` will correctly refer to an image stored as `/home/library-images/ARA-LIB/cover.jpg`.
+Once eXist-db and Apache httpd or Nginx have been restarted, images from the `/home/sample-library-images` folder on the server should be available at URLs starting with `/sample-library-images`, to which `controller.xq` will then append the references given in the `<facsimile>` elements. In this way, `<facsimile>ARA-LIB/cover.jpg</facsimile>` will correctly refer to an image stored as `/home/sample-library-images/ARA-LIB/cover.jpg`.
 
 
 ### Via IIIF
@@ -402,11 +405,35 @@ The IIIF method of including images can be easily combined with one of the two p
 
 ## Admin Tools
 
-When you are logged into eXist-db (via the dashboard or via eXide), a tab "Admin Tools" appears on the home page. There, admins can make use of three tools meant to facilitate the creation of a collection of book entries.  Two of the three tools are especially helpful to people incorporating images via IIIF. The three tools are:
+When you are logged into eXist-db—either via the dashboard or via eXide—Bibundina provides access to a set of administrative features. A **Manage Library Collections** button appears in the top-right corner of the interface, and an **Admin Tools** tab is available on the home page. These tools allow administrators to create and manage multiple library collections, switch between them, and facilitate the creation of new book entries. Several of the tools are specifically designed to support workflows that incorporate images via IIIF.
 
-- Create a new book entry
-- Import image links from a IIIF manifest
-- Zone coordinates tool (for IIIF images only)
+The available tools are:
+
+* Create a new book entry
+* Import image links from a IIIF manifest
+* Zone coordinates tool (for IIIF images only)
+
+### Manage Library Collections
+
+The **Manage Library Collections** window provides an overview of all library collections available in the app. Each collection is listed by its **human-readable name** and its **library ID**, which corresponds to the folder name under the app’s `data/` directory. The table also indicates which collection is currently **active** and which one is set as the **default**.
+
+From this window, administrators can:
+
+* **View all existing library collections**
+* **Switch the active library**, determining which collection is currently used by the interface
+* **Create a new library collection** by providing a name and a unique library ID
+
+When creating a new library, Bibundina initializes a new directory named after the library ID and populates it with a default `library.xml`, `config.xml` and `home.xml` file. Library IDs must consist of lowercase letters, digits, and hyphens, and may not contain spaces.
+
+The **sample library** (`sample-library`) is included by default and is marked as both active and default upon installation. While it can be used for experimentation or testing, it is recommended to create a separate library collection for real-world data in order to keep sample material and production data clearly separated.
+
+> **Note on deletion and defaults**
+> Library collections cannot be deleted or reordered directly via the interface.
+>
+> * To **delete** a library collection, remove the folder named after the library ID and delete the corresponding `<library/>` entry in `data/libraries.xml`.
+> * To make a library collection the **default**, move its `<library/>` entry to the first position in `data/libraries.xml`.
+
+
 
 ### Create a New Book Entry
 
@@ -454,12 +481,15 @@ For every zone selection, the tool will create the following XML:
 
 - `collection.xconf`: This file is used to configure collection-specific settings, such as indexing options and triggers.
 - `controller.xq`: This file is used to control the flow of requests and responses within the app.
-- `data/library/config.xml`: This file contains configuration settings, such as the title of the app and the browsing and sorting options.
-- `data/library/library.xml`: The main library database file.
+- `data/sample-library/config.xml`: This file contains configuration settings, such as the title of the app and the browsing and sorting options.
+- `data/sample-library/library.xml`: The main library database file.
+- `data/sample-library/home.xml`: Holds the HTML code that appears on the library's home page.
 - `modules/`: This folder contains XQuery modules, which contain the actual application code.
 - `modules/library-book-view.xql`: This module contains code that creates the book view.
 - `modules/library-browse.xql`: This module contains code for browsing the library.
 - `modules/library-functions.xql`: This module contains general-purpose functions used by `library-browse.xql` and `library-book-view.xql`.
+- `modules/library-manager.xql`: This module contains the core functions for managing library collections, including creating library entries and directory structures.
+- `modules/library-api.xql`: This module provides the REST API endpoint that handles HTTP requests for library management operations and enforces admin authentication.
 - `modules/search.xql`: This module contains code for searching within the app.
 - `modules/admin-tools.xql`: This module likely contains code for administrative tools within the app.
 - `modules/import-iiif.xql`: This module likely contains code for importing data using the IIIF (International Image Interoperability Framework) protocol.

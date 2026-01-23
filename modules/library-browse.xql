@@ -27,8 +27,9 @@ declare option exist:serialize "method=html5 media-type=text/html";
 
 declare function library-browse:navbar($node as node(), $model as map(*)){
 
-    let $configDoc := doc($config:data-root || '/library/config.xml')
-    let $libraryDoc := doc($config:data-root || '/library/library.xml')
+    let $libraryID := request:get-parameter("libraryID", "sample-library")
+    let $configDoc := doc($config:data-root || '/' || $libraryID || '/config.xml')
+    let $libraryDoc := doc($config:data-root || '/' || $libraryID || '/library.xml')
 
     (: The current sorting & browsing specifications are retrieved through the param 
        "sortAndBrowse" which is created in the controller. It contains both the sort value
@@ -134,8 +135,9 @@ declare function library-browse:getEntries($node as node(), $model as map(*)){
     let $currentBrowseValue := substring-after($sortAndBrowseParam,'/')
     let $currentSortValue := substring-before($sortAndBrowseParam,'/')
 
-    let $libraryDoc := doc($config:data-root || '/library/library.xml')
-    let $configDoc :=doc($config:data-root || '/library/config.xml')
+    let $libraryID := request:get-parameter("libraryID", "sample-library")
+    let $configDoc := doc($config:data-root || '/' || $libraryID || '/config.xml')
+    let $libraryDoc := doc($config:data-root || '/' || $libraryID || '/library.xml')
 
     (: in the following two parameters the actual range query is constructed. :)
     let $currentSortByRangeQuery := $configDoc//sortBy[data(@id) eq $currentSortValue]/rangeQuery

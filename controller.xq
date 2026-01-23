@@ -9,6 +9,14 @@ declare variable $exist:controller external;
 declare variable $exist:prefix external;
 declare variable $exist:root external;
 
+(: Load default library from data :)
+declare variable $default-library := 
+    let $doc := doc("/db/apps" || $exist:controller || "/data/libraries.xml")
+    let $lib := $doc/libraries/library[1]/@id
+    return 
+        if ($lib) then string($lib) 
+        else "sample-library";
+
 if ($exist:path eq '') then
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
         <redirect url="{request:get-uri()}/"/>
@@ -17,15 +25,15 @@ if ($exist:path eq '') then
 else if ($exist:path eq "/") then
     (: forward root path to index.xql :)
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-        <redirect url="library/home/welcome.html"/>
+        <redirect url="{request:get-context-path()}/apps/writerslibrary/{$default-library}/home/welcome.html"/>
     </dispatch>
     
-        (: forwards all paths to images to resources/images/library/   :)
+        (: forwards all paths to images to resources/images/sample-library/   :)
         (: best practice, however, is to fetch the images from outside :)
         (: of the eXist app. :)
     else if (contains($exist:path, "/$library-images/")) then
         <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-            <forward url="{$exist:controller}/resources/images/library/{substring-after($exist:path, '/$library-images/')}">
+            <forward url="{$exist:controller}/resources/images/sample-library/{substring-after($exist:path, '/$library-images/')}">
                 <set-header name="Cache-Control" value="max-age=3600, must-revalidate"/>
             </forward>
         </dispatch>
@@ -65,6 +73,8 @@ else if (contains($exist:path, "/$app/")) then
                         <view>
                             <forward
                                 url="{$exist:controller}/modules/view.xq">
+                        <add-parameter name="libraryID" value="{tokenize($exist:path, '/')[2]}"/>
+                        <add-parameter name="view" value="homepage"/>
                                 <set-header
                                     name="Cache-Control"
                                     value="no-cache"/>
@@ -86,6 +96,8 @@ else if (contains($exist:path, "/$app/")) then
                         <view>
                             <forward
                                 url="{$exist:controller}/modules/view.xq">
+                        <add-parameter name="libraryID" value="{tokenize($exist:path, '/')[2]}"/>
+                        <add-parameter name="view" value="homepage"/>
                                 <set-header
                                     name="Cache-Control"
                                     value="no-cache"/>
@@ -109,7 +121,7 @@ else if (contains($exist:path, "/$app/")) then
                     <view>
                         <forward
                             url="{$exist:controller}/modules/view.xq">
-                        <add-parameter name="moduleID" value="/library"/>
+                        <add-parameter name="libraryID" value="{tokenize($exist:path, '/')[2]}"/>
                         <add-parameter name="view" value="homepage"/>
                             <set-header
                                 name="Cache-Control"
@@ -133,7 +145,7 @@ else if (contains($exist:path, "/$app/")) then
                     <view>
                         <forward
                             url="{$exist:controller}/modules/view.xq">
-                        <add-parameter name="moduleID" value="/library"/>
+                        <add-parameter name="libraryID" value="{tokenize($exist:path, '/')[2]}"/>
                         <add-parameter name="view" value="search"/>
                             <set-header
                                 name="Cache-Control"
@@ -157,7 +169,7 @@ else if (contains($exist:path, "/$app/")) then
                     <view>
                         <forward
                             url="{$exist:controller}/modules/view.xq">
-                        <add-parameter name="moduleID" value="/library"/>
+                        <add-parameter name="libraryID" value="{tokenize($exist:path, '/')[2]}"/>
                         <add-parameter name="view" value="admin-tools"/>
                             <set-header
                                 name="Cache-Control"
@@ -181,7 +193,7 @@ else if (contains($exist:path, "/$app/")) then
                     <view>
                         <forward
                             url="{$exist:controller}/modules/view.xq">
-                        <add-parameter name="moduleID" value="/library"/>
+                        <add-parameter name="libraryID" value="{tokenize($exist:path, '/')[2]}"/>
                         <add-parameter name="view" value="admin-tools"/>
                         <add-parameter name="tool" value="zone-tool"/>
                             <set-header
@@ -206,7 +218,7 @@ else if (contains($exist:path, "/$app/")) then
                     <view>
                         <forward
                             url="{$exist:controller}/modules/view.xq">
-                        <add-parameter name="moduleID" value="/library"/>
+                        <add-parameter name="libraryID" value="{tokenize($exist:path, '/')[2]}"/>
                         <add-parameter name="view" value="admin-tools"/>
                             <set-header
                                 name="Cache-Control"
@@ -232,7 +244,7 @@ else if (contains($exist:path, "/$app/")) then
                             url="{$exist:controller}/modules/view.xq">
                         <add-parameter name="view" value=""/>
                         <add-parameter name="sortAndBrowse" value="{replace(substring-before(substring-after($exist:path,'/browse/'), '.html'), '-', '/')}"/>
-                        <add-parameter name="moduleID" value="/library"/>
+                        <add-parameter name="libraryID" value="{tokenize($exist:path, '/')[2]}"/>
                             <set-header
                                 name="Cache-Control"
                                 value="no-cache"/>
@@ -257,7 +269,7 @@ else if (contains($exist:path, "/$app/")) then
                             url="{$exist:controller}/modules/view.xq">
                         <add-parameter name="view" value="book"/>
                         <add-parameter name="bookID" value="{tokenize($exist:path, '/')[last() - 1]}"/>
-                        <add-parameter name="moduleID" value="/library"/>
+                        <add-parameter name="libraryID" value="{tokenize($exist:path, '/')[2]}"/>
                             <set-header
                                 name="Cache-Control"
                                 value="no-cache"/>

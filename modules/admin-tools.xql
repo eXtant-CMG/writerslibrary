@@ -119,100 +119,103 @@ else ()
 
 (: This function creates the "Manage Library Collections" modal window :)
 declare function admin-tools:manageLibraryCollections($node as node(), $model as map(*)) {
-let $libraryID := request:get-parameter("libraryID", "sample-library")
-let $librariesDoc := doc($config:data-root || '/libraries.xml')
-let $libraries := $librariesDoc/libraries/library
-
-return
-    <div>
-
-        <div class="table-responsive">
-          <table class="table table-sm table-striped" id="library-collections-table">
-            <thead>
-              <tr>
-                <th style="width:34%;">Name</th>
-                <th style="width:22%;">ID</th>
-                <th style="width:12%;">Active</th>
-                <th style="width:12%;">Default</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                for $lib in $libraries
-                let $id := string($lib/@id)
-                let $name := normalize-space(string($lib))
-                let $isActive := ($id = $libraryID)
-                (: Assumption: default library is stored as @default="true" on the <library> element.
-                   If you store it differently, change this line accordingly. :)
-                let $isDefault := ($lib is $lib/../*[1])
-                order by $name
-                return
-                  <tr data-library-id="{$id}">
-                    <td>
-                      {
-                        if ($isActive) then
-                          $name
-                        else
-                          <a href="../../{$id}/home/welcome.html"
-                             target="_parent"
-                             rel="noopener noreferrer"
-                             style="text-decoration:underline;">
-                            {$name}
-                          </a>
-                      }
-                    </td>
-                    <td><code>{$id}</code></td>
-
-                    <td>
-                      { if ($isActive) then <span class="check">✓</span> else () }
-                    </td>
-
-                    <td>
-                      { if ($isDefault) then <span class="check">✓</span> else () }
-                    </td>
+if (admin-tools:userIsAdmin() eq true()) 
+then
+    let $libraryID := request:get-parameter("libraryID", "sample-library")
+    let $librariesDoc := doc($config:data-root || '/libraries.xml')
+    let $libraries := $librariesDoc/libraries/library
+    
+    return
+        <div>
+    
+            <div class="table-responsive">
+              <table class="table table-sm table-striped" id="library-collections-table">
+                <thead>
+                  <tr>
+                    <th style="width:34%;">Name</th>
+                    <th style="width:22%;">ID</th>
+                    <th style="width:12%;">Active</th>
+                    <th style="width:12%;">Default</th>
                   </tr>
-              }
-            </tbody>
-          </table>
-          <p>To <span class="bold">delete</span> a library collection, <span class="bold">remove the folder</span> named with the library ID and delete the corresponding <code>&lt;library/&gt;</code> entry in <code>data/libraries.xml</code>.</p>
-          <p>To make a library collection the <span class="bold">default</span> collection, move its <code>&lt;library/&gt;</code> entry to the first position in <code>data/libraries.xml</code>.</p>
+                </thead>
+                <tbody>
+                  {
+                    for $lib in $libraries
+                    let $id := string($lib/@id)
+                    let $name := normalize-space(string($lib))
+                    let $isActive := ($id = $libraryID)
+                    (: Assumption: default library is stored as @default="true" on the <library> element.
+                       If you store it differently, change this line accordingly. :)
+                    let $isDefault := ($lib is $lib/../*[1])
+                    order by $name
+                    return
+                      <tr data-library-id="{$id}">
+                        <td>
+                          {
+                            if ($isActive) then
+                              $name
+                            else
+                              <a href="../../{$id}/home/welcome.html"
+                                 target="_parent"
+                                 rel="noopener noreferrer"
+                                 style="text-decoration:underline;">
+                                {$name}
+                              </a>
+                          }
+                        </td>
+                        <td><code>{$id}</code></td>
+    
+                        <td>
+                          { if ($isActive) then <span class="check">✓</span> else () }
+                        </td>
+    
+                        <td>
+                          { if ($isDefault) then <span class="check">✓</span> else () }
+                        </td>
+                      </tr>
+                  }
+                </tbody>
+              </table>
+              <p>To <span class="bold">delete</span> a library collection, <span class="bold">remove the folder</span> named with the library ID and delete the corresponding <code>&lt;library/&gt;</code> entry in <code>data/libraries.xml</code>.</p>
+              <p>To make a library collection the <span class="bold">default</span> collection, move its <code>&lt;library/&gt;</code> entry to the first position in <code>data/libraries.xml</code>.</p>
+            </div>
+    
+            <hr/>
+    
+            <h4 style="margin-top:0.75rem;font-size:1.2em;">Add a new library</h4>
+            <form id="add-library-form" class="form" onsubmit="return false;">
+              <div class="form-row">
+                <div class="col-md-6 mb-2">
+                  <label for="newLibraryName">Library name:</label>
+                  <input type="text"
+                         id="newLibraryName"
+                         class="form-control"
+                         placeholder="e.g. 'Virginia Woolf Library'"
+                         autocomplete="off"
+                         style="width: 350px;"/>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <label for="newLibraryId">Library ID:</label>
+                  <input type="text"
+                       id="newLibraryId"
+                       class="form-control"
+                       placeholder="e.g. woolf-library"
+                       autocomplete="off"
+                       style="width: 350px;"
+                       oninput="this.value = this.value.toLowerCase().replace(/[^a-z0-9\-]/g, '')"
+                       title="Use only lowercase letters, digits, and hyphens (no spaces)"/>
+                  <small class="form-text text-muted">
+                    Use lowercase letters, digits, and hyphens (no spaces).
+                  </small>
+                </div>
+                <div class="col-md-2 mb-2">
+                  <label> </label> <!-- Spacer to align button -->
+                  <button type="button" class="btn btn-success btn-block js-create-library">
+                    Create
+                  </button>
+                </div>
+              </div>
+            </form>
         </div>
-
-        <hr/>
-
-        <h4 style="margin-top:0.75rem;font-size:1.2em;">Add a new library</h4>
-        <form id="add-library-form" class="form" onsubmit="return false;">
-          <div class="form-row">
-            <div class="col-md-6 mb-2">
-              <label for="newLibraryName">Library name:</label>
-              <input type="text"
-                     id="newLibraryName"
-                     class="form-control"
-                     placeholder="e.g. 'Virginia Woolf Library'"
-                     autocomplete="off"
-                     style="width: 350px;"/>
-            </div>
-            <div class="col-md-4 mb-2">
-              <label for="newLibraryId">Library ID:</label>
-              <input type="text"
-                   id="newLibraryId"
-                   class="form-control"
-                   placeholder="e.g. woolf-library"
-                   autocomplete="off"
-                   style="width: 350px;"
-                   oninput="this.value = this.value.toLowerCase().replace(/[^a-z0-9\-]/g, '')"
-                   title="Use only lowercase letters, digits, and hyphens (no spaces)"/>
-              <small class="form-text text-muted">
-                Use lowercase letters, digits, and hyphens (no spaces).
-              </small>
-            </div>
-            <div class="col-md-2 mb-2">
-              <label> </label> <!-- Spacer to align button -->
-              <button type="button" class="btn btn-success btn-block js-create-library">
-                Create
-              </button>
-            </div>
-          </div>
-        </form>
-    </div>
+else ()
 };

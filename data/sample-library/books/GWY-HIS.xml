@@ -1,0 +1,11 @@
+<book type="VL" id="GWY-HIS">
+        <module type="bibl">
+            <title sort="History of Ireland">The History of Ireland</title>
+            <type>Monograph</type>
+            <author sort="Gwyn"><firstname>Stephen</firstname> <lastname>Gwynn</lastname></author>
+            <place>Dublin</place>
+            <publisher>Talbot Press</publisher>
+            <date>1924</date>
+            <generalnote/>
+        </module>
+    </book>

@@ -1,0 +1,23 @@
+<book type="EL" id="QUI-MAR">
+        <module type="bibl">
+            <title sort="Marcel Proust sa vie son oeuvre">Marcel Proust, sa vie, son œuvre, suivi de: Le Comique et le mystère chez Proust</title>
+            <type>Monograph</type>
+            <author sort="Quint"><firstname>Léon–Pierre</firstname> <lastname>Quint</lastname></author>
+            <place>Paris</place>
+            <publisher>Simon Kra</publisher>
+            <date>1928</date>
+            <firstedition>1925</firstedition>
+            <edition>rev. ed.</edition>
+            <generalnote/>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>QUI-MAR/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp</pagenumber>
+                <facsimile>QUI-MAR/tp.jpg</facsimile>
+            </page>
+        </module>
+    </book>

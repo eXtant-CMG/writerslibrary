@@ -1,0 +1,20 @@
+<book type="EL" id="DAN-NOT">
+        <module type="bibl">
+            <title sort="Notturno">Notturno</title>
+            <type>Monograph</type>
+            <author sort="DAnnunzio"><firstname>Gabriele</firstname> <lastname>D'Annunzio</lastname></author>
+            <volume/>
+            <editor/>
+            <place>Milano</place>
+            <publisher>Presso I. Fratelli Treves</publisher>
+            <date>1921</date>
+            <edition/>
+            <centimeters/>
+            <generalnote/>
+        </module>
+        <module type="prop">
+            <type>received</type>
+            <origin>Here you can describe the provenance of a book.</origin>
+            <inscription>This is a sample inscription.</inscription>
+        </module>
+    </book>

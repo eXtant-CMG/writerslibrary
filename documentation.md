@@ -4,16 +4,16 @@
 
 After installation, Bibundina opens with a welcome page and loads a **sample library collection** containing example records that demonstrate the encoding schema. This sample library is fully functional and can be used to encode your own material, but we recommend creating a **separate library collection** for production use. Bibundina supports working with **multiple library collections**, and you can switch between them at any time using the admin tools (see the *Admin Tools* section for details). Throughout this documentation, the sample library (`sample-library`) is used to illustrate the app’s features.
 
-Data entry in Bibundina is primarily done by editing the XML file `library.xml`. Some library-specific settings can be configured in `config.xml` and the contents of the home page can be edited in `home.xml`. In the case of the sample library, these files are located at:
+Data entry in Bibundina is done by creating and editing individual XML files, one per book. Each book file is stored in the `books/` subfolder of its library collection, and is named after the book's unique ID (e.g., `ARA-LIB.xml`). Some library-specific settings can be configured in `config.xml` and the contents of the home page can be edited in `home.xml`. In the case of the sample library, the relevant files and folders are located at:
 
-- `/db/apps/writerslibrarary/data/sample-library/library.xml`
-- `/db/apps/writerslibrarary/data/sample-library/config.xml`
-- `/db/apps/writerslibrarary/data/sample-library/home.xml`
+- `/db/apps/writerslibrary/data/sample-library/books/` (one `.xml` file per book)
+- `/db/apps/writerslibrary/data/sample-library/config.xml`
+- `/db/apps/writerslibrary/data/sample-library/home.xml`
 
 ### Editing the XML files in eXide
-You can open and edit these two XML files in `eXide`, eXist-db's code editor. To open eXide, go to the eXist-db **Dashboard** and click on the eXide icon.
+You can open and edit book XML files in `eXide`, eXist-db's code editor. To open eXide, go to the eXist-db **Dashboard** and click on the eXide icon.
 
-To edit `library.xml`, `config.xml` and `home.xml` you’ll need to log in as an **administrator** (dba). To do this, click on the “Login” button in the top right corner of the eXide window and enter the admin username and password you provided during the eXist-db installation.
+To edit book files, `config.xml` and `home.xml` you’ll need to log in as an **administrator** (dba). To do this, click on the “Login” button in the top right corner of the eXide window and enter the admin username and password you provided during the eXist-db installation.
 
 ### Editing the XML files in oXygen
 In addition to eXide, you can also edit the XML files in an eXist-db using **oXygen XML Editor**. oXygen is a powerful XML editor that provides many advanced features for working with XML data.
@@ -42,7 +42,7 @@ In case one or more of these options are not relevant to a collection of books (
             <operators>("contains","starts-with")</operators>
             <keys>"*",$currentBrowseValue</keys>
         </rangeQuery>
-        <orderBy>Author</orderBy>
+        <orderBy>author</orderBy>
         <breadcrumbPhrase>the presence of marginalia</breadcrumbPhrase>
     </sortBy>
 
@@ -69,9 +69,9 @@ When working with books published in other date ranges than the ones currently o
 
 Advanced users who are familiar with search indexes and range queries can add an index in `collection.xconf` and phrase the range index in this XML syntax to add another sorting option to the interface.
 
-## Encoding Schema: library.xml
+## Encoding Schema: Book XML Files
 
-In `library.xml`, add book entries following the custom encoding scheme that is documented in the section “Encoding manual”.
+Each book in the library is stored as a separate XML file in the `books/` folder of the library collection. Book files are named after the book’s unique ID (e.g., `ARA-LIB.xml`). Add book entries following the custom encoding scheme documented in the “Encoding manual” section.
 
 The root element is `<book>`, which has attributes `type` and `id`. The `type` attribute specifies the type of book (`EL` (extant library) `VL` (virtual entry), while the `id` attribute provides a unique identifier for the book.
 
@@ -423,7 +423,7 @@ From this window, administrators can:
 * **Switch the active library**, determining which collection is currently used by the interface
 * **Create a new library collection** by providing a name and a unique library ID
 
-When creating a new library, Bibundina initializes a new directory named after the library ID and populates it with a default `library.xml`, `config.xml` and `home.xml` file. Library IDs must consist of lowercase letters, digits, and hyphens, and may not contain spaces.
+When creating a new library, Bibundina initializes a new directory named after the library ID and populates it with a default `config.xml`, `home.xml`, and a `books/` folder with one sample book file (`ADA-MYF.xml`). Library IDs must consist of normal letters, digits, and hyphens, and may not contain spaces.
 
 The **sample library** (`sample-library`) is included by default and is marked as both active and default upon installation. While it can be used for experimentation or testing, it is recommended to create a separate library collection for real-world data in order to keep sample material and production data clearly separated.
 
@@ -437,15 +437,15 @@ The **sample library** (`sample-library`) is included by default and is marked a
 
 ### Create a New Book Entry
 
-This tool helps you generate the XML for a new book entry. You can copy the result to your clipboard and paste it into `library.xml`.
+This tool helps you generate the XML for a new book entry. You can copy the result to your clipboard, paste it into eXide and save it as a new `.xml` file in the `books/` folder of your library collection, named after the book’s ID (e.g., `ARA-LIB.xml`).
 
-**Note**: This tool doesn’t automatically insert or modify book elements in the publication interface. You must manually copy the generated XML into `library.xml`.
+**Note**: This tool doesn’t automatically create book files in the library. You must manually save the generated XML as a new file in the `books/` folder.
 
-First, choose a valid and unique ID that starts with a letter and contains only letters and numbers. Then enter the main bibliographic information and (optionally) import images from a IIIF manifest. This feature can also be used separately (see below).
+First, choose a valid and unique ID that starts with a letter and contains only letters, numbers and hyphens. Then enter the main bibliographic information and (optionally) import images from a IIIF manifest. This feature can also be used separately (see below).
 
 ### Import image links from a IIIF manifest
 
-This tool extracts image links from a IIIF manifest and formats them into the correct XML schema (`<module type="pages">`). You can then paste the result directly into a `<book>` entry in your library collection. However, due to structural differences in IIIF manifests, extraction may not always be successful.
+This tool extracts image links from a IIIF manifest and formats them into the correct XML schema (`<module type="pages">`). You can then paste the result directly into the relevant book XML file in your library’s `books/` folder. However, due to structural differences in IIIF manifests, extraction may not always be successful.
 
 For every image declared in the manifest, the tool will create the following XML:
 
@@ -458,7 +458,7 @@ Images are numbered consecutively in the `<pagenumber>` element. The `<facsimile
 
 ### Zone Coordinates Tool
 
-This tool allows admins to draw a rectangular zone around a reading trace on a IIIF image. The tool generates a `<zone>` element, containing the correct coordinates for the zone, which can be pasted into a `<page>` element in `library.xml`. After making a selection, click the `preview zone image` button to magnify it.
+This tool allows admins to draw a rectangular zone around a reading trace on a IIIF image. The tool generates a `<zone>` element, containing the correct coordinates for the zone, which can be pasted into a `<page>` element in the relevant book XML file. After making a selection, click the `preview zone image` button to magnify it.
 
 For every zone selection, the tool will create the following XML:
 
@@ -482,7 +482,7 @@ For every zone selection, the tool will create the following XML:
 - `collection.xconf`: This file is used to configure collection-specific settings, such as indexing options and triggers.
 - `controller.xq`: This file is used to control the flow of requests and responses within the app.
 - `data/sample-library/config.xml`: This file contains configuration settings, such as the title of the app and the browsing and sorting options.
-- `data/sample-library/library.xml`: The main library database file.
+- `data/sample-library/books/`: This folder contains one XML file per book, each named after the book’s unique ID (e.g., `ARA-LIB.xml`). Together these files form the library’s book database.
 - `data/sample-library/home.xml`: Holds the HTML code that appears on the library's home page.
 - `modules/`: This folder contains XQuery modules, which contain the actual application code.
 - `modules/library-book-view.xql`: This module contains code that creates the book view.
@@ -491,7 +491,7 @@ For every zone selection, the tool will create the following XML:
 - `modules/library-manager.xql`: This module contains the core functions for managing library collections, including creating library entries and directory structures.
 - `modules/library-api.xql`: This module provides the REST API endpoint that handles HTTP requests for library management operations and enforces admin authentication.
 - `modules/search.xql`: This module contains code for searching within the app.
-- `modules/admin-tools.xql`: This module likely contains code for administrative tools within the app.
-- `modules/import-iiif.xql`: This module likely contains code for importing data using the IIIF (International Image Interoperability Framework) protocol.
+- `modules/admin-tools.xql`: This module contains code for administrative tools within the app.
+- `modules/import-iiif.xql`: This module contains code for importing data using the IIIF (International Image Interoperability Framework) protocol.
 - `resources/`: This folder contains resources such as CSS files, images, JavaScript files, and XSLT files.
 - `templates/`: This folder contains HTML templates used to generate pages within the app.

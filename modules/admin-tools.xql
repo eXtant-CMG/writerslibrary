@@ -10,12 +10,12 @@ import module namespace import-iiif="http://exist-db.org/apps/writerslibrary/imp
 
 (: This function checks whether a user is an Admin :)
 
+
 declare function admin-tools:userIsAdmin() {
 if (sm:is-dba(sm:id()//sm:real/sm:username/string())) 
 then fn:true()
 else fn:false()
 };
-
 
 (: This function is called in templates/library/home.html, it checks whether a user is an Admin and, if so,
    creates the tab with the 3 admin tools :)
@@ -83,7 +83,7 @@ declare function admin-tools:createImageID() {
 let $bookID := substring-before(request:get-parameter("pageID",""),",")
 let $pageID := replace(substring-after(request:get-parameter("pageID",""),","), "-_-", " ")
 let $bookNode := library-book-view:getBookNode($bookID)
-let $imageID := substring-before($bookNode//page[pagenumber eq $pageID]/facsimile/text(),"/full/")
+let $imageID := substring-before($bookNode/module[@type='pages']//page[pagenumber eq $pageID]/facsimile/text(),"/full/")
 
 return $imageID
 };

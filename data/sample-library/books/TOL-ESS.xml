@@ -1,0 +1,14 @@
+<book type="EL" id="TOL-ESS">
+        <module type="bibl">
+            <title sort="Essays and Letters">Essays and Letters</title>
+            <type>Monograph</type>
+            <author sort="Tolstoy"><firstname>Leo</firstname> <lastname>Tolstoy</lastname></author>
+            <volume/>
+            <editor type="translation">Aylmer Maude</editor>
+            <place>London</place>
+            <publisher>Henry Frowde</publisher>
+            <date>1904</date>
+            <edition/>
+            <generalnote/>
+        </module>
+    </book>

@@ -1,0 +1,22 @@
+<book type="EL" id="REN-COR">
+        <module type="bibl">
+            <title sort="Correspondance de Jules Renard 1864 1910">Correspondance de Jules Renard 1864–1910</title>
+            <type>Monograph</type>
+            <author sort="Renard"><firstname>Jules</firstname> <lastname>Renard</lastname></author>
+            <place>Paris</place>
+            <publisher>François Bernouard</publisher>
+            <date>1928</date>
+            <edition/>
+            <generalnote>This is number 379 of 3075 copies</generalnote>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>REN-COR/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp</pagenumber>
+                <facsimile>REN-COR/tp.jpg</facsimile>
+            </page>
+        </module>
+    </book>

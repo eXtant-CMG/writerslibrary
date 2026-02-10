@@ -1,0 +1,13 @@
+<book type="EL" id="IBS-PEE">
+        <module type="bibl">
+            <title sort="Peer Gynt">Peer Gynt</title>
+            <type>Monograph</type>
+            <author sort="Ibse"><firstname>Henrik</firstname> <lastname>Ibsen</lastname></author>
+            <place>London</place>
+            <publisher>J.M. Dent &amp; Sons, Ltd. (Everyman)</publisher>
+            <date>1934</date>
+            <editor type="translation">R. Farquharson Sharp</editor>
+            <generalnote>This book illustrates how to encode the translator of a book.</generalnote>
+            <uncutpages>no</uncutpages>
+        </module>
+    </book>

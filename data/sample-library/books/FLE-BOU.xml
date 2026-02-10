@@ -1,0 +1,36 @@
+<book type="EL" id="FLE-BOU">
+        <module type="bibl">
+            <title sort="Boulogne-sur-mer: St. Patrick">Boulogne-sur-mer: St. Patrick's Native Town</title>
+            <type>Monograph</type>
+            <author sort="Fleming"><firstname>William Canon</firstname> <lastname>Fleming</lastname></author>
+            <volume/>
+            <editor/>
+            <place>London</place>
+            <publisher>R. &amp; T. Washbourne, London</publisher>
+            <date>1907</date>
+            <edition/>
+            <nrofpages>92</nrofpages>
+            <publishersaddress>12 &amp; 4 Paternoster Row, London</publishersaddress>
+            <generalnote/>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>FLE-BOU/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>28</pagenumber>
+                <facsimile>FLE-BOU/28.jpg</facsimile>
+                <zone>
+                    <number>1</number>
+                    <facsimile>FLE-BOU/zones/28(1).jpg</facsimile>
+                    <position>417</position>
+                    <rn><transcription><u>Armorica</u> / <u>Little Brittany</u></transcription>
+                        <handwriting>JJ</handwriting>
+                        <writingtool>lead pencil</writingtool>
+                        <extracts>"By this expression it is supposed," continues / Keating, "that Niall of the Nine Hostages waged war / against Britain or Wales, and perhaps made a conquest / of the country; <i>and it is more than probable</i> that, when the / Irish prince had finished his design upon the kingdom / of Wales, he carried his arms in a fleet to France and / invaded the country at the time called Armorica, but / now Little Brittany, and from thence he led St. Patrick / and his two sisters into captivity.</extracts>
+                    </rn>
+                </zone>
+            </page>
+        </module>
+    </book>

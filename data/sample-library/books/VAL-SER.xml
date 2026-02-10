@@ -1,0 +1,27 @@
+<book type="EL" id="VAL-SER">
+        <module type="bibl">
+            <title sort="Serpent">Le Serpent</title>
+            <type>Monograph</type>
+            <author sort="Valery"><firstname>Paul</firstname> <lastname>Valéry</lastname></author>
+            <volume/>
+            <editor/>
+            <place>Paris</place>
+            <publisher>Éditions de la Nouvelle Revue Française</publisher>
+            <date>1922</date>
+            <edition>1st</edition>
+            <nrofpages>20</nrofpages>
+            <location>University of Buffalo, catalogue number PLJJ299</location>
+            <generalnote>Inscribed to James Joyce by the author.</generalnote>
+        </module>
+        <module type="prop">
+            <type>received</type>
+            <origin>This book was sent to Joyce by Paul Valéry.</origin>
+            <inscription>A JAMES JOYCE <lb/> Paul Valéry <lb/> "JE MORDS CE QUE JE PUIS!"</inscription>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>tp1</pagenumber>
+                <facsimile>VAL-SER/tp1.jpg</facsimile>
+            </page>
+        </module>
+    </book>

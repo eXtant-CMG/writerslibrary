@@ -1,0 +1,76 @@
+<book type="EL" id="ARA-LIB">
+        <module type="bibl">
+            <title sort="Le Libertinage">Le Libertinage</title>
+            <type>Monograph</type>
+            <author sort="Aragon">
+                <firstname>Louis</firstname>
+                <lastname>Aragon</lastname>
+            </author>
+            <volume/>
+            <editor/>
+            <place>Paris</place>
+            <publisher>Éditions de la Nouvelle Revue Française</publisher>
+            <date>1924</date>
+            <edition>1st</edition>
+            <generalnote/>
+        </module>
+        <module type="prop">
+            <type>received</type>
+            <dateofacquisition>1934-05-15</dateofacquisition>
+            <origin>Here you can describe the provenance of a book.</origin>
+            <inscription>This is a sample inscription.</inscription>
+        </module>
+        <module type="reading">
+            <status>read</status>
+            <readingdate>
+                <from type="season">
+                    <season>Summer</season>
+                    <year>1934</year>
+                </from>
+                <to type="exact">
+                    <day>5</day>
+                    <month>2</month>
+                    <year>1935</year>
+                </to>
+               <source>Any type of substantiation.</source>
+            </readingdate>
+            <readingdate>
+                <from type="year">
+                    <year>1944</year>
+                </from>
+                <to type="year">
+                    <year>1945</year>
+                </to>
+                <source>Any type of substantiation.</source>
+            </readingdate>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>ARA-LIB/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp</pagenumber>
+                <facsimile>ARA-LIB/tp.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>24</pagenumber>
+                <facsimile>ARA-LIB/24.jpg</facsimile>
+                <zone>
+                    <number>1</number>
+                    <facsimile>ARA-LIB/zones/24(1).jpg</facsimile>
+                    <type>marginalia</type>
+                    <position>457</position>
+                    <rn>
+                       <transcription><m>capharnaum</m> / un <u>capharnaüm</u> sensible</transcription>
+                        <writingtool>Red ink</writingtool>
+                        <extracts>Il faut comprendre qu'ainsi jamais un mot pour moi / ne fait tableau
+                            à lui tout seul, mais lié à une multitude / de pensées, de sons informes,
+                            de calembours, de cris, / d'images, d'animaux, de caresses, de magasins,
+                            de / journaux illustrés, tout un capharnaüm sensible, / duquel je refuse de
+                            faire une seule fois abstraction.</extracts>
+                    </rn>
+                </zone>
+            </page>
+        </module>
+    </book>

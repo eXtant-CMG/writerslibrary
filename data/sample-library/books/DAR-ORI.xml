@@ -1,0 +1,41 @@
+<book type="EL" id="DAR-ORI">
+        <module type="bibl">
+            <title sort="Origin of Species">On the Origin of Species by Means of Natural Selection or the Preservation of Favoured Races in the Struggle for Life</title>
+            <type>Monograph</type>
+            <author sort="Darwin"><firstname>Charles</firstname> <lastname>Darwin</lastname></author>
+            <place>London</place>
+            <publisher>Grant Richards</publisher>
+            <date>1902</date>
+            <edition/>
+            <generalnote/>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>DAR-ORI/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp1</pagenumber>
+                <facsimile>DAR-ORI/tp1.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp2</pagenumber>
+                <facsimile>DAR-ORI/tp2.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>56</pagenumber>
+                <facsimile>DAR-ORI/56.jpg</facsimile>
+                <zone>
+                    <number>1</number>
+                    <facsimile>DAR-ORI/zones/56(1).jpg</facsimile>
+                    <type>marginalia</type>
+                    <position>880</position>
+                    <rn><transcription><u>How have all those exquisite adaptations of / one part of the organisation to another part, and to the / conditions of life, and of one distinct organic being to / another being, been perfected?</u> / <m>woodpecker</m></transcription>
+                        <writingtool>Red ink</writingtool>
+                        <extracts>But the mere existence of individual / variability and of some few well-marked varieties, / though necessary as the foundation for the work, helps / us but little in understanding how species arise in / nature. How have all those exquisite adaptations of / one part of the organisation to another part, and to the / conditions of life, and of one distinct organic being to / another being, been perfected? We see these beautiful / co-adaptations most plainly in the woodpecker and
+                        </extracts>
+                    </rn>
+                </zone>
+            </page>
+        </module>
+    </book>

@@ -22,12 +22,12 @@ declare option exist:serialize "method=html5 media-type=text/html";
    the book ID. This function is used by a number of functions on this page to quickly grab things 
    from the book node. :)
 declare function library-book-view:getBookNode($bookID as xs:string) {
-let $libraryID := request:get-parameter("libraryID", "sample-library")
-let $libraryDoc := doc($config:data-root || '/' || $libraryID || '/library.xml')
-let $bookNode := $libraryDoc/range:field-eq("library-book-ID",$bookID)
-return
-    $bookNode
+  let $libraryID := request:get-parameter("libraryID", "sample-library")
+  let $booksCollection := $config:data-root || '/' || $libraryID || '/books'
+  let $bookNode := collection($booksCollection)/range:field-eq("library-book-ID", $bookID)
+  return $bookNode[1]
 };
+
 
 (: This function constructs the bibliographic section, mainly by calling 
    library-functions:getBibliography() for all the stuff that is needed in the book view. :)

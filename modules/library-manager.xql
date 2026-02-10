@@ -83,31 +83,32 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
         (: Create the collection/directory :)
         let $createCollection := xmldb:create-collection($config:data-root, $libraryId)
                 
-        (: Create library.xml :)
-        let $libraryXml :=
-            <books id="{$libraryId}">
-                <book type="EL" id="ADA-MYF">
-                    <module type="bibl">
-                        <title sort="My First Book">My First Book</title>
-                        <type>Monograph</type>
-                        <author sort="Adams">
-                            <firstname>Anne</firstname>
-                            <lastname>Adams</lastname>
-                        </author>
-                        <volume/>
-                        <editor/>
-                        <place>London</place>
-                        <publisher>My Publisher</publisher>
-                        <date>1924</date>
-                        <edition/>
-                        <generalnote/>
-                    </module>
-                 </book>
-            </books>
-            
-        let $prettyLibrary :=
+        (: Create books/ subcollection :)
+        let $createBooksCollection := xmldb:create-collection($libraryPath, "books")
+        
+        (: Create sample book ADA-MYF.xml :)
+        let $bookXml :=
+          <book type="EL" id="ADA-MYF">
+            <module type="bibl">
+              <title sort="My First Book">My First Book</title>
+              <type>Monograph</type>
+              <author sort="Adams">
+                <firstname>Anne</firstname>
+                <lastname>Adams</lastname>
+              </author>
+              <volume/>
+              <editor/>
+              <place>London</place>
+              <publisher>My Publisher</publisher>
+              <date>1924</date>
+              <edition/>
+              <generalnote/>
+            </module>
+          </book>
+        
+        let $prettyBook :=
           serialize(
-            $libraryXml,
+            $bookXml,
             <output:serialization-parameters>
               <output:method value="xml"/>
               <output:indent value="yes"/>
@@ -115,9 +116,10 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
             </output:serialization-parameters>
           )
         
-        let $storeLibrary :=
-            xmldb:store($libraryPath, "library.xml", $prettyLibrary, "application/xml")
-        
+        let $storeBook :=
+          xmldb:store($libraryPath || "/books", "ADA-MYF.xml", $prettyBook, "application/xml")
+
+
         (: Create config.xml :)
         let $configXml := 
         <module type="library">
@@ -384,21 +386,21 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
                         <ignore qname="Handwriting"/>
                         <ignore qname="WritingTool"/>
                         <field name="library-book-zone-bookID" expression="ancestor::book/@id"/>
-                        <field name="library-book-zone-pagenumber" expression="preceding-sibling::Pagenumber"/>
-                        <field name="library-book-zone-author" expression="ancestor::book/module[1]/Author[1]"/>
-                        <field name="library-book-zone-title" expression="ancestor::book/module[1]/Title[1]"/>
-                        <field name="library-book-zone-subtitle" expression="ancestor::book/module[1]/SubTitle[1]"/>
+                        <field name="library-book-zone-pagenumber" expression="preceding-sibling::pagenumber"/>
+                        <field name="library-book-zone-author" expression="ancestor::book/module[1]/author[1]"/>
+                        <field name="library-book-zone-title" expression="ancestor::book/module[1]/title[1]"/>
+                        <field name="library-book-zone-subtitle" expression="ancestor::book/module[1]/subtitle[1]"/>
                         <facet dimension="document" expression="'library-readingtraces'"/>
                         <facet dimension="module" expression="substring-after(util:collection-name(.),'data/')"/>
                     </text>
                     
                     <text qname="m">
                         <field name="library-book-marginalia-bookID" expression="ancestor::book/@id"/>
-                        <field name="library-book-marginalia-zoneID" expression="ancestor::zone/Number"/>
-                        <field name="library-book-marginalia-pagenumber" expression="ancestor::page/Pagenumber"/>
-                        <field name="library-book-marginalia-author" expression="ancestor::book/module[1]/Author[1]"/>
-                        <field name="library-book-marginalia-title" expression="ancestor::book/module[1]/Title[1]"/>
-                        <field name="library-book-marginalia-subtitle" expression="ancestor::book/module[1]/SubTitle[1]"/>
+                        <field name="library-book-marginalia-zoneID" expression="ancestor::zone/number"/>
+                        <field name="library-book-marginalia-pagenumber" expression="ancestor::page/pagenumber"/>
+                        <field name="library-book-marginalia-author" expression="ancestor::book/module[1]/author[1]"/>
+                        <field name="library-book-marginalia-title" expression="ancestor::book/module[1]/title[1]"/>
+                        <field name="library-book-marginalia-subtitle" expression="ancestor::book/module[1]/subtitle[1]"/>
                         <facet dimension="document" expression="'library-readingtraces'"/>
                         <facet dimension="module" expression="substring-after(util:collection-name(.),'data/')"/>
                     </text>
@@ -412,21 +414,14 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
                     <create qname="book">
                         <field name="library-book-siglum" type="xs:string" match="@id"/>
                         <field name="library-book-type" type="xs:string" match="@type"/>
-                        <field name="library-book-Author" type="xs:string" match="module/Author/@sort"/>
-                        <field name="library-book-Title" type="xs:string" match="module/Title/@sort"/>
-                        <field name="library-book-Date" type="xs:string" match="module/Date"/>
-                        <field name="library-book-Place" type="xs:string" match="module/Place"/>
-                        <field name="library-book-Dedication" type="xs:string" match="module/Dedication"/>
+                        <field name="library-book-Author" type="xs:string" match="module/author/@sort"/>
+                        <field name="library-book-Title" type="xs:string" match="module/title/@sort"/>
+                        <field name="library-book-Date" type="xs:string" match="module/date"/>
+                        <field name="library-book-Place" type="xs:string" match="module/place"/>
+                        <field name="library-book-Dedication" type="xs:string" match="module/dedication"/>
                         <field name="library-book-readingTraces" type="xs:string" match="module/page"/>
                         <field name="library-book-Marginalia" type="xs:string" match="module//m"/>
-                        <field name="library-book-student-EL-VL" type="xs:string" match="@student"/>
-                    </create>
-                    
-                    <create qname="book">
-                        <condition attribute="type" value="EL"/>
-                        <field name="library-book-student-EL" type="xs:string" match="@student"/>
-                    </create>
-                    
+                    </create>                    
                 </range>
             -->
             <!-- 
@@ -438,7 +433,7 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
                         <operators>("starts-with","eq")</operators>
                         <keys>$currentBrowseValue, "EL"</keys>
                     </rangeQuery>
-                    <orderBy>Author</orderBy>
+                    <orderBy>author</orderBy>
                     <breadcrumbPhrase>author</breadcrumbPhrase>
                 </sortBy>
             -->

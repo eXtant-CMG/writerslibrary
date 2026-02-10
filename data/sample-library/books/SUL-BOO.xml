@@ -1,0 +1,26 @@
+<book type="EL" id="SUL-BOO">
+        <module type="bibl">
+            <title sort="Book of Kells">The Book of Kells</title>
+            <type>Monograph</type>
+            <author sort="Sullivan"><firstname>Edward</firstname> <lastname>Sullivan</lastname></author>
+            <volume/>
+            <editor/>
+            <place>London</place>
+            <place>Paris</place>
+            <place>New York</place>
+            <publisher>"The Studio" LTD</publisher>
+            <date>1920</date>
+            <edition>Second Edition</edition>
+            <generalnote>This is a book with one publisher and three placenames.</generalnote>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>SUL-BOO/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp</pagenumber>
+                <facsimile>SUL-BOO/tp.jpg</facsimile>
+            </page>
+        </module>
+    </book>

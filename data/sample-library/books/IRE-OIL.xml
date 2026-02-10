@@ -1,0 +1,21 @@
+<book type="EL" id="IRE-OIL">
+        <module type="bibl">
+            <title sort="Catalogue of Oil Pictures in the General Collection">Catalogue of Oil Pictures in the General Collection</title>
+            <type>Monograph</type>
+            <author sort="National Gallery of Ireland">
+                <firstname/>
+                <lastname>National Gallery of Ireland</lastname>
+            </author>
+            <publisher>Stationary Office</publisher>
+            <place>Dublin</place>
+            <location>Lilly Library - Indiana University Bloomington</location>
+            <date>1932</date>
+           <generalnote>This entry illustrates how to encode the current location of a book.</generalnote>
+            <edition>Sixth and revised edition</edition>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>IRE-OIL/cover.jpg</facsimile></page>
+        </module>
+    </book>

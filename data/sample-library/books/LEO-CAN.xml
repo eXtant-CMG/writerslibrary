@@ -1,0 +1,19 @@
+<book type="EL" id="LEO-CAN">
+        <module type="bibl"><title sort="Canti">I Canti</title>
+            <type>Monograph</type>
+            <author sort="Leopardi"><firstname>Giacomo</firstname> <lastname>Leopardi</lastname></author>
+            <volume/>
+            <editor>Ettore Fabietti</editor>
+            <place>Milan</place>
+            <publisher>Casa per Edizioni Popolari</publisher>
+            <date>1936</date>
+            <edition/>
+            <generalnote/>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>LEO-CAN/cover.jpg</facsimile>
+            </page>
+        </module>
+    </book>

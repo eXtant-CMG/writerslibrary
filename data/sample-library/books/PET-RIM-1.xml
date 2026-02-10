@@ -1,0 +1,22 @@
+<book type="EL" id="PET-RIM-1">
+        <module type="bibl">
+            <title sort="Rime del Petrarca">Le Rime del Petrarca</title>
+            <type>Monograph</type>
+            <volume>1</volume>
+            <author sort="Petrarca"><firstname>Francesco</firstname> <lastname>Petrarca</lastname></author>
+            <place>Milan</place>
+            <publisher>Nicolò Bettoni</publisher>
+            <date>1824</date>
+            <location>The private collection of Anne Atik, Paris</location>
+            <generalnote>This entry illustrates how to encode the current location of a book.</generalnote>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>PET-RIM-1/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp</pagenumber>
+                <facsimile>PET-RIM-1/tp.jpg</facsimile></page>
+        </module>
+    </book>

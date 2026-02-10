@@ -1,0 +1,22 @@
+<book type="VL" id="ARD-SAI">
+        <module type="bibl">
+            <title sort="Saint Patrick AD 180">Saint Patrick AD 180</title>
+            <type>Monograph</type>
+            <author sort="Ardill">
+                <firstname>John Roche</firstname>
+                <lastname>Ardill</lastname>
+            </author>
+            <volume/>
+            <editor/>
+            <place>London</place>
+            <place>Dublin</place>
+            
+            <publisher place="London">John Murray</publisher>
+            <publisher place="Dublin">Hodges &amp; Figgis</publisher>
+            <date>n.d.</date>
+            <edition/>
+            <centimeters/>
+            <generalnote>This book has been labeled as "VIRTUAL", it is not extant, but the editor
+                has good reason to believe the writer read the book at some point.</generalnote>
+        </module>
+    </book>

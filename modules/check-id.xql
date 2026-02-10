@@ -3,13 +3,12 @@ xquery version "3.1";
 import module namespace config="http://exist-db.org/apps/writerslibrary/config" at "config.xqm";
 
 declare function local:check-id($string as xs:string) as xs:boolean {
-    let $libraryDoc := doc($config:data-root || '/library/library.xml')
+    let $libraryID := request:get-parameter("libraryID", "sample-library")
+    let $booksCollection := $config:data-root || '/' || $libraryID || '/books'
     return
-        if (not($libraryDoc/range:field-eq("library-book-ID",$string))) then
-            true()
-        else
-            false()
+        not(collection($booksCollection)/range:field-eq("library-book-ID", $string))
 };
+
 
 let $input := request:get-parameter('bookID', '')
 return

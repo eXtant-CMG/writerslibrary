@@ -1,0 +1,15 @@
+<book type="EL" id="WES-APP">
+        <module type="bibl">
+            <title sort="Apple of the Eye">The Apple of the Eye</title>
+            <type>Monograph</type>
+            <author sort="Wescott"><firstname>Glenway</firstname> <lastname>Wescott</lastname></author>
+            <volume/>
+            <editor/>
+            <place>New York</place>
+            <publisher>The Dial Press</publisher>
+            <date>1924</date>
+            <edition/>
+            <generalnote/>
+        </module>
+        <images/>
+    </book>

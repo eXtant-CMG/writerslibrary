@@ -1,0 +1,18 @@
+<book type="EL" id="JAN-BAI">
+        <module type="bibl"><title sort="Baigneuse">La Baigneuse</title>
+            <type>Monograph</type>
+            <author sort="Janvier"><firstname>Ludovic</firstname> <lastname>Janvier</lastname></author>
+            <place>Paris</place>
+            <publisher>Gallimard NRF</publisher>
+            <date>1968</date>
+            <edition/>
+            <generalnote/>
+            <uncutpages>no</uncutpages>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>JAN-BAI/cover.jpg</facsimile>
+            </page>
+        </module>
+    </book>

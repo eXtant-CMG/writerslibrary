@@ -1,0 +1,24 @@
+<book type="EL" id="BEC-MOR">
+        <module type="bibl">
+            <title sort="More Pricks Than Kicks">More Pricks Than Kicks</title>
+            <type>Monograph</type>
+            <author sort="Beckett">
+                <firstname>Samuel</firstname>
+                <lastname>Beckett</lastname>
+            </author>
+            <volume/>
+            <editor/>
+            <place>London</place>
+            <publisher>Chatto and Windus</publisher>
+            <date>1934</date>
+            <location>University of Buffalo, catalogue number PLJJ18</location>
+            <generalnote/>
+            <imagecopyright>Image taken from http://www.abebooks.co.uk/</imagecopyright>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>BEC-MOR/cover.jpg</facsimile>
+            </page>
+        </module>
+    </book>

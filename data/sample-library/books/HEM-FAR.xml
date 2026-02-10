@@ -1,0 +1,21 @@
+<book type="EL" id="HEM-FAR">
+        <module type="bibl">
+            <title sort="Farewell to Arms">A Farewell to Arms</title>
+            <type>Monograph</type>
+            <author sort="Hemingway"><firstname>Ernest</firstname> <lastname>Hemingway</lastname></author>
+            <volume/>
+            <editor/>
+            <place>New York</place>
+            <publisher>Charles Scribner's Sons</publisher>
+            <date>1929</date>
+            <edition/>
+            <centimeters/>
+            <generalnote/>
+            <imagecopyright>Image taken from http://wwwmanhattanrarebooks-literature.com</imagecopyright>
+        </module>
+        <module type="pages">
+        <page>
+            <pagenumber>cover</pagenumber>
+            <facsimile>HEM-FAR/cover.jpg</facsimile></page>
+        </module>
+    </book>

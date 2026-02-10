@@ -1,0 +1,66 @@
+<book type="EL" id="BOU-SOI">
+        <module type="bibl">
+            <title sort="Soirees du Grammaire-Club">Les Soirées du Grammaire-Club</title>
+            <type>Monograph</type>
+            <author sort="Boulenger">
+                <firstname>Jacques</firstname>
+                <lastname>Boulenger</lastname>
+            </author>
+            <author>
+                <firstname>André</firstname>
+                <lastname>Thérive</lastname>
+            </author>
+            <volume/>
+            <editor/>
+            <place>Paris</place>
+            <publisher>Librairie Plon. Plon-Nourrit et C<sup>ie</sup>, Imprimeurs-éditeurs</publisher>
+            <date>1924</date>
+            <edition/>
+            <publishersaddress>8, Rue Garancière - 6e, Paris</publishersaddress>
+            <generalnote>This book has two authors.</generalnote>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>BOU-SOI/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp</pagenumber>
+                <facsimile>BOU-SOI/tp.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>91</pagenumber>
+                <facsimile>BOU-SOI/91.jpg</facsimile>
+                <zone>
+                    <number>1</number>
+                    <facsimile>BOU-SOI/zones/91(1).jpg</facsimile>
+                    <type>marginalia</type>
+                    <position>412</position>
+                    <rn>
+                        <transcription><m>X</m> / <u>snobs</u> / <m>snobs</m></transcription>
+                        <writingtool>Red ink</writingtool>
+                        <extracts>Mais quels sont ces gens "distingués"? Des Hutins! / puis des
+                            demi-lettrés de toutes sortes, fiers de faire / paraître ainsi quelle est
+                            la qualité de leur culture; / mais surtout des snobs: ceux-là mêmes qui ne /
+                            manquent jamais de prononcer avec "le plus pur / accent britannique"
+                                <i>square, rail, clown, football association, / cross country, rallye
+                                paper</i> ou <i>garden party</i>, / au lieu de dire ces mots comme on
+                            les entend communément: / squâre, raille, cloune, foutebolle association, /
+                            etc. Prétention enfin, Prétention et Pédanterie!</extracts>
+                    </rn>
+                </zone>
+                <zone>
+                    <number>2</number>
+                    <facsimile>BOU-SOI/zones/91(2).jpg</facsimile>
+                    <position>788</position>
+                    <rn>
+                        <transcription><u>home</u> / <m>homme?</m></transcription>
+                        <writingtool>Red ink</writingtool>
+                        <extracts>J'ai lu cette promesse à l'entrée d'un asile fondé / par une société
+                            protestante de bienfaisance: / Les jeunes filles y trouveront un home.</extracts>
+                    </rn>
+                </zone>
+            </page>
+
+        </module>
+    </book>

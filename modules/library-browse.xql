@@ -29,7 +29,8 @@ declare function library-browse:navbar($node as node(), $model as map(*)){
 
     let $libraryID := request:get-parameter("libraryID", "sample-library")
     let $configDoc := doc($config:data-root || '/' || $libraryID || '/config.xml')
-    let $libraryDoc := doc($config:data-root || '/' || $libraryID || '/library.xml')
+    let $booksCollection := $config:data-root || '/' || $libraryID || '/books'
+    let $books := collection($booksCollection)/book
 
     (: The current sorting & browsing specifications are retrieved through the param 
        "sortAndBrowse" which is created in the controller. It contains both the sort value
@@ -65,8 +66,12 @@ declare function library-browse:navbar($node as node(), $model as map(*)){
                     let $browseValue := $browseBy/value/text()
                     let $currentSortByRangeQuery := $configDoc//sortBy[data(@id) eq $currentSortValue]/rangeQuery
                     let $queryexpression := concat($currentSortByRangeQuery/fields/text(),",",$currentSortByRangeQuery/operators/text(),",",$currentSortByRangeQuery/keys/text())
-                    let $context := <static-context> <variable name="currentBrowseValue">{$browseValue}</variable> <variable name="libraryDoc">{$libraryDoc}</variable> </static-context>
-                    let $query := util:eval-with-context(concat('$libraryDoc/range:field(',$queryexpression,')'),$context,false())
+                    let $context := <static-context> <variable name="currentBrowseValue">{$browseValue}</variable> <variable name="booksCollection">{$booksCollection}</variable> </static-context>
+                    let $query := util:eval-with-context(
+    concat('collection($booksCollection)/range:field(',$queryexpression,')'),
+    $context,
+    false()
+  )
                     let $hits := count($query)
                     return 
                         <td>{
@@ -137,7 +142,8 @@ declare function library-browse:getEntries($node as node(), $model as map(*)){
 
     let $libraryID := request:get-parameter("libraryID", "sample-library")
     let $configDoc := doc($config:data-root || '/' || $libraryID || '/config.xml')
-    let $libraryDoc := doc($config:data-root || '/' || $libraryID || '/library.xml')
+    let $booksCollection := $config:data-root || '/' || $libraryID || '/books'
+    let $books := collection($booksCollection)/book
 
     (: in the following two parameters the actual range query is constructed. :)
     let $currentSortByRangeQuery := $configDoc//sortBy[data(@id) eq $currentSortValue]/rangeQuery
@@ -154,11 +160,11 @@ declare function library-browse:getEntries($node as node(), $model as map(*)){
 
     (: The following two parameters set up the actual query. The current browse value is carried
        into the util:eval-with-context function through the context variable. :)
-    let $context := <static-context> <variable name="currentBrowseValue">{$currentBrowseValue}</variable> <variable name="libraryDoc">{$libraryDoc}</variable> </static-context>
-    let $query := util:eval-with-context(concat('$libraryDoc/range:field(',$queryexpression,')'),$context,false())
+    let $context := <static-context> <variable name="currentBrowseValue">{$currentBrowseValue}</variable> <variable name="booksCollection">{$booksCollection}</variable> </static-context>
+    let $query := util:eval-with-context(concat('collection($booksCollection)/range:field(',$queryexpression,')'),$context,false())
     
     let $countResults := count($query)
-    let $booksTotal := count($libraryDoc//book)
+    let $booksTotal := count($books)
     
     return
       <div>

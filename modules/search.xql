@@ -28,17 +28,17 @@ declare function search:search($node as node(), $model as map(*), $q as xs:strin
         (: manually add the path to the library xml              :)
         let $libraryID := request:get-parameter("libraryID", "sample-library")
         let $libraryPath := $config:data-root || '/' || $libraryID
+        let $booksPath := $libraryPath || "/books"
 
 
         (: put together a collection from this list:)
-        let $docs := 
-            for $path in ($libraryPath) 
-            return  
-                if ($index eq "") then collection($path) 
-                else if ($index ne "" and contains($path,$index)) then 
-                    if ($doc ne "" and not(starts-with($doc,'library-'))) then doc(concat($path,"/",$doc,".xml")) 
-                    else collection($path) 
-                else ()
+        let $docs :=
+          if ($doc ne "" and not(starts-with($doc, "library-"))) then
+            (: If you ever search a specific non-library doc by name :)
+            doc($libraryPath || "/" || $doc || ".xml")
+          else
+            (: Search the whole library content: BOOKS only :)
+            collection($booksPath)
 
 
         let $options :=
@@ -149,7 +149,7 @@ declare function search:search($node as node(), $model as map(*), $q as xs:strin
                     <table class="library" style="width:100%;">
                         <tr>
                             <td valign="top" width="90">
-                                {if ($highlightedResults//facsimile) then 
+                                {if ($highlightedResults//page[1]/facsimile) then 
                                     <img height="100" style="max-width:80px;" src="{if (starts-with($highlightedResults//facsimile[1]/text(),'https')) then "" else $imgUrl}{$highlightedResults//page[1]/facsimile/text()}"/>
                                 else
                                     if ($highlightedResults/@type eq "VL") then <div class="imagecontainer"><span class="noscan"></span><span class="virtualthumb">V<br/>I<br/>R<br/>T<br/>U<br/>A<br/>L</span></div> else <span class="noscan"></span>}

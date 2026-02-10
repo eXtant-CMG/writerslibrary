@@ -1,0 +1,14 @@
+<book type="EL" id="MCG-POE">
+        <module type="bibl">
+            <title sort="Poems">Poems</title>
+            <type>Collection of Poems</type>
+            <author sort="McGreevy"><firstname>Thomas</firstname> <lastname>McGreevy</lastname></author>
+            <volume/>
+            <editor/>
+            <place>London</place>
+            <publisher>William Heinemann Ltd.</publisher>
+            <date>1934</date>
+            <edition/>
+            <generalnote/>
+        </module>
+    </book>

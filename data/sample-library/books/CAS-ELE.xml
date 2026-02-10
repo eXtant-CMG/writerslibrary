@@ -1,0 +1,31 @@
+<book type="EL" id="CAS-ELE">
+        <module type="bibl">
+            <title sort="Elements of Euclid">Elements of Euclid</title>
+            <type>Monograph</type>
+            <author sort="Casey"><firstname>John</firstname> <lastname>Casey</lastname></author>
+            <volume/>
+            <editor/>
+            <place>Dublin</place>
+            <place>London</place>
+            <publisher place="Dublin">Hodges, Figgis &amp; Co., Ltd.</publisher>
+            <publisher place="London">Longmans, Green &amp; Co.</publisher>
+            <date>1907</date>
+            <firstedition>1892</firstedition>
+            <edition>18th</edition>
+            <centimeters/>
+            <publishersaddress>Curzon Street Mayfair</publishersaddress>
+            <location>University of Buffalo, catalogue number PLJJ36</location>
+            <generalnote>This book illustates how to encode the date of the first edition.</generalnote>
+            <uncutpages/>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>CAS-ELE/cover.jpg</facsimile>
+            </page>
+            <page>
+                <pagenumber>tp</pagenumber>
+                <facsimile>CAS-ELE/tp.jpg</facsimile>
+            </page>
+        </module>
+    </book>

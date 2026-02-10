@@ -1,0 +1,11 @@
+<book type="EL" id="ELI-WAS">
+        <module type="bibl">
+            <title sort="The Waste Land">The Waste Land</title>
+            <type>Monograph</type>
+            <author sort="Eliot"><firstname>T.S.</firstname> <lastname>Eliot</lastname></author>
+            <place>New York</place>
+            <publisher>Boni and Liveright</publisher>
+            <date>1922</date>
+            <generalnote/>
+        </module>
+    </book>

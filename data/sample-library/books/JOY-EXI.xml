@@ -1,0 +1,19 @@
+<book type="EL" id="JOY-EXI">
+        <module type="bibl">
+            <title sort="Exiles">Exiles</title>
+            <subtitle>A Play in Three Acts</subtitle>
+            <type>Play</type>
+            <author sort="Joyce"><firstname>James</firstname> <lastname>Joyce</lastname></author>
+            <place>London</place>
+            <publisher>Grant Richards Ltd.</publisher>
+            <publishersaddress>St Martin's Street</publishersaddress>
+            <date>1918</date>
+            <edition/>
+        </module>
+        <module type="pages">
+            <page>
+                <pagenumber>cover</pagenumber>
+                <facsimile>JOY-EXI/cover.jpg</facsimile>
+            </page>
+        </module>
+    </book>

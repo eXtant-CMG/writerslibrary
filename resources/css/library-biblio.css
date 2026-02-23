@@ -560,7 +560,7 @@ span.biblio {
 
 }
 
-span.bibliobook {
+.bibliobook {
 	position:absolute;
 	left: 700px;
 	display:inline-block;

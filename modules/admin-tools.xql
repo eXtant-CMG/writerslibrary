@@ -12,9 +12,10 @@ import module namespace import-iiif="http://exist-db.org/apps/writerslibrary/imp
 
 
 declare function admin-tools:userIsAdmin() {
-if (sm:is-dba(sm:id()//sm:real/sm:username/string())) 
-then fn:true()
-else fn:false()
+    if (sm:is-dba(sm:id()//sm:real/sm:username/string()) 
+        and not(request:get-parameter('export', '') eq 'true'))
+    then fn:true()
+    else fn:false()
 };
 
 (: This function is called in templates/library/home.html, it checks whether a user is an Admin and, if so,
@@ -127,7 +128,7 @@ then
     
     return
         <div>
-    
+            <h4 style="margin-top:0.75rem;font-size:1.2em;">Current library collections</h4>
             <div class="table-responsive">
               <table class="table table-sm table-striped" id="library-collections-table">
                 <thead>
@@ -209,13 +210,65 @@ then
                   </small>
                 </div>
                 <div class="col-md-2 mb-2">
-                  <label> </label> <!-- Spacer to align button -->
+                  <!-- <label> </label> Spacer to align button -->
                   <button type="button" class="btn btn-success btn-block js-create-library">
                     Create
                   </button>
                 </div>
               </div>
             </form>
+            <hr/>
+
+<h4 style="margin-top:0.75rem;font-size:1.2em;">Export library collection to static site</h4>
+<div id="export-section">
+    <div class="form-row" style="margin-bottom:0.75rem;">
+        <div class="col-md-6">
+            <label for="exportLibrarySelect">Library to export:</label>
+            <select id="exportLibrarySelect" class="form-control" style="width:350px;">
+                {
+                    for $lib in $libraries
+                    let $id   := string($lib/@id)
+                    let $name := normalize-space(string($lib))
+                    return
+                        <option value="{$id}">
+                            {$name} ({$id})
+                        </option>
+                }
+            </select>
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary js-start-export">
+        Export
+    </button>
+    <div id="export-progress-area" style="display:none;margin-top:1rem;">
+        <div style="margin-bottom:0.5rem;">
+            <span id="export-status-message">Starting...</span>
+        </div>
+        <div class="progress" style="height:20px;width:500px;">
+            <div class="export-progress-wrap">
+                <div id="export-progress-bar" style="width:0%">0%</div>
+            </div>
+        </div>
+        <div style="margin-top:0.5rem;font-size:0.85em;color:#666;">
+            <span id="export-detail"></span>
+        </div>
+    </div>
+    <div id="export-complete-area" style="display:none;margin-top:1rem;">
+        <div class="alert alert-success" style="width:500px;">
+            <strong>Export complete.</strong>
+            <span id="export-complete-message"></span>
+        </div>
+        <button type="button" class="btn btn-secondary js-download-zip" style="margin-top:0.5rem;">
+            Download ZIP
+        </button>
+    </div>
+    <div id="export-error-area" style="display:none;margin-top:1rem;">
+        <div class="alert alert-danger" style="width:500px;">
+            <strong>Export failed:</strong>
+            <span id="export-error-message"></span>
+        </div>
+    </div>
+</div>
         </div>
 else ()
 };

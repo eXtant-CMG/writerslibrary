@@ -452,11 +452,12 @@ ProxyPassReverse    /sample-library-images http://localhost:8080/sample-library-
 
 <h2 class="documentation" id="toc_14">Admin Tools</h2>
 
-<p>When you are logged into eXist-db—either via the dashboard or via eXide—Bibundina provides access to a set of administrative features. A <strong>Manage Library Collections</strong> button appears in the top-right corner of the interface, and an <strong>Admin Tools</strong> tab is available on the home page. These tools allow administrators to create and manage multiple library collections, switch between them, and facilitate the creation of new book entries. Several of the tools are specifically designed to support workflows that incorporate images via IIIF.</p>
+<p>When you are logged into eXist-db—either via the dashboard or via eXide—Bibundina provides access to a set of administrative features. A <strong>Manage Library Collections</strong> button appears in the top-right corner of the interface, and an <strong>Admin Tools</strong> tab is available on the home page. These tools allow administrators to create and manage multiple library collections, switch between them, export collections to static sites, and facilitate the creation of new book entries. Several of the tools are specifically designed to support workflows that incorporate images via IIIF.</p>
 
 <p>The available tools are:</p>
 
 <ul>
+<li>Manage library collections (create, switch, export to static site)</li>
 <li>Create a new book entry</li>
 <li>Import image links from a IIIF manifest</li>
 <li>Zone coordinates tool (for IIIF images only)</li>
@@ -472,6 +473,7 @@ ProxyPassReverse    /sample-library-images http://localhost:8080/sample-library-
 <li><strong>View all existing library collections</strong></li>
 <li><strong>Switch the active library</strong>, determining which collection is currently used by the interface</li>
 <li><strong>Create a new library collection</strong> by providing a name and a unique library ID</li>
+<li><strong>Export a library collection to a static site</strong></li>
 </ul>
 
 <p>When creating a new library, Bibundina initializes a new directory named after the library ID and populates it with a default <code>config.xml</code>, <code>home.xml</code>, and a <code>books/</code> folder with one sample book file (<code>ADA-MYF.xml</code>). Library IDs must consist of normal letters, digits, and hyphens, and may not contain spaces.</p>
@@ -488,7 +490,38 @@ Library collections cannot be deleted or reordered directly via the interface.</
 </ul>
 </blockquote>
 
-<h3 class="documentation" id="toc_16">Create a New Book Entry</h3>
+<h3 class="documentation" id="toc_16">Export to Static Site</h3>
+
+<p>The <strong>Export to Static Site</strong> feature generates a self-contained static HTML version of a library collection that can be hosted on any standard web server without requiring eXist-db. To start an export, select a library from the dropdown and click <strong>Export</strong>. The export runs as a background job on the server; progress is shown in real time via a progress bar and status messages. When the export is complete, a <strong>Download ZIP</strong> button appears, allowing you to download the full static site as a ZIP archive.</p>
+
+<p>The exported ZIP contains the following structure:</p>
+
+<div><pre><code class="language-none">{libraryID}/
+  index.html
+  home/welcome.html
+  browse/*.html
+  {BOOK-ID}/index.html
+  resources/css|scripts|fonts|images/
+  manifests/image-manifest.xml
+  _download-images.py
+  requirements.txt
+  README-PHASE2.md</code></pre></div>
+
+<p><strong>Important notes and current limitations:</strong></p>
+
+<ul>
+<li>Only one library can be exported at a time. The export button and the Create Library form are disabled while an export is in progress.</li>
+<li>If you close the browser window or navigate away during an export, the export will continue running on the server. You can reopen the Manage Library Collections window at any time to check progress and download the result when it is done.</li>
+<li><strong>Search is currently not included in the static export.</strong> Search links in the exported site are present but non-functional. Static search support is planned for a future release.</li>
+<li>Images referenced via IIIF URLs are included as links in the static output and will load from their original IIIF server. All images are listed in <code>manifests/image-manifest.xml</code> and must be downloaded separately using the included <code>_download-images.py</code> script (see <code>README-PHASE2.md</code> inside the ZIP for instructions).</li>
+</ul>
+
+<blockquote>
+<p><strong>Note on the <code>static/</code> folder</strong>
+The first time an export is triggered, Bibundina creates a <code>static/</code> folder inside the app&#39;s database collection to store the output. This folder is not present on a fresh installation — its presence indicates that at least one export has been run. The exported ZIP file is also stored here temporarily and can be re-downloaded by running the export again.</p>
+</blockquote>
+
+<h3 class="documentation" id="toc_17">Create a New Book Entry</h3>
 
 <p>This tool helps you generate the XML for a new book entry. You can copy the result to your clipboard, paste it into eXide and save it as a new <code>.xml</code> file in the <code>books/</code> folder of your library collection, named after the book’s ID (e.g., <code>ARA-LIB.xml</code>).</p>
 
@@ -496,7 +529,7 @@ Library collections cannot be deleted or reordered directly via the interface.</
 
 <p>First, choose a valid and unique ID that starts with a letter and contains only letters, numbers and hyphens. Then enter the main bibliographic information and (optionally) import images from a IIIF manifest. This feature can also be used separately (see below).</p>
 
-<h3 class="documentation" id="toc_17">Import image links from a IIIF manifest</h3>
+<h3 class="documentation" id="toc_18">Import image links from a IIIF manifest</h3>
 
 <p>This tool extracts image links from a IIIF manifest and formats them into the correct XML schema (<code>&lt;module type=&quot;pages&quot;&gt;</code>). You can then paste the result directly into the relevant book XML file in your library’s <code>books/</code> folder. However, due to structural differences in IIIF manifests, extraction may not always be successful.</p>
 
@@ -509,7 +542,7 @@ Library collections cannot be deleted or reordered directly via the interface.</
 
 <p>Images are numbered consecutively in the <code>&lt;pagenumber&gt;</code> element. The <code>&lt;facsimile&gt;</code> element contains a IIIF compliant image link that renders the image at a width of <strong>680 pixels</strong>.</p>
 
-<h3 class="documentation" id="toc_18">Zone Coordinates Tool</h3>
+<h3 class="documentation" id="toc_19">Zone Coordinates Tool</h3>
 
 <p>This tool allows admins to draw a rectangular zone around a reading trace on a IIIF image. The tool generates a <code>&lt;zone&gt;</code> element, containing the correct coordinates for the zone, which can be pasted into a <code>&lt;page&gt;</code> element in the relevant book XML file. After making a selection, click the <code>preview zone image</code> button to magnify it.</p>
 
@@ -528,7 +561,7 @@ Library collections cannot be deleted or reordered directly via the interface.</
    &lt;type&gt;marginalia&lt;/type&gt;
 &lt;/zone&gt;</code></pre></div>
 
-<h2 class="documentation" id="toc_19">Structure of the App</h2>
+<h2 class="documentation" id="toc_20">Structure of the App</h2>
 
 <ul>
 <li><code>collection.xconf</code>: This file is used to configure collection-specific settings, such as indexing options and triggers.</li>
@@ -541,17 +574,16 @@ Library collections cannot be deleted or reordered directly via the interface.</
 <li><code>modules/library-browse.xql</code>: This module contains code for browsing the library.</li>
 <li><code>modules/library-functions.xql</code>: This module contains general-purpose functions used by <code>library-browse.xql</code> and <code>library-book-view.xql</code>.</li>
 <li><code>modules/library-manager.xql</code>: This module contains the core functions for managing library collections, including creating library entries and directory structures.</li>
-<li><code>modules/library-api.xql</code>: This module provides the REST API endpoint that handles HTTP requests for library management operations and enforces admin authentication.</li>
+<li><code>modules/library-api.xql</code>: This module provides the REST API endpoint that handles HTTP requests for library management operations, admin authentication, and export job control.</li>
+<li><code>modules/export.xql</code>: This module contains the static site export script. It is executed as a background scheduler job and generates static HTML for all book, browse, and home pages of a library collection.</li>
+<li><code>modules/download-zip.xql</code>: This standalone endpoint serves the exported static site ZIP file as a binary download. It is kept separate from <code>library-api.xql</code> because binary file serving cannot be combined with JSON responses in eXist-db.</li>
 <li><code>modules/search.xql</code>: This module contains code for searching within the app.</li>
-<li><code>modules/admin-tools.xql</code>: This module contains code for administrative tools within the app.</li>
+<li><code>modules/admin-tools.xql</code>: This module contains code for administrative tools within the app, including the Manage Library Collections modal.</li>
 <li><code>modules/import-iiif.xql</code>: This module contains code for importing data using the IIIF (International Image Interoperability Framework) protocol.</li>
 <li><code>resources/</code>: This folder contains resources such as CSS files, images, JavaScript files, and XSLT files.</li>
+<li><code>static/</code>: This folder is created automatically the first time a static export is triggered. It contains export output, status files, and ZIP archives for each exported library collection. It is not present on a fresh installation.</li>
 <li><code>templates/</code>: This folder contains HTML templates used to generate pages within the app.</li>
 </ul>
-
-
-
-
 
                     
             

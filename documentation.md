@@ -405,10 +405,11 @@ The IIIF method of including images can be easily combined with one of the two p
 
 ## Admin Tools
 
-When you are logged into eXist-db—either via the dashboard or via eXide—Bibundina provides access to a set of administrative features. A **Manage Library Collections** button appears in the top-right corner of the interface, and an **Admin Tools** tab is available on the home page. These tools allow administrators to create and manage multiple library collections, switch between them, and facilitate the creation of new book entries. Several of the tools are specifically designed to support workflows that incorporate images via IIIF.
+When you are logged into eXist-db—either via the dashboard or via eXide—Bibundina provides access to a set of administrative features. A **Manage Library Collections** button appears in the top-right corner of the interface, and an **Admin Tools** tab is available on the home page. These tools allow administrators to create and manage multiple library collections, switch between them, export collections to static sites, and facilitate the creation of new book entries. Several of the tools are specifically designed to support workflows that incorporate images via IIIF.
 
 The available tools are:
 
+* Manage library collections (create, switch, export to static site)
 * Create a new book entry
 * Import image links from a IIIF manifest
 * Zone coordinates tool (for IIIF images only)
@@ -422,6 +423,7 @@ From this window, administrators can:
 * **View all existing library collections**
 * **Switch the active library**, determining which collection is currently used by the interface
 * **Create a new library collection** by providing a name and a unique library ID
+* **Export a library collection to a static site**
 
 When creating a new library, Bibundina initializes a new directory named after the library ID and populates it with a default `config.xml`, `home.xml`, and a `books/` folder with one sample book file (`ADA-MYF.xml`). Library IDs must consist of normal letters, digits, and hyphens, and may not contain spaces.
 
@@ -433,6 +435,34 @@ The **sample library** (`sample-library`) is included by default and is marked a
 > * To **delete** a library collection, remove the folder named after the library ID and delete the corresponding `<library/>` entry in `data/libraries.xml`.
 > * To make a library collection the **default**, move its `<library/>` entry to the first position in `data/libraries.xml`.
 
+### Export to Static Site
+
+The **Export to Static Site** feature generates a self-contained static HTML version of a library collection that can be hosted on any standard web server without requiring eXist-db. To start an export, select a library from the dropdown and click **Export**. The export runs as a background job on the server; progress is shown in real time via a progress bar and status messages. When the export is complete, a **Download ZIP** button appears, allowing you to download the full static site as a ZIP archive.
+
+The exported ZIP contains the following structure:
+
+```
+{libraryID}/
+  index.html
+  home/welcome.html
+  browse/*.html
+  {BOOK-ID}/index.html
+  resources/css|scripts|fonts|images/
+  manifests/image-manifest.xml
+  _download-images.py
+  requirements.txt
+  README-PHASE2.md
+```
+
+**Important notes and current limitations:**
+
+* Only one library can be exported at a time. The export button and the Create Library form are disabled while an export is in progress.
+* If you close the browser window or navigate away during an export, the export will continue running on the server. You can reopen the Manage Library Collections window at any time to check progress and download the result when it is done.
+* **Search is currently not included in the static export.** Search links in the exported site are present but non-functional. Static search support is planned for a future release.
+* Images referenced via IIIF URLs are included as links in the static output and will load from their original IIIF server. All images are listed in `manifests/image-manifest.xml` and must be downloaded separately using the included `_download-images.py` script (see `README-PHASE2.md` inside the ZIP for instructions).
+
+> **Note on the `static/` folder**
+> The first time an export is triggered, Bibundina creates a `static/` folder inside the app's database collection to store the output. This folder is not present on a fresh installation — its presence indicates that at least one export has been run. The exported ZIP file is also stored here temporarily and can be re-downloaded by running the export again.
 
 
 ### Create a New Book Entry
@@ -489,9 +519,12 @@ For every zone selection, the tool will create the following XML:
 - `modules/library-browse.xql`: This module contains code for browsing the library.
 - `modules/library-functions.xql`: This module contains general-purpose functions used by `library-browse.xql` and `library-book-view.xql`.
 - `modules/library-manager.xql`: This module contains the core functions for managing library collections, including creating library entries and directory structures.
-- `modules/library-api.xql`: This module provides the REST API endpoint that handles HTTP requests for library management operations and enforces admin authentication.
+- `modules/library-api.xql`: This module provides the REST API endpoint that handles HTTP requests for library management operations, admin authentication, and export job control.
+- `modules/export.xql`: This module contains the static site export script. It is executed as a background scheduler job and generates static HTML for all book, browse, and home pages of a library collection.
+- `modules/download-zip.xql`: This standalone endpoint serves the exported static site ZIP file as a binary download. It is kept separate from `library-api.xql` because binary file serving cannot be combined with JSON responses in eXist-db.
 - `modules/search.xql`: This module contains code for searching within the app.
-- `modules/admin-tools.xql`: This module contains code for administrative tools within the app.
+- `modules/admin-tools.xql`: This module contains code for administrative tools within the app, including the Manage Library Collections modal.
 - `modules/import-iiif.xql`: This module contains code for importing data using the IIIF (International Image Interoperability Framework) protocol.
 - `resources/`: This folder contains resources such as CSS files, images, JavaScript files, and XSLT files.
+- `static/`: This folder is created automatically the first time a static export is triggered. It contains export output, status files, and ZIP archives for each exported library collection. It is not present on a fresh installation.
 - `templates/`: This folder contains HTML templates used to generate pages within the app.

@@ -36,6 +36,11 @@ declare variable $config:expath-descriptor := doc(concat($config:app-root, "/exp
 
 declare variable $config:data-root := $config:app-root || "/data";
 
+(: a user created for the export to static website feature :)
+declare variable $config:export-base-url := "http://localhost:8080/exist/apps/writerslibrary";
+declare variable $config:export-user := "export-service";
+declare variable $config:export-pass := "change-me-on-install";
+
 (:~
  : Resolve the given path using the current application context.
  : If the app resides in the file system,

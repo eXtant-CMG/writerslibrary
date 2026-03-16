@@ -199,9 +199,10 @@ $(document).ready(function() {
         })
         .done(function(data) {
             if (data.success) {
-                var $a = $('<a>')
-                    .attr('href', '../' + libraryId + '/modules/download-zip.xql?libraryId=' + libraryId)
-                    .attr('download', libraryId + '-static-export.zip');
+            var appRoot = window.location.pathname.split('/writerslibrary')[0] + '/writerslibrary';
+            var $a = $('<a>')
+                .attr('href', appRoot + '/modules/download-zip.xql?libraryId=' + libraryId)
+                .attr('download', libraryId + '-static-export.zip');
                 $('body').append($a);
                 $a[0].click();
                 $a.remove();

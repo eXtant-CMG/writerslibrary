@@ -15,7 +15,7 @@ declare option exist:serialize "method=html5 media-type=text/html";
 
 (:
 :
-: THIS MODULE CONTAINS THE LIBRARY SEARCH ENGINE
+: THIS MODULE CONTAINS THE LIBRARY SEARCH ENGINE example
 : 
 : We made use of this guide:
 : https://en.wikibooks.org/wiki/XQuery/Keyword_Search#Paginate_and_Summarize_Results

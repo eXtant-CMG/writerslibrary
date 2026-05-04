@@ -1,4 +1,4 @@
-<book type="VL" id="ARD-SAI">
+<book type="LL" id="ARD-SAI">
         <module type="bibl">
             <title sort="Saint Patrick AD 180">Saint Patrick AD 180</title>
             <type>Monograph</type>
@@ -16,7 +16,7 @@
             <date>n.d.</date>
             <edition/>
             <centimeters/>
-            <generalnote>This book has been labeled as "VIRTUAL", it is not extant, but the editor
+            <generalnote>This book has been labeled as "lost", it is not extant, but the editor
                 has good reason to believe the writer read the book at some point.</generalnote>
         </module>
     </book>

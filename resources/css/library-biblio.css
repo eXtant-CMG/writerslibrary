@@ -33,7 +33,7 @@ exist\:match {
     font-weight:700;
 }
 
-
+/* TODO: This class and the one after look redundant (nothing ever set to them) */
 .VLstudent, .VL {
 	border-bottom: 1px dashed black;
 	padding-top: 5px;
@@ -116,7 +116,7 @@ exist\:match {
 }
 
 
-
+/* TODO: This class and the one after look redundant (nothing ever set to them) */
 div.entryVL {
 	border-bottom: 1px dashed black;
 	padding-top: 5px;
@@ -221,11 +221,11 @@ background-color:black;}
 	background-color:#FA8072;
 }
 
-.virtualthumb {
+.lostthumb {
 	position:absolute;    
 	color:white;
 	font-size:10px;
-	line-height:140%;
+	line-height:250%;
 	z-index:1;
 	left:-12px;
 	width:12px;

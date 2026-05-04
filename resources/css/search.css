@@ -204,11 +204,11 @@ span.noscan {
 	text-align:center;
 }
 
-.virtualthumb {
+.lostthumb {
    
 	color:white;
 	font-size:10px;
-	line-height:140%;
+	line-height:250%;
 	z-index:1;
 	left:-12px;
 	width:12px;

@@ -73,7 +73,7 @@ Advanced users who are familiar with search indexes and range queries can add an
 
 Each book in the library is stored as a separate XML file in the `books/` folder of the library collection. Book files are named after the book’s unique ID (e.g., `ARA-LIB.xml`). Add book entries following the custom encoding scheme documented in the “Encoding manual” section.
 
-The root element is `<book>`, which has attributes `type` and `id`. The `type` attribute specifies the type of book (`EL` (extant library) `VL` (virtual entry), while the `id` attribute provides a unique identifier for the book.
+The root element is `<book>`, which has attributes `type` and `id`. The `type` attribute specifies the type of book (`EL` (extant library) `LL` (lost entry), while the `id` attribute provides a unique identifier for the book.
 
 	<book id="ARA-LIB" type="EL">
 		<!-- Module elements go here -->

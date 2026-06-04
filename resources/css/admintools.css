@@ -27,6 +27,10 @@ font-weight: bold;
     min-width: 380px;
 }
 
+.fieldset {
+    max-width: 480px;
+}
+
 .grid-container {
          display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -60,13 +64,17 @@ font-weight: bold;
     font-weight:bold;
 }
 
-#confirm-ID-button, #new-book-import-iiif {
+#confirm-ID-button, #new-book-import-iiif, #save-book-button {
     padding: 10px 20px;
     border-radius: 5px;
     border: none;
     background-color: #2a7e70;
     color: white;
     cursor: pointer;
+}
+
+#save-div {
+    padding-top: 10px;
 }
 
 #confirm-ID-button:hover, #new-book-import-iiif:hover {
@@ -155,22 +163,6 @@ form.iiif-manifest-link {
     #copyButton:hover {
         background-color: #003828;
     }
-    
-    #copyButtonNewBook {
-        position: absolute;
-        right: 42px;
-        margin-top:16px;
-        padding: 10px 20px;
-        border-radius: 5px;
-        border: none;
-        background-color: #2a7e70;
-        color: white;
-        cursor: pointer;
-    }
-    
-    #copyButtonNewBook:hover {
-        background-color: #003828;
-    }    
 
     #iiif-manifest-link-textarea {
         padding: 10px;

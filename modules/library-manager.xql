@@ -74,6 +74,110 @@ declare function libmgr:add-library-entry($libraryId as xs:string, $libraryName 
 };
 
 (:~
+ : Create a new book entry and store it in the library's books collection.
+ : @param $libraryId  the target library (e.g. "woolf-library")
+ : @param $bookId     the unique book siglum / filename stem (e.g. "WOO-WAV")
+ : @param $bookType   "EL" (extant) or "LL" (lost)
+ : @param $firstname  author firstname
+ : @param $lastname   author lastname
+ : @param $title      book title
+ : @param $subtitle   book subtitle (may be empty)
+ : @param $type       publication type (Monograph, Journal, …)
+ : @param $volume     volume number (may be empty)
+ : @param $series     series (may be empty)
+ : @param $edition    edition (may be empty)
+ : @param $editor     editor (may be empty)
+ : @param $place      place of publication
+ : @param $publisher  publisher
+ : @param $date       publication date (YYYY or n.d.)
+ : @param $generalnote general note (may be empty)
+ : @param $location   current location / holding institution
+ : @param $iiifManifest IIIF manifest URL (may be empty)
+ : @param $iiifViewer   IIIF viewer URL (may be empty)
+ : @return success/error map
+ :)
+declare function libmgr:create-book(
+    $libraryId    as xs:string,
+    $bookId       as xs:string,
+    $bookType     as xs:string,
+    $firstname    as xs:string,
+    $lastname     as xs:string,
+    $title        as xs:string,
+    $subtitle     as xs:string,
+    $type         as xs:string,
+    $volume       as xs:string,
+    $series       as xs:string,
+    $edition      as xs:string,
+    $editor       as xs:string,
+    $place        as xs:string,
+    $publisher    as xs:string,
+    $date         as xs:string,
+    $generalnote  as xs:string,
+    $location     as xs:string,
+    $iiifManifest as xs:string,
+    $iiifViewer   as xs:string
+) as map(*) {
+    try {
+        (: Basic validation :)
+        if (not(matches($bookId, "^[a-zA-Z][a-zA-Z0-9\-]+$"))) then
+            map { "success": false(), "message": "Invalid book ID format" }
+        else if ($bookId eq "" or $libraryId eq "") then
+            map { "success": false(), "message": "Book ID and library ID are required" }
+        else if (not($bookType = ("EL", "LL"))) then
+            map { "success": false(), "message": "Book type must be EL or LL" }
+        else
+            let $booksPath := $config:data-root || '/' || $libraryId || '/books'
+            let $filename  := $bookId || '.xml'
+
+            (: Check the file doesn't already exist :)
+            return
+                if (doc-available($booksPath || '/' || $filename)) then
+                    map { "success": false(), "message": "A book with this ID already exists" }
+                else
+                    (: Build the sort attributes :)
+                    let $lastnameSortRaw := upper-case(substring($lastname, 1, 1)) || lower-case(substring($lastname, 2, 14))
+                    let $titleSortRaw    := upper-case(substring($title, 1, 1)) || lower-case(substring($title, 2, 14))
+
+                    (: Build the <IIIF> element only when a manifest was supplied :)
+                    let $iiifElement :=
+                        if ($iiifManifest ne "") then
+                            <IIIF>
+                                <IIIFmanifest>{$iiifManifest}</IIIFmanifest>
+                                <IIIFviewer>{$iiifViewer}</IIIFviewer>
+                            </IIIF>
+                        else ()
+
+                    let $bookXml :=
+                        <book id="{$bookId}" type="{$bookType}">
+                            <module type="bibl">
+                                <author sort="{$lastnameSortRaw}">
+                                    <firstname>{$firstname}</firstname>
+                                    <lastname>{$lastname}</lastname>
+                                </author>
+                                <title sort="{$titleSortRaw}">{$title}</title>
+                                <subtitle>{$subtitle}</subtitle>
+                                <type>{$type}</type>
+                                <volume>{$volume}</volume>
+                                <series>{$series}</series>
+                                <edition>{$edition}</edition>
+                                <editor>{$editor}</editor>
+                                <place>{$place}</place>
+                                <publisher>{$publisher}</publisher>
+                                <date>{$date}</date>
+                                <generalnote>{$generalnote}</generalnote>
+                                <location>{$location}</location>
+                                {$iiifElement}
+                            </module>
+                        </book>
+
+                    let $_ := xmldb:store($booksPath, $filename, $bookXml, 'application/xml')
+                    return map { "success": true(), "message": "Book saved as " || $filename }
+    } catch * {
+        map { "success": false(), "message": "Exception: " || $err:description }
+    }
+};
+
+(:~
  : Create the library directory structure with initial XML files
  :)
 declare function libmgr:create-library-directory($libraryId as xs:string, $libraryName as xs:string) as xs:boolean {

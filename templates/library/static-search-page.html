@@ -1,0 +1,71 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+    data-template="templates:surround"
+    data-template-with="templates/library/library-page.html"
+    data-template-at="content">
+    <div id="main">
+        <div id="header">
+            <p style="float: right !important;padding-right:20px;margin: 0px 0px 0px 0px;">
+                <a style="text-decoration:none;color:black;cursor:pointer;"
+                    data-toggle="modal" data-target="#guideModal"
+                    title="Manual for the Library">
+                    <span class="manualnav">User Manual</span>
+                    <span class="glyphicon glyphicon-book" aria-hiddden="true"/>
+                </a>
+            </p>
+            <div data-template="library-browse:navbar"/>
+        </div>
+        <div class="search">
+            <h1>Search</h1>
+            <div id="staticSearch">
+                <link rel="stylesheet" href="../staticSearch/ssSearch.css" id="ssCss"/>
+                <script src="../staticSearch/ssSearch-debug.js"><!-- --></script>
+                <script src="../staticSearch/ssInitialize.js"><!-- --></script>
+                <noscript>This page requires JavaScript.</noscript>
+                <form accept-charset="UTF-8"
+                    id="ssForm"
+                    data-allowphrasal="yes"
+                    data-allowwildcards="yes"
+                    data-minwordlength="2"
+                    data-maxkwicstoshow="5"
+                    data-scoringalgorithm="raw"
+                    data-resultsperpage="10"
+                    data-resultslimit="1000"
+                    data-kwictruncatestring="..."
+                    data-versionstring="VERSIONSTRING"
+                    data-ssfolder="../staticSearch"
+                    onsubmit="return false;">
+                    <span class="ssQueryAndButton">
+                        <input type="text" id="ssQuery" aria-label="Search"/>
+                        <button id="ssDoSearch">Search</button>
+                    </span>
+                </form>
+                <div id="ssFileWarning" style="display:none;padding:1em;margin-bottom:1em;
+                    background:#fff3cd;border:1px solid #ffc107;border-radius:4px;color:#856404;">
+                    <strong>Search unavailable</strong>
+                    <p style="margin:0.5em 0 0 0;">This search page requires a local web server to function.
+                        You appear to be opening the file directly from your filesystem
+                        (your browser cannot load the search index without a server).</p>
+                    <p style="margin:0.5em 0 0 0;">To enable search, serve this folder with a simple local
+                        web server. For example, open a terminal in the export folder and run:</p>
+                    <pre style="margin:0.5em 0 0 0;background:#f8f9fa;padding:0.5em;
+         border-radius:3px;">python3 -m http.server 8000</pre>
+                    <p style="margin:0.5em 0 0 0;">Then open
+                        <a href="http://localhost:8000">http://localhost:8000</a>
+                        in your browser.</p>
+                </div>
+                <script>
+                    if (window.location.protocol === 'file:') {
+                    document.getElementById('ssFileWarning').style.display = 'block';
+                    }
+                </script>
+                <div id="ssSearching">Searching&#8230;</div>
+                <div id="ssResults"/>
+                <div id="ssPoweredBy">
+                    <p>Powered by</p>
+                    <a href="https://github.com/projectEndings/staticSearch"
+                        aria-label="Powered by staticSearch">staticSearch</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

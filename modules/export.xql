@@ -7,6 +7,8 @@ xquery version "3.1";
  
 import module namespace config = "http://exist-db.org/apps/writerslibrary/config"
     at "/db/apps/writerslibrary/modules/config.xqm";
+import module namespace si = "http://bibundina.org/ns/search-index"
+    at "/db/apps/writerslibrary/modules/search-index.xqm";
 import module namespace http = "http://expath.org/ns/http-client";
 import module namespace request="http://exist-db.org/xquery/request";
 declare namespace xmldb      = "http://exist-db.org/xquery/xmldb";
@@ -98,6 +100,18 @@ declare function local:rewrite-html(
     (: remove manage library collections button :)
     let $s := replace($s,
         '<button[^>]*manage-button[^>]*>.*?</button>', '', 's')
+    let $s := replace($s, '\.\./\.\./[^/]+/search/', '../search/')
+    return $s
+};
+
+declare function local:rewrite-search-html(
+    $html as xs:string,
+    $libraryID as xs:string
+) as xs:string {
+    let $s := replace($html, '\$resources/', '../resources/')
+    let $s := replace($s, '\$library-images/', '../resources/images/' || $libraryID || '/')
+    let $s := replace($s, '<span class="admin-tools-open-in-zone-tool">.*?</span>', '', 's')
+    let $s := replace($s, '<button[^>]*manage-button[^>]*>.*?</button>', '', 's')
     let $s := replace($s, '\.\./\.\./[^/]+/search/', '../search/')
     return $s
 };
@@ -459,6 +473,38 @@ let $redirectBinary := util:string-to-binary($redirectHtml, "UTF-8")
 let $redirectStored := xmldb:store($outLibCol, "index.html",
                          $redirectBinary, "application/octet-stream")
 
+(: SEARCH PAGE :)
+let $logSearch := local:write-status($libraryID, "running", "search",
+                        "Exporting search page...",
+                        68, $booksOk, $booksFailed, $browseOk, $browseFailed)
+let $searchDir  := local:ensure-collection($outLibCol || "/search")
+let $searchUrl  := $baseUrl || '/' || $libraryID || '/search/static.html?export=true'
+let $searchResponse :=
+    http:send-request(
+        <http:request method="GET"
+                      href="{$searchUrl}"
+                      username="{$httpUser}"
+                      password="{$httpPass}"
+                      auth-method="basic"
+                      send-authorization="true"/>
+    )
+let $searchStatusCode := xs:integer($searchResponse[1]/@status)
+let $searchExport :=
+    if ($searchStatusCode eq 200) then
+        let $searchHtml     := serialize($searchResponse[2], map { "method": "html" })
+        let $searchRewritten := local:rewrite-search-html($searchHtml, $libraryID)
+        let $searchBinary   := util:string-to-binary($searchRewritten, "UTF-8")
+        let $searchStored   := xmldb:store($searchDir, "index.html",
+                                   $searchBinary, "application/octet-stream")
+        return "ok"
+    else "error"
+
+(: SEARCH INDEX :)
+let $logIndex := local:write-status($libraryID, "running", "index",
+                        "Building search index...",
+                        72, $booksOk, $booksFailed, $browseOk, $browseFailed)
+let $indexBuilt := si:build-index($libraryID, $outLibCol)
+
 (: PHASE 2 SCRIPTS :)
 let $logPhase2 := local:write-status($libraryID, "running", "phase2",
                         "Writing Phase 2 scripts...",
@@ -476,9 +522,13 @@ let $pythonScript :=
 """
 Phase 2: Download IIIF images and rewrite HTML
 Reads manifests/image-manifest.xml and downloads all external images.
+Also rewrites staticSearch ssTitles JSON if present.
 """
 import os
 import re
+import json
+import glob
+import hashlib
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from urllib.parse import urlparse
@@ -493,12 +543,13 @@ except ImportError:
 
 DELAY = 0.5  # seconds between downloads (be nice to IIIF servers)
 
+
 def download_image(url, output_path):
     """Download image from URL to output_path"""
     if output_path.exists():
         print(f"    (already exists, skipping)")
         return True
-    
+
     try:
         response = requests.get(url, timeout=30)
         response.raise_for_status()
@@ -510,6 +561,7 @@ def download_image(url, output_path):
         print(f"  ERROR downloading {url}: {e}")
         return False
 
+
 def url_to_filename(url):
     """Convert IIIF URL to local filename"""
     try:
@@ -520,31 +572,70 @@ def url_to_filename(url):
             coords = parts[1].replace(",", "-")
             return f"{base}_{coords}.jpg"
         return f"{base}.jpg"
-    except:
-        import hashlib
+    except Exception:
         hash_digest = hashlib.md5(url.encode()).hexdigest()[:16]
         return f"image_{hash_digest}.jpg"
+
+
+def rewrite_titles_json(library_id, url_map):
+    """Rewrite IIIF URLs in ssTitles JSON to local paths.
+    Silently skips if staticSearch is not present in the export."""
+
+    ss_dir = Path("staticSearch")
+    if not ss_dir.exists():
+        print("No staticSearch folder found, skipping titles rewrite")
+        return
+
+    titles_files = list(ss_dir.glob("ssTitles_*.json"))
+    if not titles_files:
+        print("No ssTitles JSON found in staticSearch/, skipping")
+        return
+
+    for titles_path in titles_files:
+        print(f"Rewriting {titles_path}...")
+        try:
+            with open(titles_path, "r", encoding="utf-8") as f:
+                titles = json.load(f)
+
+            changed = False
+            for doc_uri, arr in titles.items():
+                if len(arr) >= 2:
+                    cover = arr[1]
+                    if cover in url_map:
+                        arr[1] = "../resources/images/" + url_map[cover]
+                        changed = True
+
+            if changed:
+                with open(titles_path, "w", encoding="utf-8") as f:
+                    json.dump(titles, f, ensure_ascii=False)
+                print(f"  Rewrote IIIF cover URLs in {titles_path}")
+            else:
+                print(f"  No IIIF URLs found in {titles_path}")
+
+        except Exception as e:
+            print(f"  Warning: Could not process {titles_path}: {e}")
+
 
 def main():
     print("=" * 70)
     print("Phase 2: Download IIIF Images")
     print("=" * 70)
     print()
-    
+
     manifest_path = Path("manifests/image-manifest.xml")
     if not manifest_path.exists():
         print("Error: manifests/image-manifest.xml not found")
         print("Make sure you are running this script from the export root directory")
         exit(1)
-    
+
     print("Reading manifest...")
     tree = ET.parse(manifest_path)
     root = tree.getroot()
-    
+
     library_id = root.find("libraryID").text
     print(f"Library: {library_id}")
     print()
-    
+
     iiif_images = []
     for book in root.findall("book"):
         book_id = book.get("id")
@@ -562,103 +653,111 @@ def main():
                 "page": pagenumber,
                 "zone": zone
             })
-    
+
     if not iiif_images:
         print("No IIIF images found in manifest - nothing to download")
         return
-    
+
     print(f"Found {len(iiif_images)} IIIF images to download")
-    
+
     page_count = sum(1 for img in iiif_images if img["type"] == "page")
     zone_count = sum(1 for img in iiif_images if img["type"] == "zone")
     print(f"  - {page_count} page images")
     print(f"  - {zone_count} zone images (reading traces)")
-    
+
     est_time = len(iiif_images) * DELAY / 60
     print(f"Estimated download time: ~{est_time:.1f} minutes")
     print()
-    
+
     print("Downloading images...")
     print("-" * 70)
-    
+
     success = 0
     failed = []
-    
+
     for i, img in enumerate(iiif_images, 1):
         label = f"{img[&apos;book_id&apos;]}"
         if img["type"] == "page":
             label += f" page {img[&apos;page&apos;]}"
         else:
             label += f" page {img[&apos;page&apos;]} zone {img[&apos;zone&apos;]}"
-        
+
         print(f"[{i}/{len(iiif_images)}] {label}")
         print(f"    {img[&apos;filename&apos;]}")
-        
+
         book_dir = Path(f"resources/images/{library_id}/{img[&apos;book_id&apos;]}")
         output_path = book_dir / img["filename"]
-        
+
         if download_image(img["url"], output_path):
             success += 1
         else:
             failed.append((img["book_id"], img["url"]))
-    
+
     print("-" * 70)
     print()
     print(f"Downloaded {success}/{len(iiif_images)} images")
-    
+
     if failed:
         print(f"Failed: {len(failed)} images")
         print("Failed downloads:")
         for book_id, url in failed:
             print(f"  - {book_id}: {url}")
         print()
-    
+
+    # Build url_map: full IIIF URL → {libraryId}/{bookId}/{filename}
+    url_map = {}
+    for img in iiif_images:
+        local_path = f"{library_id}/{img[&apos;book_id&apos;]}/{img[&apos;filename&apos;]}"
+        url_map[img["url"]] = local_path
+
     print()
     print("=" * 70)
     print("Rewriting HTML files to use local images...")
     print("=" * 70)
     print()
-    
-    url_map = {}
-    for img in iiif_images:
-        local_path = f"{library_id}/{img[&apos;book_id&apos;]}/{img[&apos;filename&apos;]}"
-        url_map[img["url"]] = local_path
-    
+
     html_files = []
     for pattern in ["*.html", "*/*.html", "*/*/*.html"]:
         html_files.extend(Path(".").glob(pattern))
-    
+
     print(f"Found {len(html_files)} HTML files")
-    
+
     rewritten = 0
     files_changed = []
-    
+
     for html_file in html_files:
         try:
             html = html_file.read_text(encoding="utf-8")
             original = html
-            
+
             depth = len(html_file.parts) - 1
             rel_prefix = "../" * depth + "resources/images/"
-            
+
             for url, local_path in url_map.items():
                 full_local_path = rel_prefix + local_path
-                html = html.replace(f"{url}", f"{full_local_path}")
-            
+                html = html.replace(url, full_local_path)
+
             if html != original:
                 html_file.write_text(html, encoding="utf-8")
                 rewritten += 1
                 files_changed.append(str(html_file))
         except Exception as e:
             print(f"  Warning: Could not process {html_file}: {e}")
-    
+
     print(f"Rewrote {rewritten} HTML files")
-    
+
     if files_changed and len(files_changed) <= 10:
         print("Changed files:")
         for f in files_changed:
             print(f"  - {f}")
-    
+
+    print()
+    print("=" * 70)
+    print("Rewriting staticSearch titles JSON...")
+    print("=" * 70)
+    print()
+    rewrite_titles_json(library_id, url_map)
+
     print()
     print("=" * 70)
     print("Phase 2 complete!")
@@ -668,6 +767,7 @@ def main():
     print(f"Rewrote {rewritten} HTML files")
     print()
     print("Your static site is now fully standalone and can be deployed anywhere.")
+
 
 if __name__ == "__main__":
     main()

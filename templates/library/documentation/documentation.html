@@ -502,6 +502,8 @@ Library collections cannot be deleted or reordered directly via the interface.</
   home/welcome.html
   browse/*.html
   {BOOK-ID}/index.html
+  search/index.html
+  staticSearch/
   resources/css|scripts|fonts|images/
   manifests/image-manifest.xml
   _download-images.py
@@ -513,7 +515,7 @@ Library collections cannot be deleted or reordered directly via the interface.</
 <ul>
 <li>Only one library can be exported at a time. The export button and the Create Library form are disabled while an export is in progress.</li>
 <li>If you close the browser window or navigate away during an export, the export will continue running on the server. You can reopen the Manage Library Collections window at any time to check progress and download the result when it is done.</li>
-<li><strong>Search is currently not included in the static export.</strong> Search links in the exported site are present but non-functional. Static search support is planned for a future release.</li>
+<li>The static export includes a full-text search engine (powered by <a href="https://github.com/projectEndings/staticSearch">staticSearch</a> covering all text content in the library's book XML files. Search results link to book pages but do not yet highlight matched terms within those pages — hit highlighting is planned for a future release. <strong>Search requires a local web server</strong> and will not function when files are opened directly from the filesystem; if you open <code>search/index.html</code> without a server, a warning with instructions will be displayed. The simplest option is to run <code>python3 -m http.server 8000</code> from the export folder and open <code>http://localhost:8000</code> in your browser.</li>
 <li>Images referenced via IIIF URLs are included as links in the static output and will load from their original IIIF server. All images are listed in <code>manifests/image-manifest.xml</code> and must be downloaded separately using the included <code>_download-images.py</code> script (see <code>README-PHASE2.md</code> inside the ZIP for instructions).</li>
 </ul>
 

@@ -130,8 +130,32 @@ else if (contains($exist:path, "/$app/")) then
                     </view>
                 </dispatch> 
                 
+
+(: static search page template (export only) :)
+    else if (contains($exist:path,"/search/static.html")) then
+                <dispatch
+                    xmlns="http://exist.sourceforge.net/NS/exist">
+                    <forward url="{$exist:controller}/templates/library/static-search-page.html">
+                        <set-header
+                            name="Cache-Control"
+                            value="no-cache"/>
+                        <cache-control
+                            cache="no"/>
+                    </forward>
+                    <view>
+                        <forward
+                            url="{$exist:controller}/modules/view.xq">
+                        <add-parameter name="libraryID" value="{tokenize($exist:path, '/')[2]}"/>
+                        <add-parameter name="view" value="search"/>
+                            <set-header
+                                name="Cache-Control"
+                                value="no-cache"/>
+                        </forward>
+                    </view>
+                </dispatch>
+
       (: search engine :)
-    else if (contains($exist:path,"/search/index.html")) then
+   else if (contains($exist:path,"/search/index.html")) then
                 <dispatch
                     xmlns="http://exist.sourceforge.net/NS/exist">
                     <!-- forward to  template search.html -->

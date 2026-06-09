@@ -447,6 +447,8 @@ The exported ZIP contains the following structure:
   home/welcome.html
   browse/*.html
   {BOOK-ID}/index.html
+  search/index.html
+  staticSearch/
   resources/css|scripts|fonts|images/
   manifests/image-manifest.xml
   _download-images.py
@@ -456,10 +458,10 @@ The exported ZIP contains the following structure:
 
 **Important notes and current limitations:**
 
-* Only one library can be exported at a time. The export button and the Create Library form are disabled while an export is in progress.
-* If you close the browser window or navigate away during an export, the export will continue running on the server. You can reopen the Manage Library Collections window at any time to check progress and download the result when it is done.
-* **Search is currently not included in the static export.** Search links in the exported site are present but non-functional. Static search support is planned for a future release.
-* Images referenced via IIIF URLs are included as links in the static output and will load from their original IIIF server. All images are listed in `manifests/image-manifest.xml` and must be downloaded separately using the included `_download-images.py` script (see `README-PHASE2.md` inside the ZIP for instructions).
+- Only one library can be exported at a time. The export button and the Create Library form are disabled while an export is in progress.
+- If you close the browser window or navigate away during an export, the export will continue running on the server. You can reopen the Manage Library Collections window at any time to check progress and download the result when it is done.
+- The static export includes a full-text search engine (powered by [staticSearch](https://github.com/projectEndings/staticSearch)) covering all text content in the library's book XML files. Search results link to book pages but do not yet highlight matched terms within those pages — hit highlighting is planned for a future release. **Search requires a local web server** and will not function when files are opened directly from the filesystem; if you open `search/index.html` without a server, a warning with instructions will be displayed. The simplest option is to run `python3 -m http.server 8000` from the export folder and open `http://localhost:8000` in your browser.
+- Images referenced via IIIF URLs are included as links in the static output and will load from their original IIIF server. All images are listed in `manifests/image-manifest.xml` and must be downloaded separately using the included `_download-images.py` script (see `README-PHASE2.md` inside the ZIP for instructions). After running the Phase 2 script, IIIF cover images will also appear correctly as thumbnails in search results.
 
 > **Note on the `static/` folder**
 > The first time an export is triggered, Bibundina creates a `static/` folder inside the app's database collection to store the output. This folder is not present on a fresh installation — its presence indicates that at least one export has been run. The exported ZIP file is also stored here temporarily and can be re-downloaded by running the export again.

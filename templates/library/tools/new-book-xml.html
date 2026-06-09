@@ -86,7 +86,15 @@
                                 <input class="long" type="text" id="IIIFmanifest" name="IIIFmanifest"/></p>
                             <p class="admin-tools-new-book-p"><label class="fieldset" for="IIIFviewer">IIIF Viewer:</label>
                                 <input class="long" type="text" id="IIIFviewer" name="IIIFviewer"/></p>
-                            <p><button id="new-book-import-iiif" class="hidden">Import images from IIIF manifest</button></p>
+                            <p>
+                                <button id="prefill-from-iiif" class="hidden">Pre-fill metadata from IIIF manifest</button>
+                            </p>
+                            <p class="admin-tools-new-book-p">
+                                <label class="checkbox">
+                                    <input type="checkbox" name="importIIIFImages" id="importIIIFImages"/>
+                                    Import images from IIIF manifest
+                                </label>
+                            </p>
                         </fieldset>
 
                     </form>

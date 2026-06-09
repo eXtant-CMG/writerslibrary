@@ -38,14 +38,15 @@ return
         let $date        := request:get-parameter("date", "")
         let $generalnote := request:get-parameter("generalnote", "")
         let $location    := request:get-parameter("location", "")
-        let $iiifManifest := request:get-parameter("iiifManifest", "")
-        let $iiifViewer   := request:get-parameter("iiifViewer", "")
+        let $iiifManifest     := request:get-parameter("iiifManifest", "")
+        let $iiifViewer       := request:get-parameter("iiifViewer", "")
+        let $importIIIFImages := request:get-parameter("importIIIFImages", "false") eq "true"
         return libmgr:create-book(
             $libraryId, $bookId, $bookType,
             $firstname, $lastname, $title, $subtitle,
             $type, $volume, $series, $edition, $editor,
             $place, $publisher, $date, $generalnote, $location,
-            $iiifManifest, $iiifViewer
+            $iiifManifest, $iiifViewer, $importIIIFImages
         )
 
     else if ($action = "start-export") then

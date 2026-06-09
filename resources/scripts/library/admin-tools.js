@@ -29,38 +29,31 @@ $(document).ready(function() {
         };
     });
 
+// Show/hide IIIF fieldset
     $('#addIIIF').on('change', function() {
         if ($(this).is(':checked')) {
             $('#IIIFfieldset').removeClass('hidden');
         } else {
             $('#IIIFfieldset').addClass('hidden');
             $('#IIIFfieldset input').val('');
+            $('#importIIIFImages').prop('checked', false);
         }
     });
 
-    $('#IIIFmanifest').on('input', function() {
-        if ($(this).val() === '') {
-            $('#new-book-import-iiif').addClass('hidden');
-        } else {
-            $('#new-book-import-iiif').removeClass('hidden');
-        }
-    });
-
-
-// Auto-fill the IIIF viewer URL when a manifest is entered
+// Show prefill button and auto-fill viewer URL when manifest is entered
     $('#IIIFmanifest').on('input', function() {
         var manifestValue = $(this).val();
         if (manifestValue !== '') {
             $('#IIIFviewer').val("https://uv-v4.netlify.app/#?manifest=" + manifestValue);
-            $('#new-book-import-iiif').removeClass('hidden');
+            $('#prefill-from-iiif').removeClass('hidden');
         } else {
             $('#IIIFviewer').val('');
-            $('#new-book-import-iiif').addClass('hidden');
+            $('#prefill-from-iiif').addClass('hidden');
         }
     });
 
-// Import metadata from IIIF manifest into form fields
-    $('#new-book-import-iiif').on('click', function() {
+// Pre-fill metadata fields from IIIF manifest
+    $('#prefill-from-iiif').on('click', function() {
         var manifest = $('#IIIFmanifest').val();
         $.get('$app/modules/import-iiif.xql', {manifest: manifest})
             .done(function(data) {
@@ -70,7 +63,7 @@ $(document).ready(function() {
                 try { $('#location').val(data.getElementsByTagName('Relation')[0].textContent); } catch(e) {}
             })
             .fail(function() {
-                alert('Import failed. Check the manifest URL for errors!');
+                alert('Could not fetch manifest. Check the URL for errors!');
             });
     });
 
@@ -83,26 +76,27 @@ $(document).ready(function() {
         $('#save-response').text('').removeClass('error success');
 
         $.post('$app/modules/library-api.xql', {
-            action:       'create-book',
-            libraryId:    libraryId,
-            bookId:       $('#bookID').val(),
-            bookType:     $("input[name='ELLL']:checked").val(),
-            firstname:    $('#firstname').val(),
-            lastname:     $('#lastname').val(),
-            title:        $('#title').val(),
-            subtitle:     $('#subtitle').val(),
-            type:         $('#type').val(),
-            volume:       $('#volume').val(),
-            series:       $('#series').val(),
-            edition:      $('#edition').val(),
-            editor:       $('#editor').val(),
-            place:        $('#place').val(),
-            publisher:    $('#publisher').val(),
-            date:         $('#date').val(),
-            generalnote:  $('#generalnote').val(),
-            location:     $('#location').val(),
-            iiifManifest: $('#IIIFmanifest').val(),
-            iiifViewer:   $('#IIIFviewer').val()
+            action:            'create-book',
+            libraryId:         libraryId,
+            bookId:            $('#bookID').val(),
+            bookType:          $("input[name='ELLL']:checked").val(),
+            firstname:         $('#firstname').val(),
+            lastname:          $('#lastname').val(),
+            title:             $('#title').val(),
+            subtitle:          $('#subtitle').val(),
+            type:              $('#type').val(),
+            volume:            $('#volume').val(),
+            series:            $('#series').val(),
+            edition:           $('#edition').val(),
+            editor:            $('#editor').val(),
+            place:             $('#place').val(),
+            publisher:         $('#publisher').val(),
+            date:              $('#date').val(),
+            generalnote:       $('#generalnote').val(),
+            location:          $('#location').val(),
+            iiifManifest:      $('#IIIFmanifest').val(),
+            iiifViewer:        $('#IIIFviewer').val(),
+            importIIIFImages:  $('#importIIIFImages').is(':checked') ? 'true' : 'false'
         }, function(data) {
             if (data.success) {
                 $('#save-response').text('✔ ' + data.message).addClass('success');

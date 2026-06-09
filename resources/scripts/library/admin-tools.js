@@ -61,9 +61,39 @@ $(document).ready(function() {
                 try { $('#date').val(data.getElementsByTagName('Date')[0].textContent); } catch(e) {}
                 try { $('#title').val(data.getElementsByTagName('Title')[0].textContent); } catch(e) {}
                 try { $('#location').val(data.getElementsByTagName('Relation')[0].textContent); } catch(e) {}
+                $('#prefill-response').text('Metadata extracted').removeClass('error');
             })
             .fail(function() {
-                alert('Could not fetch manifest. Check the URL for errors!');
+                $('#prefill-response').text('Could not fetch manifest. Check the URL for errors!').addClass('error');
+            });
+    });
+
+// Check page count when import images checkbox is ticked
+    $('#importIIIFImages').on('change', function() {
+        if (!$(this).is(':checked')) {
+            $('#import-images-response').text('');
+            return;
+        }
+        var manifest = $('#IIIFmanifest').val();
+        if (manifest === '') {
+            $('#import-images-response').text('Please enter a manifest URL first.').addClass('error');
+            $(this).prop('checked', false);
+            return;
+        }
+        $('#import-images-response').text('Checking…').removeClass('error');
+        $.get('$app/modules/import-iiif.xql', {manifest: manifest})
+            .done(function(data) {
+                var pages = data.getElementsByTagName('page').length;
+                if (pages > 0) {
+                    $('#import-images-response').text(pages + ' pages will be imported').removeClass('error');
+                } else {
+                    $('#import-images-response').text('No pages found in manifest.').addClass('error');
+                    $('#importIIIFImages').prop('checked', false);
+                }
+            })
+            .fail(function() {
+                $('#import-images-response').text('Could not fetch manifest.').addClass('error');
+                $('#importIIIFImages').prop('checked', false);
             });
     });
 

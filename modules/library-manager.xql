@@ -74,18 +74,179 @@ declare function libmgr:add-library-entry($libraryId as xs:string, $libraryName 
 };
 
 (:~
+ : Fetch a IIIF manifest and return a <module type="pages"> element
+ : with one <page> per image, or an empty sequence on failure.
+ : Mirrors the logic in import-iiif.xql.
+ :)
+declare function libmgr:pages-from-iiif-manifest($manifestUrl as xs:string) {
+    try {
+        let $raw  := unparsed-text($manifestUrl)
+        let $data := json-to-xml($raw)
+
+        let $images :=
+            for $sequence in $data//fn:array[@key="sequences"]//fn:map
+            for $canvas in $sequence//fn:array[@key="canvases"]//fn:map
+            for $image in $canvas//fn:array[@key="images"]//fn:map
+            let $imageId := $image/fn:string[@key="@id"]/data()
+            let $title   := $canvas//fn:array[@key="metadata"]/fn:map[fn:string[@key="label"]/data() = "Title"]/fn:string[@key="value"]/data()
+            where $imageId ne "" and
+                  not(contains($imageId, "/anno")) and
+                  not(contains($imageId, "default.jpg")) and
+                  not(contains($imageId, "annotation")) and
+                  not(contains($imageId, "/full/"))
+            return
+                <image>
+                    <id>{concat($imageId, "/full/680,/0/default.jpg")}</id>
+                    <title>{$title}</title>
+                </image>
+
+        return
+            if (exists($images)) then
+                <module type="pages">
+                    {for $image at $pos in $images
+                     let $label :=
+                         if ($image/title/text() ne "") then
+                             if (starts-with($image/title/text(), "Page "))
+                             then substring-after($image/title/text(), "Page ")
+                             else $image/title/text()
+                         else $pos
+                     return
+                         <page>
+                             <pagenumber>{$label}</pagenumber>
+                             <facsimile>{$image/id/text()}</facsimile>
+                         </page>}
+                </module>
+            else ()
+    } catch * {
+        ()
+    }
+};
+
+(:~
+ : Create a new book entry and store it in the library's books collection.
+ : @param $libraryId  the target library (e.g. "woolf-library")
+ : @param $bookId     the unique book siglum / filename stem (e.g. "WOO-WAV")
+ : @param $bookType   "EL" (extant) or "LL" (lost)
+ : @param $firstname  author firstname
+ : @param $lastname   author lastname
+ : @param $title      book title
+ : @param $subtitle   book subtitle (may be empty)
+ : @param $type       publication type (Monograph, Journal, …)
+ : @param $volume     volume number (may be empty)
+ : @param $series     series (may be empty)
+ : @param $edition    edition (may be empty)
+ : @param $editor     editor (may be empty)
+ : @param $place      place of publication
+ : @param $publisher  publisher
+ : @param $date       publication date (YYYY or n.d.)
+ : @param $generalnote general note (may be empty)
+ : @param $location   current location / holding institution
+ : @param $iiifManifest IIIF manifest URL (may be empty)
+ : @param $iiifViewer   IIIF viewer URL (may be empty)
+ : @return success/error map
+ :)
+declare function libmgr:create-book(
+    $libraryId    as xs:string,
+    $bookId       as xs:string,
+    $bookType     as xs:string,
+    $firstname    as xs:string,
+    $lastname     as xs:string,
+    $title        as xs:string,
+    $subtitle     as xs:string,
+    $type         as xs:string,
+    $volume       as xs:string,
+    $series       as xs:string,
+    $edition      as xs:string,
+    $editor       as xs:string,
+    $place        as xs:string,
+    $publisher    as xs:string,
+    $date         as xs:string,
+    $generalnote  as xs:string,
+    $location     as xs:string,
+    $iiifManifest      as xs:string,
+    $iiifViewer        as xs:string,
+    $importIIIFImages  as xs:boolean
+) as map(*) {
+    try {
+        (: Basic validation :)
+        if (not(matches($bookId, "^[a-zA-Z][a-zA-Z0-9\-]+$"))) then
+            map { "success": false(), "message": "Invalid book ID format" }
+        else if ($bookId eq "" or $libraryId eq "") then
+            map { "success": false(), "message": "Book ID and library ID are required" }
+        else if (not($bookType = ("EL", "LL"))) then
+            map { "success": false(), "message": "Book type must be EL or LL" }
+        else
+            let $booksPath := $config:data-root || '/' || $libraryId || '/books'
+            let $filename  := $bookId || '.xml'
+
+            (: Check the file doesn't already exist :)
+            return
+                if (doc-available($booksPath || '/' || $filename)) then
+                    map { "success": false(), "message": "A book with this ID already exists" }
+                else
+                    (: Build the sort attributes :)
+                    let $lastnameSortRaw := upper-case(substring($lastname, 1, 1)) || lower-case(substring($lastname, 2, 14))
+                    let $titleSortRaw    := upper-case(substring($title, 1, 1)) || lower-case(substring($title, 2, 14))
+
+                    (: Build the <IIIF> element only when a manifest URL was supplied :)
+                    let $iiifElement :=
+                        if ($iiifManifest ne "") then
+                            <IIIF>
+                                <IIIFmanifest>{$iiifManifest}</IIIFmanifest>
+                                <IIIFviewer>{$iiifViewer}</IIIFviewer>
+                            </IIIF>
+                        else ()
+
+                    (: Fetch and build <module type="pages"> if requested :)
+                    let $pagesModule :=
+                        if ($importIIIFImages and $iiifManifest ne "") then
+                            libmgr:pages-from-iiif-manifest($iiifManifest)
+                        else ()
+
+                    let $bookXml :=
+                        <book id="{$bookId}" type="{$bookType}">
+                            <module type="bibl">
+                                <author sort="{$lastnameSortRaw}">
+                                    <firstname>{$firstname}</firstname>
+                                    <lastname>{$lastname}</lastname>
+                                </author>
+                                <title sort="{$titleSortRaw}">{$title}</title>
+                                <subtitle>{$subtitle}</subtitle>
+                                <type>{$type}</type>
+                                <volume>{$volume}</volume>
+                                <series>{$series}</series>
+                                <edition>{$edition}</edition>
+                                <editor>{$editor}</editor>
+                                <place>{$place}</place>
+                                <publisher>{$publisher}</publisher>
+                                <date>{$date}</date>
+                                <generalnote>{$generalnote}</generalnote>
+                                <location>{$location}</location>
+                                {$iiifElement}
+                            </module>
+                            {$pagesModule}
+                        </book>
+
+                    let $_ := xmldb:store($booksPath, $filename, $bookXml, 'application/xml')
+                    return map { "success": true(), "message": "Book saved as " || $filename }
+    } catch * {
+        map { "success": false(), "message": "Exception: " || $err:description }
+    }
+};
+
+(:~
  : Create the library directory structure with initial XML files
  :)
 declare function libmgr:create-library-directory($libraryId as xs:string, $libraryName as xs:string) as xs:boolean {
     try {
         let $libraryPath := $config:data-root || '/' || $libraryId
-        
+
         (: Create the collection/directory :)
         let $createCollection := xmldb:create-collection($config:data-root, $libraryId)
-                
+
         (: Create books/ subcollection :)
         let $createBooksCollection := xmldb:create-collection($libraryPath, "books")
-        
+
         (: Create sample book ADA-MYF.xml :)
         let $bookXml :=
           <book type="EL" id="ADA-MYF">
@@ -105,7 +266,7 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
               <generalnote/>
             </module>
           </book>
-        
+
         let $prettyBook :=
           serialize(
             $bookXml,
@@ -115,13 +276,13 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
               <output:omit-xml-declaration value="yes"/>
             </output:serialization-parameters>
           )
-        
+
         let $storeBook :=
           xmldb:store($libraryPath || "/books", "ADA-MYF.xml", $prettyBook, "application/xml")
 
 
         (: Create config.xml :)
-        let $configXml := 
+        let $configXml :=
         <module type="library">
             <title>{$libraryName}</title>
             <subtitle></subtitle>
@@ -366,9 +527,9 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
                         <label>n.d.</label>
                     </browse>
                 </browseBy>
-        
+
             </browsing>
-            <!--  index fields to be declared in collection.xconf 
+            <!--  index fields to be declared in collection.xconf
                 <lucene>
                     <text qname="module" index="no">
                         <ignore qname="Term"/>
@@ -379,7 +540,7 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
                         <facet dimension="document" expression="'library-bibliography'"/>
                         <facet dimension="module" expression="substring-after(util:collection-name(.),'data/')"/>
                     </text>
-                    
+
                     <text qname="zone">
                         <ignore qname="Coordinates"/>
                         <ignore qname="PlaceOnThePage"/>
@@ -393,7 +554,7 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
                         <facet dimension="document" expression="'library-readingtraces'"/>
                         <facet dimension="module" expression="substring-after(util:collection-name(.),'data/')"/>
                     </text>
-                    
+
                     <text qname="m">
                         <field name="library-book-marginalia-bookID" expression="ancestor::book/@id"/>
                         <field name="library-book-marginalia-zoneID" expression="ancestor::zone/number"/>
@@ -404,7 +565,7 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
                         <facet dimension="document" expression="'library-readingtraces'"/>
                         <facet dimension="module" expression="substring-after(util:collection-name(.),'data/')"/>
                     </text>
-                    
+
                     <text qname="ManuscriptLink" index="no">
                         <field name="library-book-with-manuscript-link" expression="ancestor::book/@id"/>
                         <facet dimension="module" expression="substring-after(util:collection-name(.),'data/')"/>
@@ -421,10 +582,10 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
                         <field name="library-book-Dedication" type="xs:string" match="module/dedication"/>
                         <field name="library-book-readingTraces" type="xs:string" match="module/page"/>
                         <field name="library-book-Marginalia" type="xs:string" match="module//m"/>
-                    </create>                    
+                    </create>
                 </range>
             -->
-            <!-- 
+            <!--
                An example of a range query that combines two fields:
                   <sortBy id="Author" browseCategory="Alphabet">
                     <label>Author</label>
@@ -438,7 +599,7 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
                 </sortBy>
             -->
         </module>
-        
+
         let $prettyConfig :=
           serialize(
             $configXml,
@@ -449,18 +610,18 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
             </output:serialization-parameters>
           )
         let $storeConfig := xmldb:store($libraryPath, 'config.xml', $prettyConfig, "application/xml")
-        
 
-        
+
+
         (: Create home.xml :)
-        let $homeXml := 
+        let $homeXml :=
             <div id="home-grid-container">
                 <div id="about">
                     <h4>Welcome to {$libraryName}</h4>
-                    
+
                     <p>To edit this home page, open <code>data/{$libraryId}/home.xml</code> in eXide.</p>
-                    <div id="documentation-tools-container">    
-                        <div id="documentation">  
+                    <div id="documentation-tools-container">
+                        <div id="documentation">
                             <p class="documentation-links"><a style="color: #003828; font-size:1.4em; font-weight:bold;" href="../documentation/index.html">Documentation</a><br/>
                                  ∟ <a href="../documentation/index.html#toc_1">Getting started</a><br/>
                                  ∟ <a href="../documentation/index.html#toc_5">Encoding schema</a><br/>
@@ -468,19 +629,19 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
                                  ∟ <a href="../documentation/index.html#toc_14">Admin tools</a></p>
                             <p class="documentation-links"><a style="color: #003828; font-size:1.4em; font-weight:bold;" href="../usermanual/index.html">User Manual</a></p>
                         </div><!--/documentation-->
-                        
+
                         <!-- Do not remove, this line generates the admin tools -->
                         <span class="admin-tools:getAdmintools"/>
-                        
-                    </div><!--/documentation-tools-container-->           
+
+                    </div><!--/documentation-tools-container-->
 
                 </div><!--/about-->
                 <div id="home-image">
                     <img class="home" src="$resources/images/home.jpg" width="350"/>
                 </div>
-                
+
             <!--/home-grid-container--></div>
-            
+
         let $prettyHome :=
           serialize(
             $homeXml,
@@ -491,7 +652,7 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
             </output:serialization-parameters>
           )
         let $storeHome := xmldb:store($libraryPath, 'home.xml', $prettyHome, "application/xml")
-        
+
         return true()
     } catch * {
         false()

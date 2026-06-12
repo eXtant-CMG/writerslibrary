@@ -20,6 +20,35 @@ return
                 let $libraryName := request:get-parameter("libraryName", "")
                 return libmgr:create-library($libraryId, $libraryName)
 
+    else if ($action = "create-book") then
+        let $libraryId   := request:get-parameter("libraryId", "")
+        let $bookId      := request:get-parameter("bookId", "")
+        let $bookType    := request:get-parameter("bookType", "EL")
+        let $firstname   := request:get-parameter("firstname", "")
+        let $lastname    := request:get-parameter("lastname", "")
+        let $title       := request:get-parameter("title", "")
+        let $subtitle    := request:get-parameter("subtitle", "")
+        let $type        := request:get-parameter("type", "")
+        let $volume      := request:get-parameter("volume", "")
+        let $series      := request:get-parameter("series", "")
+        let $edition     := request:get-parameter("edition", "")
+        let $editor      := request:get-parameter("editor", "")
+        let $place       := request:get-parameter("place", "")
+        let $publisher   := request:get-parameter("publisher", "")
+        let $date        := request:get-parameter("date", "")
+        let $generalnote := request:get-parameter("generalnote", "")
+        let $location    := request:get-parameter("location", "")
+        let $iiifManifest     := request:get-parameter("iiifManifest", "")
+        let $iiifViewer       := request:get-parameter("iiifViewer", "")
+        let $importIIIFImages := request:get-parameter("importIIIFImages", "false") eq "true"
+        return libmgr:create-book(
+            $libraryId, $bookId, $bookType,
+            $firstname, $lastname, $title, $subtitle,
+            $type, $volume, $series, $edition, $editor,
+            $place, $publisher, $date, $generalnote, $location,
+            $iiifManifest, $iiifViewer, $importIIIFImages
+        )
+
     else if ($action = "start-export") then
         let $libraryId := request:get-parameter("libraryId", "")
         return

@@ -75,39 +75,47 @@ declare function libmgr:add-library-entry($libraryId as xs:string, $libraryName 
 
 (:~
  : Fetch a IIIF manifest and return a <module type="pages"> element
- : with one <page> per canvas, or an empty sequence on failure.
+ : with one <page> per image, or an empty sequence on failure.
+ : Mirrors the logic in import-iiif.xql.
  :)
 declare function libmgr:pages-from-iiif-manifest($manifestUrl as xs:string) {
     try {
         let $raw  := unparsed-text($manifestUrl)
         let $data := json-to-xml($raw)
-        let $pages :=
-            for $canvas at $pos in $data//fn:array[@key="canvases"]//fn:map
-            let $images := $canvas//fn:array[@key="images"]//fn:map
-            let $imageId := $images/fn:string[@key="@id"]/data()
-            let $label :=
-                let $raw := $canvas/fn:string[@key="label"]/data()
-                return if ($raw ne "") then
-                    if (starts-with($raw, "Page ")) then substring-after($raw, "Page ")
-                    else $raw
-                else xs:string($pos)
-            let $facsimile :=
-                if ($imageId ne "" and
-                    not(contains($imageId, "/anno")) and
-                    not(contains($imageId, "default.jpg")) and
-                    not(contains($imageId, "annotation")) and
-                    not(contains($imageId, "/full/")))
-                then concat($imageId, "/full/680,/0/default.jpg")
-                else ()
-            where exists($facsimile)
+
+        let $images :=
+            for $sequence in $data//fn:array[@key="sequences"]//fn:map
+            for $canvas in $sequence//fn:array[@key="canvases"]//fn:map
+            for $image in $canvas//fn:array[@key="images"]//fn:map
+            let $imageId := $image/fn:string[@key="@id"]/data()
+            let $title   := $canvas//fn:array[@key="metadata"]/fn:map[fn:string[@key="label"]/data() = "Title"]/fn:string[@key="value"]/data()
+            where $imageId ne "" and
+                  not(contains($imageId, "/anno")) and
+                  not(contains($imageId, "default.jpg")) and
+                  not(contains($imageId, "annotation")) and
+                  not(contains($imageId, "/full/"))
             return
-                <page>
-                    <pagenumber>{$label}</pagenumber>
-                    <facsimile>{$facsimile}</facsimile>
-                </page>
+                <image>
+                    <id>{concat($imageId, "/full/680,/0/default.jpg")}</id>
+                    <title>{$title}</title>
+                </image>
+
         return
-            if (exists($pages)) then
-                <module type="pages">{$pages}</module>
+            if (exists($images)) then
+                <module type="pages">
+                    {for $image at $pos in $images
+                     let $label :=
+                         if ($image/title/text() ne "") then
+                             if (starts-with($image/title/text(), "Page "))
+                             then substring-after($image/title/text(), "Page ")
+                             else $image/title/text()
+                         else $pos
+                     return
+                         <page>
+                             <pagenumber>{$label}</pagenumber>
+                             <facsimile>{$image/id/text()}</facsimile>
+                         </page>}
+                </module>
             else ()
     } catch * {
         ()

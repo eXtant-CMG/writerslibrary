@@ -28,7 +28,7 @@
 
 <p>After installation, Bibundina opens with a welcome page and loads a <strong>sample library collection</strong> containing example records that demonstrate the encoding schema. This sample library is fully functional and can be used to encode your own material, but we recommend creating a <strong>separate library collection</strong> for production use. Bibundina supports working with <strong>multiple library collections</strong>, and you can switch between them at any time using the admin tools (see the <em>Admin Tools</em> section for details). Throughout this documentation, the sample library (<code>sample-library</code>) is used to illustrate the app’s features.</p>
 
-<p>Data entry in Bibundina is done by creating and editing individual XML files, one per book. Each book file is stored in the <code>books/</code> subfolder of its library collection, and is named after the book&#39;s unique ID (e.g., <code>ARA-LIB.xml</code>). Some library-specific settings can be configured in <code>config.xml</code> and the contents of the home page can be edited in <code>home.xml</code>. In the case of the sample library, the relevant files and folders are located at:</p>
+<p>Data entry in Bibundina is done by creating and editing individual XML files, one per book. Each book file is stored in the <code>books/</code> subfolder of its library collection, and is named after the book's unique ID (e.g., <code>ARA-LIB.xml</code>). Some library-specific settings can be configured in <code>config.xml</code> and the contents of the home page can be edited in <code>home.xml</code>. In the case of the sample library, the relevant files and folders are located at:</p>
 
 <ul>
 <li><code>/db/apps/writerslibrary/data/sample-library/books/</code> (one <code>.xml</code> file per book)</li>
@@ -38,7 +38,7 @@
 
 <h3 class="documentation" id="toc_2">Editing the XML files in eXide</h3>
 
-<p>You can open and edit book XML files in <code>eXide</code>, eXist-db&#39;s code editor. To open eXide, go to the eXist-db <strong>Dashboard</strong> and click on the eXide icon.</p>
+<p>You can open and edit book XML files in <code>eXide</code>, eXist-db's code editor. To open eXide, go to the eXist-db <strong>Dashboard</strong> and click on the eXide icon.</p>
 
 <p>To edit book files, <code>config.xml</code> and <code>home.xml</code> you’ll need to log in as an <strong>administrator</strong> (dba). To do this, click on the “Login” button in the top right corner of the eXide window and enter the admin username and password you provided during the eXist-db installation.</p>
 
@@ -55,21 +55,21 @@
 <p>As a first step in configuring the app to represent a particular collection of books, an admin can change the title and subtitle in <code>config.xml</code>.</p>
 
 <div><pre><code class="language-none">&lt;title&gt;Bibundina&lt;/title&gt;
-&lt;subtitle&gt;A Writer&#39;s Library App&lt;/subtitle&gt;</code></pre></div>
+&lt;subtitle&gt;A Writer's Library App&lt;/subtitle&gt;</code></pre></div>
 
 <p>The subtitle field can of course be left blank.</p>
 
-<p>As the user manual states, the upper horizontal navigation bar of the writer&#39;s library app serves as a browsing tool that can sort alphabetically among <strong>authors</strong>, <strong>titles</strong> and <strong>places</strong> of publication. The number of items retrieved is shown under each letter to give an idea of how relevant or representative a specific search query is. It is also possible to sort the library chronologically according to the <strong>date</strong> of publication and to apply filters to the book collection to only display books with an <strong>inscription</strong>, with <strong>reading traces</strong>, or with <strong>marginalia</strong>.</p>
+<p>As the user manual states, the upper horizontal navigation bar of the writer's library app serves as a browsing tool that can sort alphabetically among <strong>authors</strong>, <strong>titles</strong> and <strong>places</strong> of publication. The number of items retrieved is shown under each letter to give an idea of how relevant or representative a specific search query is. It is also possible to sort the library chronologically according to the <strong>date</strong> of publication and to apply filters to the book collection to only display books with an <strong>inscription</strong>, with <strong>reading traces</strong>, or with <strong>marginalia</strong>.</p>
 
-<p>In case one or more of these options are not relevant to a collection of books (for instance when they contain no marginalia), items in the navigation can be easily removed by deleting (or commenting out) the <code>&lt;sortBy&gt;</code> element in <code>config.xml</code> that generates them. This, for instance, is the <code>&lt;sortBy&gt;</code> element that generates the &quot;Marginalia only&quot; option:</p>
+<p>In case one or more of these options are not relevant to a collection of books (for instance when they contain no marginalia), items in the navigation can be easily removed by deleting (or commenting out) the <code>&lt;sortBy&gt;</code> element in <code>config.xml</code> that generates them. This, for instance, is the <code>&lt;sortBy&gt;</code> element that generates the "Marginalia only" option:</p>
 
 <div><pre><code class="language-none">&lt;!-- Marginalia only --&gt;
-&lt;sortBy id=&quot;Marginalia&quot; browseCategory=&quot;Alphabet&quot;&gt;
+&lt;sortBy id="Marginalia" browseCategory="Alphabet"&gt;
     &lt;label&gt;Marginalia only&lt;/label&gt;
     &lt;rangeQuery&gt;
-        &lt;fields&gt;(&quot;library-book-Marginalia&quot;,&quot;library-book-Author&quot;)&lt;/fields&gt;
-        &lt;operators&gt;(&quot;contains&quot;,&quot;starts-with&quot;)&lt;/operators&gt;
-        &lt;keys&gt;&quot;*&quot;,$currentBrowseValue&lt;/keys&gt;
+        &lt;fields&gt;("library-book-Marginalia","library-book-Author")&lt;/fields&gt;
+        &lt;operators&gt;("contains","starts-with")&lt;/operators&gt;
+        &lt;keys&gt;"*",$currentBrowseValue&lt;/keys&gt;
     &lt;/rangeQuery&gt;
     &lt;orderBy&gt;author&lt;/orderBy&gt;
     &lt;breadcrumbPhrase&gt;the presence of marginalia&lt;/breadcrumbPhrase&gt;
@@ -77,7 +77,7 @@
 
 <p>When working with books published in other date ranges than the ones currently offered, the admin can add or modify date ranges using these syntax conventions:</p>
 
-<div><pre><code class="language-none">&lt;browseBy id=&quot;DateRange&quot;&gt;
+<div><pre><code class="language-none">&lt;browseBy id="DateRange"&gt;
     &lt;browse&gt;
         &lt;value&gt;17&lt;/value&gt;
         &lt;label&gt;1700→&lt;/label&gt;
@@ -104,19 +104,19 @@
 
 <p>The root element is <code>&lt;book&gt;</code>, which has attributes <code>type</code> and <code>id</code>. The <code>type</code> attribute specifies the type of book (<code>EL</code> (extant library) <code>LL</code> (lost entry), while the <code>id</code> attribute provides a unique identifier for the book.</p>
 
-<div><pre><code class="language-none">&lt;book id=&quot;ARA-LIB&quot; type=&quot;EL&quot;&gt;
+<div><pre><code class="language-none">&lt;book id="ARA-LIB" type="EL"&gt;
     &lt;!-- Module elements go here --&gt;
 &lt;/book&gt;</code></pre></div>
 
 <h3 class="documentation" id="toc_6">Module 1: Bibliographic Info</h3>
 
-<p>This XML schema is used to encode a book&#39;s bibliographical data. </p>
+<p>This XML schema is used to encode a book's bibliographical data. </p>
 
-<div><pre><code class="language-none">&lt;module type=&quot;bibl&quot;&gt;
-    &lt;title sort=&quot;&quot;/&gt;
+<div><pre><code class="language-none">&lt;module type="bibl"&gt;
+    &lt;title sort=""/&gt;
     &lt;subtitle/&gt;
     &lt;type&gt;&lt;/type&gt;
-    &lt;author sort=&quot;&quot;&gt;
+    &lt;author sort=""&gt;
         &lt;firstname/&gt;
         &lt;lastname/&gt;
     &lt;/author&gt;
@@ -135,23 +135,23 @@
     &lt;/IIIF&gt;
 &lt;/module&gt;</code></pre></div>
 
-<p>Within the <code>&lt;book&gt;</code> element is a <code>&lt;module&gt;</code> element with an attribute <code>type</code> set to <code>&quot;bibl&quot;</code>. This element contains the bibliographical information for the book. Except for <code>&lt;title&gt;</code> and <code>&lt;author&gt;</code>, all elements are optional.</p>
+<p>Within the <code>&lt;book&gt;</code> element is a <code>&lt;module&gt;</code> element with an attribute <code>type</code> set to <code>"bibl"</code>. This element contains the bibliographical information for the book. Except for <code>&lt;title&gt;</code> and <code>&lt;author&gt;</code>, all elements are optional.</p>
 
-<p>The <code>&lt;title&gt;</code> element contains the title of the book. The <code>sort</code> attribute can be used to specify a sort key for the title. The novel <em>The Wind in the Willows</em>, for instance, can be encoded to be sorted under &quot;W&quot; by supplying &quot;Wind in the Willows&quot; in the sort attribute.</p>
+<p>The <code>&lt;title&gt;</code> element contains the title of the book. The <code>sort</code> attribute can be used to specify a sort key for the title. The novel <em>The Wind in the Willows</em>, for instance, can be encoded to be sorted under "W" by supplying "Wind in the Willows" in the sort attribute.</p>
 
-<p>The <code>&lt;type&gt;</code> element specifies the type of publication, such as &quot;Monograph&quot;, &quot;Journal&quot;, &quot;Collection of Essays&quot;, &quot;Collection of Stories&quot;, &quot;Dictionary&quot;, &quot;Sheet Music&quot;, &quot;Manuscript&quot;, or &quot;Typescript&quot;.</p>
+<p>The <code>&lt;type&gt;</code> element specifies the type of publication, such as "Monograph", "Journal", "Collection of Essays", "Collection of Stories", "Dictionary", "Sheet Music", "Manuscript", or "Typescript".</p>
 
-<p>The <code>&lt;author&gt;</code> element contains information about the author of the book. Within the <code>&lt;author&gt;</code> element are <code>&lt;firstname&gt;</code> and <code>&lt;lastname&gt;</code> elements that contain the author&#39;s first and last names. The <code>sort</code> attribute can be used to specify a sort key for the author&#39;s name. &quot;John O&#39;Brien&quot; can be sorted under &quot;B&quot; by supplying &quot;Brien&quot; in the sort attribute. Please note that the sort attribute should only contain regular letters, so in the sort attribute the last name &quot;Dupré&quot; should be encoded as <code>sort=&quot;Dupre&quot;</code> or <code>sort=&quot;Dupr&amp;#233;&quot;</code>. The value of the sort attribute is never visualized in the interface, it is only used to correctly sort authors and titles.</p>
+<p>The <code>&lt;author&gt;</code> element contains information about the author of the book. Within the <code>&lt;author&gt;</code> element are <code>&lt;firstname&gt;</code> and <code>&lt;lastname&gt;</code> elements that contain the author's first and last names. The <code>sort</code> attribute can be used to specify a sort key for the author's name. "John O'Brien" can be sorted under "B" by supplying "Brien" in the sort attribute. Please note that the sort attribute should only contain regular letters, so in the sort attribute the last name "Dupré" should be encoded as <code>sort="Dupre"</code> or <code>sort="Dupr&amp;#233;"</code>. The value of the sort attribute is never visualized in the interface, it is only used to correctly sort authors and titles.</p>
 
 <p>If a book has <strong>no author</strong>, the <code>&lt;author&gt;</code> element can be left empty, and the sort attribute can be used to make the book appear in the author lists on the basis of its title or editor:</p>
 
-<div><pre><code class="language-none">&lt;title sort=&quot;Everyday Spanish&quot;&gt;Everyday Spanish&lt;/title&gt;
-&lt;author sort=&quot;Collier&quot;&gt;&lt;firstname/&gt;&lt;lastname/&gt;&lt;/author&gt;
+<div><pre><code class="language-none">&lt;title sort="Everyday Spanish"&gt;Everyday Spanish&lt;/title&gt;
+&lt;author sort="Collier"&gt;&lt;firstname/&gt;&lt;lastname/&gt;&lt;/author&gt;
 &lt;editor&gt;L.D. Collier&lt;/editor&gt; </code></pre></div>
 
 <p>If a book has <strong>multiple authors</strong>, each author should be enclosed in their own <code>&lt;author&gt;</code> element:</p>
 
-<div><pre><code class="language-none">&lt;author sort=&quot;Smith&quot;&gt;
+<div><pre><code class="language-none">&lt;author sort="Smith"&gt;
     &lt;firstname&gt;John&lt;/firstname&gt;
     &lt;lastname&gt;Smith&lt;/lastname&gt;
 &lt;/author&gt;
@@ -175,14 +175,14 @@
 
 <p>The proprietary history module is used to encode the ownership and provenance details of a book.</p>
 
-<div><pre><code class="language-none">&lt;module type=&quot;prop&quot;&gt;
+<div><pre><code class="language-none">&lt;module type="prop"&gt;
     &lt;type&gt;received&lt;/type&gt;
     &lt;dateofacquisition&gt;1934-05-15&lt;/dateofacquisition&gt;
     &lt;origin&gt;Here you can describe the provenance of a book.&lt;/origin&gt;
     &lt;inscription&gt;This is a sample dedication.&lt;/inscription&gt;
 &lt;/module&gt;</code></pre></div>
 
-<p>Within the <code>&lt;book&gt;</code> element, the <code>&lt;module&gt;</code> element with an attribute <code>type</code> set to <code>&quot;prop&quot;</code> contains the proprietary history of the book. This module provides information about how and when the book was acquired, its origin, and any dedications associated with it.</p>
+<p>Within the <code>&lt;book&gt;</code> element, the <code>&lt;module&gt;</code> element with an attribute <code>type</code> set to <code>"prop"</code> contains the proprietary history of the book. This module provides information about how and when the book was acquired, its origin, and any dedications associated with it.</p>
 
 <p>The <code>&lt;type&gt;</code> element specifies the nature of the acquisition. Common values might include:</p>
 
@@ -195,7 +195,7 @@
 
 <p>The <code>&lt;dateofacquisition&gt;</code> element contains the date when the book was acquired. This should be formatted in a standard date format (e.g., YYYY-MM-DD).</p>
 
-<p>The <code>&lt;origin&gt;</code> element provides a detailed description of the book&#39;s provenance, such as previous owners, acquisition source, or historical context.</p>
+<p>The <code>&lt;origin&gt;</code> element provides a detailed description of the book's provenance, such as previous owners, acquisition source, or historical context.</p>
 
 <p>The <code>&lt;inscription&gt;</code> element includes any inscription written in or associated with the book. </p>
 
@@ -203,14 +203,14 @@
 
 <p>The reading history module is used to encode details about the reading history of a book, including whether it has been read, the time period(s) during which it was read, and the evidence substantiating this claim.</p>
 
-<div><pre><code class="language-markup">&lt;module type=&quot;reading&quot;&gt;
+<div><pre><code class="language-markup">&lt;module type="reading"&gt;
     &lt;status&gt;read&lt;/status&gt;
     &lt;readingdate&gt;
-        &lt;from type=&quot;season&quot;&gt;
+        &lt;from type="season"&gt;
             &lt;season&gt;Summer&lt;/season&gt;
             &lt;year&gt;1934&lt;/year&gt;
         &lt;/from&gt;
-        &lt;to type=&quot;exact&quot;&gt;
+        &lt;to type="exact"&gt;
             &lt;day&gt;5&lt;/day&gt;
             &lt;month&gt;2&lt;/month&gt;
             &lt;year&gt;1935&lt;/year&gt;
@@ -219,7 +219,7 @@
     &lt;/readingdate&gt;
 &lt;/module&gt;</code></pre></div>
 
-<p>Within the <code>&lt;book&gt;</code> element, the <code>&lt;module&gt;</code> element with an attribute <code>type</code> set to <code>&quot;reading&quot;</code> contains the reading history of the book. This module provides information about whether the book was read, the dates or periods of reading, and any evidence supporting the reading history.</p>
+<p>Within the <code>&lt;book&gt;</code> element, the <code>&lt;module&gt;</code> element with an attribute <code>type</code> set to <code>"reading"</code> contains the reading history of the book. This module provides information about whether the book was read, the dates or periods of reading, and any evidence supporting the reading history.</p>
 
 <ol>
 <li><p><strong><code>&lt;status&gt;</code></strong></p>
@@ -259,9 +259,9 @@
 <li>Content structure:
 
 <ul>
-<li>If <code>@type=&quot;exact&quot;</code>, include <code>&lt;day&gt;</code>, <code>&lt;month&gt;</code>, and <code>&lt;year&gt;</code>.</li>
-<li>If <code>@type=&quot;season&quot;</code>, include <code>&lt;season&gt;</code> and <code>&lt;year&gt;</code>.</li>
-<li>If <code>@type=&quot;year&quot;</code>, include only <code>&lt;year&gt;</code>.</li>
+<li>If <code>@type="exact"</code>, include <code>&lt;day&gt;</code>, <code>&lt;month&gt;</code>, and <code>&lt;year&gt;</code>.</li>
+<li>If <code>@type="season"</code>, include <code>&lt;season&gt;</code> and <code>&lt;year&gt;</code>.</li>
+<li>If <code>@type="year"</code>, include only <code>&lt;year&gt;</code>.</li>
 </ul></li>
 </ul></li>
 <li><p><strong><code>&lt;source&gt;</code></strong></p>
@@ -273,12 +273,12 @@
 
 <p><strong>Example of an Exact Date Range</strong>:</p>
 
-<div><pre><code class="language-markup">  &lt;from type=&quot;exact&quot;&gt;
+<div><pre><code class="language-markup">  &lt;from type="exact"&gt;
       &lt;day&gt;15&lt;/day&gt;
       &lt;month&gt;7&lt;/month&gt;
       &lt;year&gt;1934&lt;/year&gt;
   &lt;/from&gt;
-  &lt;to type=&quot;exact&quot;&gt;
+  &lt;to type="exact"&gt;
       &lt;day&gt;20&lt;/day&gt;
       &lt;month&gt;7&lt;/month&gt;
       &lt;year&gt;1934&lt;/year&gt;
@@ -286,31 +286,31 @@
 
 <p><strong>Example of a Seasonal Period</strong>:</p>
 
-<div><pre><code class="language-markup">  &lt;from type=&quot;season&quot;&gt;
+<div><pre><code class="language-markup">  &lt;from type="season"&gt;
       &lt;season&gt;Spring&lt;/season&gt;
       &lt;year&gt;1934&lt;/year&gt;
   &lt;/from&gt;
-  &lt;to type=&quot;season&quot;&gt;
+  &lt;to type="season"&gt;
       &lt;season&gt;Summer&lt;/season&gt;
       &lt;year&gt;1934&lt;/year&gt;
   &lt;/to&gt;</code></pre></div>
 
 <p><strong>Example of a Year-Only Period</strong>:</p>
 
-<div><pre><code class="language-markup">  &lt;from type=&quot;year&quot;&gt;
+<div><pre><code class="language-markup">  &lt;from type="year"&gt;
       &lt;year&gt;1934&lt;/year&gt;
   &lt;/from&gt;
-  &lt;to type=&quot;year&quot;&gt;
+  &lt;to type="year"&gt;
       &lt;year&gt;1935&lt;/year&gt;
   &lt;/to&gt;</code></pre></div>
 
-<p>The <code>&lt;readingdate&gt;</code> element can be used multiple times if the book was known to have been read more than once. To encode one period (e.g. &quot;Summer 1934&quot;) instead of a range, fill in the same info in both <code>&lt;from&gt;</code> and <code>&lt;to&gt;</code>. If these two fields are identical, only <code>&lt;from&gt;</code> will be visualized.</p>
+<p>The <code>&lt;readingdate&gt;</code> element can be used multiple times if the book was known to have been read more than once. To encode one period (e.g. "Summer 1934") instead of a range, fill in the same info in both <code>&lt;from&gt;</code> and <code>&lt;to&gt;</code>. If these two fields are identical, only <code>&lt;from&gt;</code> will be visualized.</p>
 
 <h3 class="documentation" id="toc_9">Module 4: Pages and Reading Traces</h3>
 
 <p>The Pages and Reading Traces module is used to encode information about individual pages of a book and any reading traces or annotations found on those pages.</p>
 
-<div><pre><code class="language-none">&lt;module type=&quot;pages&quot;&gt;
+<div><pre><code class="language-none">&lt;module type="pages"&gt;
     &lt;page&gt;
         &lt;pagenumber&gt;cover&lt;/pagenumber&gt;
         &lt;facsimile&gt;DAR-ORI/cover.jpg&lt;/facsimile&gt;
@@ -339,7 +339,7 @@
     &lt;/page&gt;
 &lt;/module&gt;</code></pre></div>
 
-<p>The <code>&lt;module&gt;</code> element with the attribute <code>type</code> set to <code>&quot;pages&quot;</code> contains the details of individual pages within the book. Each <code>&lt;page&gt;</code> element includes a <code>&lt;pagenumber&gt;</code> and a <code>&lt;facsimile&gt;</code>. The <code>&lt;pagenumber&gt;</code> element specifies the page number or identifier (e.g., &quot;cover&quot;, &quot;tp&quot; for title page), while the <code>&lt;facsimile&gt;</code> element provides a reference to an image file of the page, which can be a local file path or a IIIF image URL (see the &quot;Including Images&quot; section).</p>
+<p>The <code>&lt;module&gt;</code> element with the attribute <code>type</code> set to <code>"pages"</code> contains the details of individual pages within the book. Each <code>&lt;page&gt;</code> element includes a <code>&lt;pagenumber&gt;</code> and a <code>&lt;facsimile&gt;</code>. The <code>&lt;pagenumber&gt;</code> element specifies the page number or identifier (e.g., "cover", "tp" for title page), while the <code>&lt;facsimile&gt;</code> element provides a reference to an image file of the page, which can be a local file path or a IIIF image URL (see the "Including Images" section).</p>
 
 <p>A page can have one or more reading traces, which are encoded within <code>&lt;zone&gt;</code> elements. Each <code>&lt;zone&gt;</code> element represents an individual reading trace, with several sub-elements to provide detailed information.</p>
 
@@ -347,21 +347,21 @@
 
 <p>The <code>&lt;facsimile&gt;</code> element within a <code>&lt;zone&gt;</code> provides a reference to an image file of the specific reading trace.</p>
 
-<p>A <code>&lt;type&gt;</code> element with the value &quot;marginalia&quot; <strong>must</strong> be added if the reading trace contains actual words written by the reader.</p>
+<p>A <code>&lt;type&gt;</code> element with the value "marginalia" <strong>must</strong> be added if the reading trace contains actual words written by the reader.</p>
 
 <p>The <code>&lt;position&gt;</code> element indicates the position of the reading trace on the page, expressed in pixels down from the top of the image.</p>
 
-<p>The <code>&lt;rn&gt;</code> element (reading note) contains the detailed content of the reading trace, including the transcription, writing tool, and the extract associated with the trace. The <code>&lt;transcription&gt;</code> element holds the transcribed text, with emphasis tags such as <code>&lt;u&gt;</code> for underlined text and <code>&lt;m&gt;</code> for marginalia notes. The <code>&lt;writingtool&gt;</code> element specifies the tool used to create the trace, such as &quot;Red ink&quot;. The <code>&lt;extracts&gt;</code> element contains the text excerpts related to the reading trace.</p>
+<p>The <code>&lt;rn&gt;</code> element (reading note) contains the detailed content of the reading trace, including the transcription, writing tool, and the extract associated with the trace. The <code>&lt;transcription&gt;</code> element holds the transcribed text, with emphasis tags such as <code>&lt;u&gt;</code> for underlined text and <code>&lt;m&gt;</code> for marginalia notes. The <code>&lt;writingtool&gt;</code> element specifies the tool used to create the trace, such as "Red ink". The <code>&lt;extracts&gt;</code> element contains the text excerpts related to the reading trace.</p>
 
 <h2 class="documentation" id="toc_10">Including Images</h2>
 
-<p>The writer&#39;s library app accommodates <strong>three</strong> different ways of incorporating images and the sample data and documentation in the app will demonstrate the three ways. Images can either be stored <strong>within the app</strong> itself (<em>which we do not recommend</em>); images can be loaded into the app from a <strong>static folder on the same server</strong>; and thirdly, images can be incorporated <strong>via IIIF</strong>. The methods can also be combined.</p>
+<p>The writer's library app accommodates <strong>three</strong> different ways of incorporating images and the sample data and documentation in the app will demonstrate the three ways. Images can either be stored <strong>within the app</strong> itself (<em>which we do not recommend</em>); images can be loaded into the app from a <strong>static folder on the same server</strong>; and thirdly, images can be incorporated <strong>via IIIF</strong>. The methods can also be combined.</p>
 
 <h3 class="documentation" id="toc_11">Inside the app</h3>
 
-<p>The writer&#39;s library app contains sample book entries with images stored within the app.</p>
+<p>The writer's library app contains sample book entries with images stored within the app.</p>
 
-<p>The book with id <code>ARA-LIB</code>, for instance, contains <code>&lt;page&gt;</code> elements such as this in <code>&lt;module type=&quot;pages&quot;&gt;</code>:</p>
+<p>The book with id <code>ARA-LIB</code>, for instance, contains <code>&lt;page&gt;</code> elements such as this in <code>&lt;module type="pages"&gt;</code>:</p>
 
 <div><pre><code class="language-none">&lt;page&gt;
     &lt;pagenumber&gt;cover&lt;/pagenumber&gt;
@@ -380,32 +380,32 @@
 
 <p>In the file <code>db/writerslibrary/controller.xq</code> the following statement specifies that paths to images in <code>&lt;facsimile&gt;</code> elements must be preceded by <code>db/writerslibrary/resources/images/sample-library/</code>:</p>
 
-<div><pre><code class="language-none">    else if (contains($exist:path, &quot;/$library-images/&quot;)) then
-    &lt;dispatch xmlns=&quot;http://exist.sourceforge.net/NS/exist&quot;&gt;
-        &lt;forward url=&quot;{$exist:controller}/resources/images/sample-library/{substring-after($exist:path, &#39;/$library-images/&#39;)}&quot;&gt;
-            &lt;set-header name=&quot;Cache-Control&quot; value=&quot;max-age=3600, must-revalidate&quot;/&gt;
+<div><pre><code class="language-none">    else if (contains($exist:path, "/$library-images/")) then
+    &lt;dispatch xmlns="http://exist.sourceforge.net/NS/exist"&gt;
+        &lt;forward url="{$exist:controller}/resources/images/sample-library/{substring-after($exist:path, '/$library-images/')}"&gt;
+            &lt;set-header name="Cache-Control" value="max-age=3600, must-revalidate"/&gt;
         &lt;/forward&gt;
     &lt;/dispatch&gt;</code></pre></div>
 
 <p>This must be changed to the static folder outside of eXist-db:</p>
 
-<div><pre><code class="language-none">    else if (contains($exist:path, &quot;/$library-images/&quot;)) then
-    &lt;dispatch xmlns=&quot;http://exist.sourceforge.net/NS/exist&quot;&gt;
-        &lt;forward url=&quot;/sample-library-images/{substring-after($exist:path, &#39;/$library-images/&#39;)}&quot;&gt;
-            &lt;set-header name=&quot;Cache-Control&quot; value=&quot;max-age=3600, must-revalidate&quot;/&gt;
+<div><pre><code class="language-none">    else if (contains($exist:path, "/$library-images/")) then
+    &lt;dispatch xmlns="http://exist.sourceforge.net/NS/exist"&gt;
+        &lt;forward url="/sample-library-images/{substring-after($exist:path, '/$library-images/')}"&gt;
+            &lt;set-header name="Cache-Control" value="max-age=3600, must-revalidate"/&gt;
         &lt;/forward&gt;
     &lt;/dispatch&gt;</code></pre></div>
 
 <p>eXist-db uses <strong>Jetty</strong> as its web server. Jetty is an open-source project providing an HTTP server, HTTP client, and <code>javax.servlet</code> container. To access images from a static folder outside of eXist-db within the app, a configuration file must be created for Jetty. This file specifies the folder from which Jetty should serve resources when running. The following can be used as a template for the file:</p>
 
-<div><pre><code class="language-none">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE Configure PUBLIC &quot;-//Jetty//Configure//EN&quot; &quot;http://www.eclipse.org/jetty/configure_9_0.dtd&quot;&gt;
-&lt;Configure class=&quot;org.eclipse.jetty.server.handler.ContextHandler&quot;&gt;
-      &lt;Set name=&quot;contextPath&quot;&gt;/sample-library-images&lt;/Set&gt;
-      &lt;Set name=&quot;handler&quot;&gt;
-        &lt;New class=&quot;org.eclipse.jetty.server.handler.ResourceHandler&quot;&gt;
-         &lt;Set name=&quot;resourceBase&quot;&gt;/home/sample-library-images&lt;/Set&gt;
-         &lt;Set name=&quot;directoriesListed&quot;&gt;false&lt;/Set&gt;
+<div><pre><code class="language-none">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_0.dtd"&gt;
+&lt;Configure class="org.eclipse.jetty.server.handler.ContextHandler"&gt;
+      &lt;Set name="contextPath"&gt;/sample-library-images&lt;/Set&gt;
+      &lt;Set name="handler"&gt;
+        &lt;New class="org.eclipse.jetty.server.handler.ResourceHandler"&gt;
+         &lt;Set name="resourceBase"&gt;/home/sample-library-images&lt;/Set&gt;
+         &lt;Set name="directoriesListed"&gt;false&lt;/Set&gt;
        &lt;/New&gt;
       &lt;/Set&gt;
 &lt;/Configure&gt;</code></pre></div>
@@ -417,8 +417,8 @@
 <p>Here is a brief explanation of what each part of the configuration does:</p>
 
 <ul>
-<li><code>&lt;Set name=&quot;contextPath&quot;&gt;/sample-library-images&lt;/Set&gt;</code>: This line sets the context path for the ContextHandler to /sample-library-images. This means that resources served by this ContextHandler will be available at URLs starting with /sample-library-images.</li>
-<li><code>&lt;Set name=&quot;resourceBase&quot;&gt;/home/sample-library-images&lt;/Set&gt;</code>: This line sets the resourceBase property of the ResourceHandler to <code>/home/sample-library-images</code>. This specifies the folder on the file system from which resources will be served.</li>
+<li><code>&lt;Set name="contextPath"&gt;/sample-library-images&lt;/Set&gt;</code>: This line sets the context path for the ContextHandler to /sample-library-images. This means that resources served by this ContextHandler will be available at URLs starting with /sample-library-images.</li>
+<li><code>&lt;Set name="resourceBase"&gt;/home/sample-library-images&lt;/Set&gt;</code>: This line sets the resourceBase property of the ResourceHandler to <code>/home/sample-library-images</code>. This specifies the folder on the file system from which resources will be served.</li>
 </ul>
 
 <p>After placing this configuration file in the correct location, you will need to <strong>restart eXist-db</strong> for the changes to take effect. </p>
@@ -521,7 +521,7 @@ Library collections cannot be deleted or reordered directly via the interface.</
 
 <blockquote>
 <p><strong>Note on the <code>static/</code> folder</strong>
-The first time an export is triggered, Bibundina creates a <code>static/</code> folder inside the app&#39;s database collection to store the output. This folder is not present on a fresh installation — its presence indicates that at least one export has been run. The exported ZIP file is also stored here temporarily and can be re-downloaded by running the export again.</p>
+The first time an export is triggered, Bibundina creates a <code>static/</code> folder inside the app's database collection to store the output. This folder is not present on a fresh installation — its presence indicates that at least one export has been run. The exported ZIP file is also stored here temporarily and can be re-downloaded by running the export again.</p>
 </blockquote>
 
 <h3 class="documentation" id="toc_17">Create a New Book Entry</h3>
@@ -534,7 +534,7 @@ The first time an export is triggered, Bibundina creates a <code>static/</code> 
 
 <h3 class="documentation" id="toc_18">Import image links from a IIIF manifest</h3>
 
-<p>This tool extracts image links from a IIIF manifest and formats them into the correct XML schema (<code>&lt;module type=&quot;pages&quot;&gt;</code>). You can then paste the result directly into the relevant book XML file in your library’s <code>books/</code> folder. However, due to structural differences in IIIF manifests, extraction may not always be successful.</p>
+<p>This tool extracts image links from a IIIF manifest and formats them into the correct XML schema (<code>&lt;module type="pages"&gt;</code>). You can then paste the result directly into the relevant book XML file in your library’s <code>books/</code> folder. However, due to structural differences in IIIF manifests, extraction may not always be successful.</p>
 
 <p>For every image declared in the manifest, the tool will create the following XML:</p>
 
@@ -571,7 +571,7 @@ The first time an export is triggered, Bibundina creates a <code>static/</code> 
 <li><code>controller.xq</code>: This file is used to control the flow of requests and responses within the app.</li>
 <li><code>data/sample-library/config.xml</code>: This file contains configuration settings, such as the title of the app and the browsing and sorting options.</li>
 <li><code>data/sample-library/books/</code>: This folder contains one XML file per book, each named after the book’s unique ID (e.g., <code>ARA-LIB.xml</code>). Together these files form the library’s book database.</li>
-<li><code>data/sample-library/home.xml</code>: Holds the HTML code that appears on the library&#39;s home page.</li>
+<li><code>data/sample-library/home.xml</code>: Holds the HTML code that appears on the library's home page.</li>
 <li><code>modules/</code>: This folder contains XQuery modules, which contain the actual application code.</li>
 <li><code>modules/library-book-view.xql</code>: This module contains code that creates the book view.</li>
 <li><code>modules/library-browse.xql</code>: This module contains code for browsing the library.</li>

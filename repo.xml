@@ -9,4 +9,4 @@
   <target>writerslibrary</target>
   <prepare>pre-install.xq</prepare>
   <finish>post-install.xq</finish>
-<deployed>2023-05-18T11:51:52.391+02:00</deployed></meta>
+<deployed>2026-02-26T09:43:31.765Z</deployed></meta>

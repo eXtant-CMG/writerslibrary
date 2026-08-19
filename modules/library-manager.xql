@@ -497,3 +497,137 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
         false()
     }
 };
+
+(:
+ : Standalone / ad-hoc functions for generating <page> blocks from a directory
+ : of FADGI-style-named image files (e.g. DOS-BRO-2_0001_frontcover.jpg).
+ :
+ : Intended usage:
+ :   1. Upload images to resources/images/{libraryID}/{siglum}/ as usual.
+ :   2. Open eXide, import this module (or paste into library-manager.xql),
+ :      and call libmgr:pages-from-directory-listing() to preview the XML,
+ :      or libmgr:insert-pages-into-book() to write it straight into a book.
+ :
+ : Filename assumption: {SIGLUM}_{4-digit-sequence}_{label}.{ext}
+ : e.g. DOS-BRO-2_0001_frontcover.jpg -> pagenumber "frontcover",
+ :      facsimile "DOS-BRO-2/DOS-BRO-2_0001_frontcover.jpg"
+ :
+ : Adjust the $imageDir and facsimile path construction below if your
+ : actual resources/images layout differs.
+ :)
+
+(: Generates <page> elements from a directory of images, sorted by the
+   zero-padded sequence number embedded in the filename. Does NOT touch
+   any book document -- just returns the XML so you can eyeball it first. :)
+declare function libmgr:pages-from-directory-listing(
+    $libraryID as xs:string,
+    $siglum as xs:string
+) as element(page)* {
+    let $imageDir := $config:app-root || "/resources/images/" || $libraryID || "/" || $siglum
+    let $files := xmldb:get-child-resources($imageDir)
+    let $pattern := "^" || $siglum || "_(\d+)_(.+)\.(jpg|jpeg|png|tif|tiff|jp2)$"
+    let $matched :=
+        for $file in $files
+        where matches($file, $pattern, "i")
+        let $seq := replace($file, $pattern, "$1", "i")
+        let $label := replace($file, $pattern, "$2", "i")
+        order by $seq
+        return
+            <page>
+                <pagenumber>{$label}</pagenumber>
+                <facsimile>{$siglum || "/" || $file}</facsimile>
+            </page>
+    return $matched
+};
+
+(: Same as above, but also reports any files in the directory that did NOT
+   match the expected naming pattern -- run this first as a sanity check
+   before trusting the output, since a stray file (a .DS_Store, an unrelated
+   scan, an inconsistent name) would otherwise be silently skipped. :)
+declare function libmgr:check-directory-listing(
+    $libraryID as xs:string,
+    $siglum as xs:string
+) as element(report) {
+    let $imageDir := $config:app-root || "/resources/images/" || $libraryID || "/" || $siglum
+    let $files := xmldb:get-child-resources($imageDir)
+    let $pattern := "^" || $siglum || "_(\d+)_(.+)\.(jpg|jpeg|png|tif|tiff|jp2)$"
+    let $matchedCount := count($files[matches(., $pattern, "i")])
+    let $unmatched := $files[not(matches(., $pattern, "i"))]
+    return
+        <report>
+            <directory>{$imageDir}</directory>
+            <totalFiles>{count($files)}</totalFiles>
+            <matched>{$matchedCount}</matched>
+            <unmatchedFiles>
+                {for $f in $unmatched return <file>{$f}</file>}
+            </unmatchedFiles>
+        </report>
+};
+
+(: Finds the book document by ID -- mirrors the lookup pattern already used
+   in library-book-view:getBookNode(). :)
+declare function libmgr:get-book-doc(
+    $libraryID as xs:string,
+    $bookID as xs:string
+) as node()? {
+    let $booksCollection := $config:data-root || '/' || $libraryID || '/books'
+    return collection($booksCollection)/range:field-eq("library-book-ID", $bookID)[1]
+};
+
+(: Inserts the generated <page> elements directly into a book's
+   module[@type="pages"] (creating that module if it doesn't exist yet).
+   This WRITES to the document -- run pages-from-directory-listing() and
+   check-directory-listing() first to confirm the output looks right. :)
+declare function libmgr:insert-pages-into-book(
+    $libraryID as xs:string,
+    $bookID as xs:string,
+    $siglum as xs:string
+) as element()? {
+    let $bookNode := libmgr:get-book-doc($libraryID, $bookID)
+    let $allPages := libmgr:pages-from-directory-listing($libraryID, $siglum)
+    return
+        if (not($bookNode)) then
+            <error>No book found with id "{$bookID}" in library "{$libraryID}".</error>
+        else if (empty($allPages)) then
+            <error>No matching images found for siglum "{$siglum}" -- run check-directory-listing() first.</error>
+        else
+            let $existingPagesModule := $bookNode/module[@type="pages"]
+            let $existingFacsimiles := $existingPagesModule/page/facsimile/text()
+            let $newPages := $allPages[not(facsimile/text() = $existingFacsimiles)]
+            return
+                if (empty($newPages)) then
+                    <skipped>All {count($allPages)} page(s) for "{$bookID}" already present -- nothing inserted.</skipped>
+                else
+                    (
+                        if ($existingPagesModule) then
+                            update insert $newPages into $existingPagesModule
+                        else
+                            update insert <module type="pages">{$newPages}</module> into $bookNode
+                        ,
+                        <success>Inserted {count($newPages)} new page(s) into book "{$bookID}" ({count($allPages) - count($newPages)} already present, skipped).</success>
+                    )
+};
+
+(: Removes all <page> entries for a book -- full reset before regenerating.
+   Leaves the module[@type="pages"] element itself in place (empty) rather
+   than removing it, so insert-pages-into-book() can just insert into it. :)
+declare function libmgr:remove-pages-from-book(
+    $libraryID as xs:string,
+    $bookID as xs:string
+) as element() {
+    let $bookNode := libmgr:get-book-doc($libraryID, $bookID)
+    return
+        if (not($bookNode)) then
+            <error>No book found with id "{$bookID}" in library "{$libraryID}".</error>
+        else
+            let $pagesModule := $bookNode/module[@type="pages"]
+            return
+                if (not($pagesModule) or empty($pagesModule/page)) then
+                    <skipped book="{$bookID}">No pages to remove</skipped>
+                else
+                    let $count := count($pagesModule/page)
+                    return (
+                        update delete $pagesModule/page,
+                        <removed book="{$bookID}">Removed {$count} page(s)</removed>
+                    )
+};

@@ -28,12 +28,14 @@ else if ($exist:path eq "/") then
         <redirect url="{request:get-context-path()}/apps/writerslibrary/{$default-library}/home/welcome.html"/>
     </dispatch>
     
-        (: forwards all paths to images to resources/images/sample-library/   :)
+        (: forwards all paths to images to resources/images/{$library-id}/   :)
         (: best practice, however, is to fetch the images from outside :)
         (: of the eXist app. :)
     else if (contains($exist:path, "/$library-images/")) then
+    let $imageLibraryID := tokenize($exist:path, '/')[2]
+    return
         <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-            <forward url="{$exist:controller}/resources/images/sample-library/{substring-after($exist:path, '/$library-images/')}">
+            <forward url="{$exist:controller}/resources/images/{$imageLibraryID}/{substring-after($exist:path, '/$library-images/')}">
                 <set-header name="Cache-Control" value="max-age=3600, must-revalidate"/>
             </forward>
         </dispatch>

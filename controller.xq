@@ -2,6 +2,7 @@ xquery version "3.0";
 
 import module namespace library-browse = "http://exist-db.org/apps/writerslibrary/library-browse" at "modules/library-browse.xql";
 import module namespace admin-tools = "http://exist-db.org/apps/writerslibrary/admin-tools" at "modules/admin-tools.xql";
+import module namespace config = "http://exist-db.org/apps/writerslibrary/config" at "modules/config.xqm";
 
 declare variable $exist:path external;
 declare variable $exist:resource external;
@@ -11,7 +12,7 @@ declare variable $exist:root external;
 
 (: Load default library from data :)
 declare variable $default-library := 
-    let $doc := doc("/db/apps" || $exist:controller || "/data/libraries.xml")
+    let $doc := doc($config:data-root || "/libraries.xml")
     let $lib := $doc/libraries/library[1]/@id
     return 
         if ($lib) then string($lib) 

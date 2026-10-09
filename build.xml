@@ -15,11 +15,20 @@
   </target>
   <!-- Dev build (includes everything unoptimized) -->
   <target name="dev" depends="init" description="compile all source files">
-    <zip basedir="." destfile="${build.dir}/${project.app}-${project.version}-dev.xar" excludes="**/${build.dir}/**, **/node_modules/**"/>
+    <zip destfile="${build.dir}/${project.app}-${project.version}-dev.xar">
+      <fileset dir="." excludes="**/${build.dir}/**, **/node_modules/**, .env*, data/**"/>
+      <fileset dir="." includes="data/libraries.xml, data/sample-library/**"/>
+    </zip>
   </target>
   <!-- Release build -->
   <target name="deploy" depends="init" description="compile release build">
-    <zip basedir="." destfile="${build.dir}/${project.app}-${project.version}.xar" excludes="**/${build.dir}/**, .existdb.json, .yo-rc.json, **/node_modules/**, **/reports/**, README.md, **/.git*/** "/>
+    <!-- data/ ships only the seed (sample-library + libraries.xml); post-install.xq
+         copies it to the external data root on a fresh install. Anything else that
+         happens to be in data/ locally must never end up in a XAR. -->
+    <zip destfile="${build.dir}/${project.app}-${project.version}.xar">
+      <fileset dir="." excludes="**/${build.dir}/**, .existdb.json, .yo-rc.json, **/node_modules/**, **/reports/**, README.md, **/.git*/**, .env*, data/**, test/**, cypress.config.js, package.json, package-lock.json, push-exist.sh, watch-exist.sh, book.rng, build.xml"/>
+      <fileset dir="." includes="data/libraries.xml, data/sample-library/**"/>
+    </zip>
   </target>
   <target name="all" depends="dev, deploy">
     <tstamp/>

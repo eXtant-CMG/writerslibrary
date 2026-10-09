@@ -12,12 +12,39 @@ declare variable $home external;
 declare variable $dir external;
 (: the target collection into which the app is deployed :)
 declare variable $target external;
+
+(: Library data lives outside the app collection -- see $config:data-root
+   in modules/config.xqm, which this must match. :)
+declare variable $data-root := "/db/writerslibrary-data";
+
+(:~
+ : Seed the data root from the packaged data/ (sample-library + libraries.xml),
+ : but ONLY when it has no libraries.xml yet, i.e. on a fresh install. On an
+ : upgrade this does nothing: existing library data is never overwritten.
+ :)
+declare function local:seed-data-root() {
+    if (doc-available($data-root || "/libraries.xml")) then
+        ()
+    else
+        let $_ := xmldb:create-collection("/db", substring-after($data-root, "/db/"))
+        let $seed := $target || "/data"
+        return (
+            for $lib in xmldb:get-child-collections($seed)
+            where not(xmldb:collection-available($data-root || "/" || $lib))
+            return xmldb:copy-collection($seed || "/" || $lib, $data-root),
+            xmldb:copy-resource($seed, "libraries.xml", $data-root, "libraries.xml")
+        )
+};
 (: Create export service account if it doesn't exist :)
 let $_ :=
     if (not(sm:user-exists("export-service"))) then
         sm:create-account("export-service", "change-me-on-install", "dba", ())
     else
         ()
+let $_ := local:seed-data-root()
+(: Bring the data root's indexes in line with the collection.xconf just
+   stored by pre-install.xq :)
+let $_ := xmldb:reindex($data-root)
 (: Ensure all XQuery files in modules are executable :)
 return
     for $f in xmldb:get-child-resources($target || "/modules")

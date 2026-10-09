@@ -30,6 +30,13 @@ declare function local:mkcol($collection, $path) {
     local:mkcol-recursive($collection, tokenize($path, "/"))
 };
 
-(: store the collection configuration :)
+(: Library data lives outside the app collection -- see $config:data-root
+   in modules/config.xqm, which this must match. :)
+declare variable $data-root := "/db/writerslibrary-data";
+
+(: store the collection configuration: for the app collection, and for the
+   data root, which is where the indexed book XML actually lives :)
 local:mkcol("/db/system/config", $target),
-xdb:store-files-from-pattern(concat("/db/system/config", $target), $dir, "*.xconf")
+xdb:store-files-from-pattern(concat("/db/system/config", $target), $dir, "*.xconf"),
+local:mkcol("/db/system/config", $data-root),
+xdb:store-files-from-pattern(concat("/db/system/config", $data-root), $dir, "*.xconf")

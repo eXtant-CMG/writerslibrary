@@ -31,9 +31,9 @@
 <p>Data entry in Bibundina is done by creating and editing individual XML files, one per book. Each book file is stored in the <code>books/</code> subfolder of its library collection, and is named after the book's unique ID (e.g., <code>ARA-LIB.xml</code>). Some library-specific settings can be configured in <code>config.xml</code> and the contents of the home page can be edited in <code>home.xml</code>. In the case of the sample library, the relevant files and folders are located at:</p>
 
 <ul>
-<li><code>/db/apps/writerslibrary/data/sample-library/books/</code> (one <code>.xml</code> file per book)</li>
-<li><code>/db/apps/writerslibrary/data/sample-library/config.xml</code></li>
-<li><code>/db/apps/writerslibrary/data/sample-library/home.xml</code></li>
+<li><code>/db/writerslibrary-data/sample-library/books/</code> (one <code>.xml</code> file per book)</li>
+<li><code>/db/writerslibrary-data/sample-library/config.xml</code></li>
+<li><code>/db/writerslibrary-data/sample-library/home.xml</code></li>
 </ul>
 
 <h3 class="documentation" id="toc_2">Editing the XML files in eXide</h3>
@@ -486,8 +486,8 @@ ProxyPassReverse    /sample-library-images http://localhost:8080/sample-library-
 Library collections cannot be deleted or reordered directly via the interface.</p>
 
 <ul>
-<li>To <strong>delete</strong> a library collection, remove the folder named after the library ID and delete the corresponding <code>&lt;library/&gt;</code> entry in <code>data/libraries.xml</code>.</li>
-<li>To make a library collection the <strong>default</strong>, move its <code>&lt;library/&gt;</code> entry to the first position in <code>data/libraries.xml</code>.</li>
+<li>To <strong>delete</strong> a library collection, remove the folder named after the library ID and delete the corresponding <code>&lt;library/&gt;</code> entry in <code>/db/writerslibrary-data/libraries.xml</code>.</li>
+<li>To make a library collection the <strong>default</strong>, move its <code>&lt;library/&gt;</code> entry to the first position in <code>/db/writerslibrary-data/libraries.xml</code>.</li>
 </ul>
 </blockquote>
 
@@ -569,6 +569,7 @@ The first time an export is triggered, Bibundina creates a <code>static/</code> 
 <ul>
 <li><code>collection.xconf</code>: This file is used to configure collection-specific settings, such as indexing options and triggers.</li>
 <li><code>controller.xq</code>: This file is used to control the flow of requests and responses within the app.</li>
+<li><code>data/</code>: Seed data (the sample library and <code>libraries.xml</code>). On a fresh install it is copied to <code>/db/writerslibrary-data</code>, which is where the app reads and writes all library data. Library data is kept outside the app collection so that upgrading the app does not delete it.</li>
 <li><code>data/sample-library/config.xml</code>: This file contains configuration settings, such as the title of the app and the browsing and sorting options.</li>
 <li><code>data/sample-library/books/</code>: This folder contains one XML file per book, each named after the book’s unique ID (e.g., <code>ARA-LIB.xml</code>). Together these files form the library’s book database.</li>
 <li><code>data/sample-library/home.xml</code>: Holds the HTML code that appears on the library's home page.</li>

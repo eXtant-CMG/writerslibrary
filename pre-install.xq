@@ -32,7 +32,7 @@ declare function local:mkcol($collection, $path) {
 
 (: Library data lives outside the app collection -- see $config:data-root
    in modules/config.xqm, which this must match. :)
-declare variable $data-root := "/db/writerslibrary-data";
+declare variable $data-root := "/db/data/writerslibrary";
 
 (: store the collection configuration: for the app collection, and for the
    data root, which is where the indexed book XML actually lives :)

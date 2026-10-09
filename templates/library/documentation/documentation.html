@@ -368,7 +368,7 @@
     &lt;facsimile&gt;ARA-LIB/cover.jpg&lt;/facsimile&gt;
 &lt;/page&gt;</code></pre></div>
 
-<p>The app is set to search for the contents of the <code>&lt;facsimile&gt;</code> element (e.g., <code>ARA-LIB/cover.jpg</code>) in the <code>db/writerslibrary/resources/images/sample-library/</code> folder. Admins can add images to this folder via eXide by clicking <code>Manage</code> under the <code>File</code> menu and navigating to the folder in the DB Manager window (click the upload icon to upload files or folders). Images can also be added by dropping them into the folder when using the app via oXygen. The <code>&lt;facsimile&gt;</code> element must reference the correct image location and file name.</p>
+<p>The app is set to search for the contents of the <code>&lt;facsimile&gt;</code> element (e.g., <code>ARA-LIB/cover.jpg</code>) in the <code>/db/writerslibrary-images/sample-library/</code> collection (one subcollection per library, outside the app so that upgrading the app does not delete the images). Admins can add images to this folder via eXide by clicking <code>Manage</code> under the <code>File</code> menu and navigating to the folder in the DB Manager window (click the upload icon to upload files or folders). Images can also be added by dropping them into the folder when using the app via oXygen. The <code>&lt;facsimile&gt;</code> element must reference the correct image location and file name.</p>
 
 <p><strong>Note</strong>: Storing large amounts of images in the writer’s library app is <strong>not recommended</strong>. This is because eXist-db is not designed to host images and doing so can increase the file size of the app instance. To incorporate a substantial collection of images in the app, it is preferable to host them in a static folder on the server (or local machine), or on a IIIF server.</p>
 
@@ -378,12 +378,13 @@
 
 <p>By following the outlined steps, the app can retrieve images from a static folder named <code>library-images</code> (on a computer or on a server).</p>
 
-<p>In the file <code>db/writerslibrary/controller.xq</code> the following statement specifies that paths to images in <code>&lt;facsimile&gt;</code> elements must be preceded by <code>db/writerslibrary/resources/images/sample-library/</code>:</p>
+<p>In the file <code>db/writerslibrary/controller.xq</code> the following statement specifies that paths to images in <code>&lt;facsimile&gt;</code> elements are served by <code>modules/image.xql</code> from <code>/db/writerslibrary-images/{library-id}/</code>:</p>
 
 <div><pre><code class="language-none">    else if (contains($exist:path, "/$library-images/")) then
     &lt;dispatch xmlns="http://exist.sourceforge.net/NS/exist"&gt;
-        &lt;forward url="{$exist:controller}/resources/images/sample-library/{substring-after($exist:path, '/$library-images/')}"&gt;
-            &lt;set-header name="Cache-Control" value="max-age=3600, must-revalidate"/&gt;
+        &lt;forward url="{$exist:controller}/modules/image.xql"&gt;
+            &lt;add-parameter name="library" value="{$imageLibraryID}"/&gt;
+            &lt;add-parameter name="path" value="{substring-after($exist:path, '/$library-images/')}"/&gt;
         &lt;/forward&gt;
     &lt;/dispatch&gt;</code></pre></div>
 

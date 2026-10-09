@@ -664,7 +664,7 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
  : of FADGI-style-named image files (e.g. DOS-BRO-2_0001_frontcover.jpg).
  :
  : Intended usage:
- :   1. Upload images to resources/images/{libraryID}/{siglum}/ as usual.
+ :   1. Upload images to {$config:images-root}/{libraryID}/{siglum}/.
  :   2. Open eXide, import this module (or paste into library-manager.xql),
  :      and call libmgr:pages-from-directory-listing() to preview the XML,
  :      or libmgr:insert-pages-into-book() to write it straight into a book.
@@ -674,7 +674,7 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
  :      facsimile "DOS-BRO-2/DOS-BRO-2_0001_frontcover.jpg"
  :
  : Adjust the $imageDir and facsimile path construction below if your
- : actual resources/images layout differs.
+ : actual image layout differs.
  :)
 
 (: Generates <page> elements from a directory of images, sorted by the
@@ -684,7 +684,7 @@ declare function libmgr:pages-from-directory-listing(
     $libraryID as xs:string,
     $siglum as xs:string
 ) as element(page)* {
-    let $imageDir := $config:app-root || "/resources/images/" || $libraryID || "/" || $siglum
+    let $imageDir := $config:images-root || "/" || $libraryID || "/" || $siglum
     let $files := xmldb:get-child-resources($imageDir)
     let $pattern := "^" || $siglum || "_(\d+)_(.+)\.(jpg|jpeg|png|tif|tiff|jp2)$"
     let $matched :=
@@ -709,7 +709,7 @@ declare function libmgr:check-directory-listing(
     $libraryID as xs:string,
     $siglum as xs:string
 ) as element(report) {
-    let $imageDir := $config:app-root || "/resources/images/" || $libraryID || "/" || $siglum
+    let $imageDir := $config:images-root || "/" || $libraryID || "/" || $siglum
     let $files := xmldb:get-child-resources($imageDir)
     let $pattern := "^" || $siglum || "_(\d+)_(.+)\.(jpg|jpeg|png|tif|tiff|jp2)$"
     let $matchedCount := count($files[matches(., $pattern, "i")])

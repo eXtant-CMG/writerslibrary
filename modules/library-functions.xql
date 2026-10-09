@@ -7,6 +7,20 @@ import module namespace templates="http://exist-db.org/xquery/html-templating" ;
 
 declare option exist:serialize "method=html5 media-type=text/html";
 
+(:
+ : Name of a second, third or fourth author, printed first name first.
+ : Authors encoded with <firstname>/<lastname> children are printed from
+ : those; an author given as a single string -- <author>Lucy Dale</author>,
+ : the form the spreadsheet importer writes for further authors -- is printed
+ : as it stands.
+ :)
+declare function library-functions:furtherAuthorName($author as element()?) {
+    if ($author/firstname or $author/lastname) then
+        ($author/firstname/node(), xs:string(" "), $author/lastname/node())
+    else
+        $author/node()
+};
+
 (: 
  : This module contains functions that are used by library-book-view.xql, library-browse.xql and
  : search.xql. All three of these views need a function that constructs the bibliography, for instance.
@@ -54,10 +68,10 @@ let $AuthorLine :=
             {if ($nrOfAuthors gt 1) then 
                (
                 if ($nrOfAuthors eq 4) then 
-                   <span>, {$biblModule/author[4]/firstname/node()}{xs:string(" ")}{$biblModule/author[4]/lastname/node()}, {$biblModule/author[3]/firstname/node()} {$biblModule/author[3]/lastname/node()}</span> else (),
+                   <span>, {library-functions:furtherAuthorName($biblModule/author[4])}, {library-functions:furtherAuthorName($biblModule/author[3])}</span> else (),
                 if ($nrOfAuthors eq 3) then 
-                   <span>, {$biblModule/author[3]/firstname/node()}{xs:string(" ")}{$biblModule/author[3]/lastname/node()}</span> else (),
-                <span> and {$biblModule/author[2]/firstname/node()}{xs:string(" ")}{$biblModule/author[2]/lastname/node()}</span>
+                   <span>, {library-functions:furtherAuthorName($biblModule/author[3])}</span> else (),
+                <span> and {library-functions:furtherAuthorName($biblModule/author[2])}</span>
                 )
              else ()}
              {": "}

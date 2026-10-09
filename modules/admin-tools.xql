@@ -177,8 +177,8 @@ then
                   }
                 </tbody>
               </table>
-              <p>To <span class="bold">delete</span> a library collection, <span class="bold">remove the folder</span> named with the library ID and delete the corresponding <code>&lt;library/&gt;</code> entry in <code>data/libraries.xml</code>.</p>
-              <p>To make a library collection the <span class="bold">default</span> collection, move its <code>&lt;library/&gt;</code> entry to the first position in <code>data/libraries.xml</code>.</p>
+              <p>To <span class="bold">delete</span> a library collection, <span class="bold">remove the folder</span> named with the library ID and delete the corresponding <code>&lt;library/&gt;</code> entry in <code>{$config:data-root}/libraries.xml</code>.</p>
+              <p>To make a library collection the <span class="bold">default</span> collection, move its <code>&lt;library/&gt;</code> entry to the first position in <code>{$config:data-root}/libraries.xml</code>.</p>
             </div>
     
             <hr/>

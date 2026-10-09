@@ -619,7 +619,7 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
                 <div id="about">
                     <h4>Welcome to {$libraryName}</h4>
 
-                    <p>To edit this home page, open <code>data/{$libraryId}/home.xml</code> in eXide.</p>
+                    <p>To edit this home page, open <code>{$config:data-root}/{$libraryId}/home.xml</code> in eXide.</p>
                     <div id="documentation-tools-container">
                         <div id="documentation">
                             <p class="documentation-links"><a style="color: #003828; font-size:1.4em; font-weight:bold;" href="../documentation/index.html">Documentation</a><br/>

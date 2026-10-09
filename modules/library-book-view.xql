@@ -23,7 +23,7 @@ declare option exist:serialize "method=html5 media-type=text/html";
    from the book node. :)
 declare function library-book-view:getBookNode($bookID as xs:string) {
   let $libraryID := request:get-parameter("libraryID", "sample-library")
-  let $booksCollection := $config:data-root || '/' || $libraryID || '/books'
+  let $booksCollection := config:xml-collection($libraryID)
   let $bookNode := collection($booksCollection)/range:field-eq("library-book-ID", $bookID)
   return $bookNode[1]
 };

@@ -5,7 +5,7 @@ xquery version "3.1";
  :
  : controller.xq forwards every .../$library-images/{path} URL here with
  : ?library={libraryID}&path={path}. Images live outside the app collection
- : ($config:images-root) because the eXist package manager deletes
+ : ({data-root}/{library}/images/) because the eXist package manager deletes
  : /db/apps/writerslibrary on every upgrade.
  :)
 
@@ -20,7 +20,7 @@ return
         "Bad image request"
     )
     else
-        let $uri := $config:images-root || "/" || $library || "/" || $path
+        let $uri := config:images-collection($library) || "/" || $path
         return
             if (util:binary-doc-available($uri)) then (
                 response:set-header("Cache-Control", "max-age=3600, must-revalidate"),

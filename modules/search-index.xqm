@@ -79,7 +79,7 @@ declare function si:build-index(
     let $stopwords := si:load-stopwords()
 
     (: Collect every book XML in this library :)
-    let $booksCol := concat($config:data-root, "/", $libraryId, "/books")
+    let $booksCol := config:xml-collection($libraryId)
     let $bookDocs := collection($booksCol)/book
 
     (: Per-book indexing :)

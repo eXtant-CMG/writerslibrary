@@ -320,7 +320,7 @@ let $logStart    := local:write-status($libraryID, "running", "init",
                         "Export started for library: " || $libraryID,
                         0, 0, 0, 0, 0)
 let $baseUrl     := local:base-url()
-let $booksCol    := $config:data-root || '/' || $libraryID || '/books'
+let $booksCol    := config:xml-collection($libraryID)
 let $bookFiles   := xmldb:get-child-resources($booksCol)[ends-with(., '.xml')]
 let $totalBooks  := count($bookFiles)
 

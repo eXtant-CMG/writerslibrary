@@ -28,7 +28,7 @@ declare function search:search($node as node(), $model as map(*), $q as xs:strin
         (: manually add the path to the library xml              :)
         let $libraryID := request:get-parameter("libraryID", "sample-library")
         let $libraryPath := $config:data-root || '/' || $libraryID
-        let $booksPath := $libraryPath || "/books"
+        let $booksPath := config:xml-collection($libraryID)
 
 
         (: put together a collection from this list:)

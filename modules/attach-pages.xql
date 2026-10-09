@@ -4,7 +4,7 @@ xquery version "3.1";
  : Driver for linking uploaded page images to book files.
  :
  : For every book in a library, looks for an image collection named after the
- : book id under $config:images-root/{library}/ and, in write mode, inserts the
+ : book id under {data-root}/{library}/images/ and, in write mode, inserts the
  : matching <page> blocks through libmgr:insert-pages-into-book().
  :
  : This must be a STORED query in modules/ -- config:app-root does not resolve
@@ -29,8 +29,8 @@ declare variable $library := request:get-parameter("library", "joyce-library");
 declare variable $write   := request:get-parameter("write", "no") = "yes";
 declare variable $only    := request:get-parameter("book", "");
 
-let $imageRoot := $config:images-root || "/" || $library
-let $books := collection($config:data-root || "/" || $library || "/books")/book
+let $imageRoot := config:images-collection($library)
+let $books := collection(config:xml-collection($library))/book
 let $imageDirs :=
     if (xmldb:collection-available($imageRoot))
     then xmldb:get-child-collections($imageRoot)

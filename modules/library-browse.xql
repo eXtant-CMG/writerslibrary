@@ -29,7 +29,7 @@ declare function library-browse:navbar($node as node(), $model as map(*)){
 
     let $libraryID := request:get-parameter("libraryID", "sample-library")
     let $configDoc := doc($config:data-root || '/' || $libraryID || '/config.xml')
-    let $booksCollection := $config:data-root || '/' || $libraryID || '/books'
+    let $booksCollection := config:xml-collection($libraryID)
     let $books := collection($booksCollection)/book
 
     (: The current sorting & browsing specifications are retrieved through the param 
@@ -142,7 +142,7 @@ declare function library-browse:getEntries($node as node(), $model as map(*)){
 
     let $libraryID := request:get-parameter("libraryID", "sample-library")
     let $configDoc := doc($config:data-root || '/' || $libraryID || '/config.xml')
-    let $booksCollection := $config:data-root || '/' || $libraryID || '/books'
+    let $booksCollection := config:xml-collection($libraryID)
     let $books := collection($booksCollection)/book
 
     (: in the following two parameters the actual range query is constructed. :)

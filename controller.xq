@@ -2,6 +2,7 @@ xquery version "3.0";
 
 import module namespace library-browse = "http://exist-db.org/apps/writerslibrary/library-browse" at "modules/library-browse.xql";
 import module namespace admin-tools = "http://exist-db.org/apps/writerslibrary/admin-tools" at "modules/admin-tools.xql";
+import module namespace config = "http://exist-db.org/apps/writerslibrary/config" at "modules/config.xqm";
 
 declare variable $exist:path external;
 declare variable $exist:resource external;
@@ -11,7 +12,7 @@ declare variable $exist:root external;
 
 (: Load default library from data :)
 declare variable $default-library := 
-    let $doc := doc("/db/apps" || $exist:controller || "/data/libraries.xml")
+    let $doc := doc($config:data-root || "/libraries.xml")
     let $lib := $doc/libraries/library[1]/@id
     return 
         if ($lib) then string($lib) 
@@ -28,15 +29,14 @@ else if ($exist:path eq "/") then
         <redirect url="{request:get-context-path()}/apps/writerslibrary/{$default-library}/home/welcome.html"/>
     </dispatch>
     
-        (: forwards all paths to images to resources/images/{$library-id}/   :)
-        (: best practice, however, is to fetch the images from outside :)
-        (: of the eXist app. :)
+        (: serves .../$library-images/{path} from {data-root}/{library-id}/images/{path} via modules/image.xql :)
     else if (contains($exist:path, "/$library-images/")) then
     let $imageLibraryID := tokenize($exist:path, '/')[2]
     return
         <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-            <forward url="{$exist:controller}/resources/images/{$imageLibraryID}/{substring-after($exist:path, '/$library-images/')}">
-                <set-header name="Cache-Control" value="max-age=3600, must-revalidate"/>
+            <forward url="{$exist:controller}/modules/image.xql">
+                <add-parameter name="library" value="{$imageLibraryID}"/>
+                <add-parameter name="path" value="{substring-after($exist:path, '/$library-images/')}"/>
             </forward>
         </dispatch>
         

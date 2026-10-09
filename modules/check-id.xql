@@ -4,7 +4,7 @@ import module namespace config="http://exist-db.org/apps/writerslibrary/config" 
 
 declare function local:check-id($string as xs:string) as xs:boolean {
     let $libraryID := request:get-parameter("libraryID", "sample-library")
-    let $booksCollection := $config:data-root || '/' || $libraryID || '/books'
+    let $booksCollection := config:xml-collection($libraryID)
     return
         not(collection($booksCollection)/range:field-eq("library-book-ID", $string))
 };

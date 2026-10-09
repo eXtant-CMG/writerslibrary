@@ -123,7 +123,7 @@ declare function libmgr:pages-from-iiif-manifest($manifestUrl as xs:string) {
 };
 
 (:~
- : Create a new book entry and store it in the library's books collection.
+ : Create a new book entry and store it in the library's xml collection.
  : @param $libraryId  the target library (e.g. "woolf-library")
  : @param $bookId     the unique book siglum / filename stem (e.g. "WOO-WAV")
  : @param $bookType   "EL" (extant) or "LL" (lost)
@@ -176,7 +176,7 @@ declare function libmgr:create-book(
         else if (not($bookType = ("EL", "LL"))) then
             map { "success": false(), "message": "Book type must be EL or LL" }
         else
-            let $booksPath := $config:data-root || '/' || $libraryId || '/books'
+            let $booksPath := config:xml-collection($libraryId)
             let $filename  := $bookId || '.xml'
 
             (: Check the file doesn't already exist :)
@@ -244,8 +244,9 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
         (: Create the collection/directory :)
         let $createCollection := xmldb:create-collection($config:data-root, $libraryId)
 
-        (: Create books/ subcollection :)
-        let $createBooksCollection := xmldb:create-collection($libraryPath, "books")
+        (: Create xml/ (book files) and images/ subcollections :)
+        let $createBooksCollection := xmldb:create-collection($libraryPath, "xml")
+        let $createImagesCollection := xmldb:create-collection($libraryPath, "images")
 
         (: Create sample book ADA-MYF.xml :)
         let $bookXml :=
@@ -278,7 +279,7 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
           )
 
         let $storeBook :=
-          xmldb:store($libraryPath || "/books", "ADA-MYF.xml", $prettyBook, "application/xml")
+          xmldb:store(config:xml-collection($libraryId), "ADA-MYF.xml", $prettyBook, "application/xml")
 
 
         (: Create config.xml :)
@@ -619,7 +620,7 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
                 <div id="about">
                     <h4>Welcome to {$libraryName}</h4>
 
-                    <p>To edit this home page, open <code>data/{$libraryId}/home.xml</code> in eXide.</p>
+                    <p>To edit this home page, open <code>{$config:data-root}/{$libraryId}/home.xml</code> in eXide.</p>
                     <div id="documentation-tools-container">
                         <div id="documentation">
                             <p class="documentation-links"><a style="color: #003828; font-size:1.4em; font-weight:bold;" href="../documentation/index.html">Documentation</a><br/>
@@ -664,7 +665,7 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
  : of FADGI-style-named image files (e.g. DOS-BRO-2_0001_frontcover.jpg).
  :
  : Intended usage:
- :   1. Upload images to resources/images/{libraryID}/{siglum}/ as usual.
+ :   1. Upload images to {data-root}/{libraryID}/images/{siglum}/.
  :   2. Open eXide, import this module (or paste into library-manager.xql),
  :      and call libmgr:pages-from-directory-listing() to preview the XML,
  :      or libmgr:insert-pages-into-book() to write it straight into a book.
@@ -674,7 +675,7 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
  :      facsimile "DOS-BRO-2/DOS-BRO-2_0001_frontcover.jpg"
  :
  : Adjust the $imageDir and facsimile path construction below if your
- : actual resources/images layout differs.
+ : actual image layout differs.
  :)
 
 (: Generates <page> elements from a directory of images, sorted by the
@@ -684,7 +685,7 @@ declare function libmgr:pages-from-directory-listing(
     $libraryID as xs:string,
     $siglum as xs:string
 ) as element(page)* {
-    let $imageDir := $config:app-root || "/resources/images/" || $libraryID || "/" || $siglum
+    let $imageDir := config:images-collection($libraryID) || "/" || $siglum
     let $files := xmldb:get-child-resources($imageDir)
     let $pattern := "^" || $siglum || "_(\d+)_(.+)\.(jpg|jpeg|png|tif|tiff|jp2)$"
     let $matched :=
@@ -709,7 +710,7 @@ declare function libmgr:check-directory-listing(
     $libraryID as xs:string,
     $siglum as xs:string
 ) as element(report) {
-    let $imageDir := $config:app-root || "/resources/images/" || $libraryID || "/" || $siglum
+    let $imageDir := config:images-collection($libraryID) || "/" || $siglum
     let $files := xmldb:get-child-resources($imageDir)
     let $pattern := "^" || $siglum || "_(\d+)_(.+)\.(jpg|jpeg|png|tif|tiff|jp2)$"
     let $matchedCount := count($files[matches(., $pattern, "i")])
@@ -731,7 +732,7 @@ declare function libmgr:get-book-doc(
     $libraryID as xs:string,
     $bookID as xs:string
 ) as node()? {
-    let $booksCollection := $config:data-root || '/' || $libraryID || '/books'
+    let $booksCollection := config:xml-collection($libraryID)
     return collection($booksCollection)/range:field-eq("library-book-ID", $bookID)[1]
 };
 

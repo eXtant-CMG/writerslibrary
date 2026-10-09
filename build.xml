@@ -15,11 +15,21 @@
   </target>
   <!-- Dev build (includes everything unoptimized) -->
   <target name="dev" depends="init" description="compile all source files">
-    <zip basedir="." destfile="${build.dir}/${project.app}-${project.version}-dev.xar" excludes="**/${build.dir}/**, **/node_modules/**"/>
+    <zip destfile="${build.dir}/${project.app}-${project.version}-dev.xar">
+      <fileset dir="." excludes="**/${build.dir}/**, **/node_modules/**, .env*, data/**, resources/images/*/*/**, .idea/**, .vscode/**, *.xpr"/>
+      <fileset dir="." includes="data/libraries.xml, data/sample-library/**, resources/images/sample-library/**"/>
+    </zip>
   </target>
   <!-- Release build -->
   <target name="deploy" depends="init" description="compile release build">
-    <zip basedir="." destfile="${build.dir}/${project.app}-${project.version}.xar" excludes="**/${build.dir}/**, .existdb.json, .yo-rc.json, **/node_modules/**, **/reports/**, README.md, **/.git*/** "/>
+    <!-- data/ and resources/images/ ship only the sample-library seed (plus the UI
+         images at the top of resources/images/); post-install.xq copies the seed to
+         the external data and images roots on a fresh install. Library data or scans
+         that happen to be in the working tree must never end up in a XAR. -->
+    <zip destfile="${build.dir}/${project.app}-${project.version}.xar">
+      <fileset dir="." excludes="**/${build.dir}/**, .existdb.json, .yo-rc.json, **/node_modules/**, **/reports/**, README.md, **/.git*/**, .env*, data/**, test/**, cypress.config.js, package.json, package-lock.json, push-exist.sh, watch-exist.sh, book.rng, build.xml, resources/images/*/*/**, .idea/**, .vscode/**, *.xpr"/>
+      <fileset dir="." includes="data/libraries.xml, data/sample-library/**, resources/images/sample-library/**"/>
+    </zip>
   </target>
   <target name="all" depends="dev, deploy">
     <tstamp/>

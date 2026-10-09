@@ -18,6 +18,7 @@ xquery version "3.1";
 module namespace si = "http://bibundina.org/ns/search-index";
 
 import module namespace xmldb  = "http://exist-db.org/xquery/xmldb";
+import module namespace config = "http://exist-db.org/apps/writerslibrary/config" at "config.xqm";
 import module namespace util   = "http://exist-db.org/xquery/util";
 import module namespace transform = "http://exist-db.org/xquery/transform";
 
@@ -78,7 +79,7 @@ declare function si:build-index(
     let $stopwords := si:load-stopwords()
 
     (: Collect every book XML in this library :)
-    let $booksCol := concat("/db/apps/writerslibrary/data/", $libraryId, "/books")
+    let $booksCol := config:xml-collection($libraryId)
     let $bookDocs := collection($booksCol)/book
 
     (: Per-book indexing :)

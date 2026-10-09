@@ -34,7 +34,37 @@ declare variable $config:repo-descriptor := doc(concat($config:app-root, "/repo.
 
 declare variable $config:expath-descriptor := doc(concat($config:app-root, "/expath-pkg.xml"))/expath:package;
 
-declare variable $config:data-root := $config:app-root || "/data";
+(:
+    Research data lives OUTSIDE the app collection. The eXist package manager
+    deletes /db/apps/writerslibrary on every upgrade, so anything stored under
+    it is lost on deploy. post-install.xq seeds this collection from the
+    packaged data/ (sample-library + libraries.xml) on a fresh install only.
+
+    /db/data/ is the parent for data that is not part of any package; this
+    app's data lives in its own subcollection there.
+
+    The "module" facets in collection.xconf take
+    substring-after(util:collection-name(.), 'data/'), which gives
+    "writerslibrary/{library}/xml": the first "data/" in the path must be the
+    /db/data/ parent. Keep in sync with pre-install.xq and post-install.xq.
+:)
+declare variable $config:data-root := "/db/data/writerslibrary";
+
+(:
+    Layout of one library under the data root:
+      {data-root}/{libraryID}/config.xml
+      {data-root}/{libraryID}/home.xml
+      {data-root}/{libraryID}/xml/      one file per book
+      {data-root}/{libraryID}/images/   page images, served by modules/image.xql
+    Build these paths through the two functions below, never by hand.
+:)
+declare function config:xml-collection($libraryID as xs:string) as xs:string {
+    $config:data-root || "/" || $libraryID || "/xml"
+};
+
+declare function config:images-collection($libraryID as xs:string) as xs:string {
+    $config:data-root || "/" || $libraryID || "/images"
+};
 
 (: a user created for the export to static website feature :)
 declare variable $config:export-base-url := "http://localhost:8080/exist/apps/writerslibrary";

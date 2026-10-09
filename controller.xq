@@ -29,7 +29,7 @@ else if ($exist:path eq "/") then
         <redirect url="{request:get-context-path()}/apps/writerslibrary/{$default-library}/home/welcome.html"/>
     </dispatch>
     
-        (: serves .../$library-images/{path} from $config:images-root/{library-id}/{path} :)
+        (: serves .../$library-images/{path} from {data-root}/{library-id}/images/{path} via modules/image.xql :)
     else if (contains($exist:path, "/$library-images/")) then
     let $imageLibraryID := tokenize($exist:path, '/')[2]
     return

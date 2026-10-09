@@ -28,10 +28,10 @@
 
 <p>After installation, Bibundina opens with a welcome page and loads a <strong>sample library collection</strong> containing example records that demonstrate the encoding schema. This sample library is fully functional and can be used to encode your own material, but we recommend creating a <strong>separate library collection</strong> for production use. Bibundina supports working with <strong>multiple library collections</strong>, and you can switch between them at any time using the admin tools (see the <em>Admin Tools</em> section for details). Throughout this documentation, the sample library (<code>sample-library</code>) is used to illustrate the app’s features.</p>
 
-<p>Data entry in Bibundina is done by creating and editing individual XML files, one per book. Each book file is stored in the <code>books/</code> subfolder of its library collection, and is named after the book's unique ID (e.g., <code>ARA-LIB.xml</code>). Some library-specific settings can be configured in <code>config.xml</code> and the contents of the home page can be edited in <code>home.xml</code>. In the case of the sample library, the relevant files and folders are located at:</p>
+<p>Data entry in Bibundina is done by creating and editing individual XML files, one per book. Each book file is stored in the <code>xml/</code> subfolder of its library collection, and is named after the book's unique ID (e.g., <code>ARA-LIB.xml</code>). Some library-specific settings can be configured in <code>config.xml</code> and the contents of the home page can be edited in <code>home.xml</code>. In the case of the sample library, the relevant files and folders are located at:</p>
 
 <ul>
-<li><code>/db/writerslibrary-data/sample-library/books/</code> (one <code>.xml</code> file per book)</li>
+<li><code>/db/writerslibrary-data/sample-library/xml/</code> (one <code>.xml</code> file per book)</li>
 <li><code>/db/writerslibrary-data/sample-library/config.xml</code></li>
 <li><code>/db/writerslibrary-data/sample-library/home.xml</code></li>
 </ul>
@@ -100,7 +100,7 @@
 
 <h2 class="documentation" id="toc_5">Encoding Schema: Book XML Files</h2>
 
-<p>Each book in the library is stored as a separate XML file in the <code>books/</code> folder of the library collection. Book files are named after the book’s unique ID (e.g., <code>ARA-LIB.xml</code>). Add book entries following the custom encoding scheme documented in the “Encoding manual” section.</p>
+<p>Each book in the library is stored as a separate XML file in the <code>xml/</code> folder of the library collection. Book files are named after the book’s unique ID (e.g., <code>ARA-LIB.xml</code>). Add book entries following the custom encoding scheme documented in the “Encoding manual” section.</p>
 
 <p>The root element is <code>&lt;book&gt;</code>, which has attributes <code>type</code> and <code>id</code>. The <code>type</code> attribute specifies the type of book (<code>EL</code> (extant library) <code>LL</code> (lost entry), while the <code>id</code> attribute provides a unique identifier for the book.</p>
 
@@ -368,7 +368,7 @@
     &lt;facsimile&gt;ARA-LIB/cover.jpg&lt;/facsimile&gt;
 &lt;/page&gt;</code></pre></div>
 
-<p>The app is set to search for the contents of the <code>&lt;facsimile&gt;</code> element (e.g., <code>ARA-LIB/cover.jpg</code>) in the <code>/db/writerslibrary-images/sample-library/</code> collection (one subcollection per library, outside the app so that upgrading the app does not delete the images). Admins can add images to this folder via eXide by clicking <code>Manage</code> under the <code>File</code> menu and navigating to the folder in the DB Manager window (click the upload icon to upload files or folders). Images can also be added by dropping them into the folder when using the app via oXygen. The <code>&lt;facsimile&gt;</code> element must reference the correct image location and file name.</p>
+<p>The app is set to search for the contents of the <code>&lt;facsimile&gt;</code> element (e.g., <code>ARA-LIB/cover.jpg</code>) in the <code>/db/writerslibrary-data/sample-library/images/</code> collection (each library keeps its images in its own <code>images/</code> subcollection, outside the app so that upgrading the app does not delete them). Admins can add images to this folder via eXide by clicking <code>Manage</code> under the <code>File</code> menu and navigating to the folder in the DB Manager window (click the upload icon to upload files or folders). Images can also be added by dropping them into the folder when using the app via oXygen. The <code>&lt;facsimile&gt;</code> element must reference the correct image location and file name.</p>
 
 <p><strong>Note</strong>: Storing large amounts of images in the writer’s library app is <strong>not recommended</strong>. This is because eXist-db is not designed to host images and doing so can increase the file size of the app instance. To incorporate a substantial collection of images in the app, it is preferable to host them in a static folder on the server (or local machine), or on a IIIF server.</p>
 
@@ -378,7 +378,7 @@
 
 <p>By following the outlined steps, the app can retrieve images from a static folder named <code>library-images</code> (on a computer or on a server).</p>
 
-<p>In the file <code>db/writerslibrary/controller.xq</code> the following statement specifies that paths to images in <code>&lt;facsimile&gt;</code> elements are served by <code>modules/image.xql</code> from <code>/db/writerslibrary-images/{library-id}/</code>:</p>
+<p>In the file <code>db/writerslibrary/controller.xq</code> the following statement specifies that paths to images in <code>&lt;facsimile&gt;</code> elements are served by <code>modules/image.xql</code> from <code>/db/writerslibrary-data/{library-id}/images/</code>:</p>
 
 <div><pre><code class="language-none">    else if (contains($exist:path, "/$library-images/")) then
     &lt;dispatch xmlns="http://exist.sourceforge.net/NS/exist"&gt;

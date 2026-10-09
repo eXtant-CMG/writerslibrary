@@ -41,17 +41,26 @@ declare variable $config:expath-descriptor := doc(concat($config:app-root, "/exp
     packaged data/ (sample-library + libraries.xml) on a fresh install only.
 
     The path must end in "data": the "module" facets in collection.xconf take
-    substring-after(util:collection-name(.), 'data/') to get "{library}/books".
+    substring-after(util:collection-name(.), 'data/') to get "{library}/xml".
     Keep in sync with pre-install.xq and post-install.xq.
 :)
 declare variable $config:data-root := "/db/writerslibrary-data";
 
 (:
-    Page images, one subcollection per library: {images-root}/{libraryID}/...
-    Outside the app collection for the same reason as the data root; served
-    by modules/image.xql. Keep in sync with post-install.xq.
+    Layout of one library under the data root:
+      {data-root}/{libraryID}/config.xml
+      {data-root}/{libraryID}/home.xml
+      {data-root}/{libraryID}/xml/      one file per book
+      {data-root}/{libraryID}/images/   page images, served by modules/image.xql
+    Build these paths through the two functions below, never by hand.
 :)
-declare variable $config:images-root := "/db/writerslibrary-images";
+declare function config:xml-collection($libraryID as xs:string) as xs:string {
+    $config:data-root || "/" || $libraryID || "/xml"
+};
+
+declare function config:images-collection($libraryID as xs:string) as xs:string {
+    $config:data-root || "/" || $libraryID || "/images"
+};
 
 (: a user created for the export to static website feature :)
 declare variable $config:export-base-url := "http://localhost:8080/exist/apps/writerslibrary";

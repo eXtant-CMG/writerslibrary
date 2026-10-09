@@ -172,3 +172,5 @@ modules/WLtoJL.xql
 
 # Local dev helpers
 watch-exist.sh
+# Deploy credentials (xst / EXISTDB_*) -- never commit
+.env.*

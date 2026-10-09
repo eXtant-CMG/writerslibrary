@@ -129,8 +129,8 @@ declare function library-browse:navbar($node as node(), $model as map(*)){
  :              <keys>$currentBrowseValue, "EL"</keys>
  :      </rangeQuery>
  : which means the "library-book-Title" field starts with the current browse value,
- : and the "library-book-type" (EL or LL) should equal EL, which means only retrieve
- : books from the extant library (and not the lost library).
+ : and the "library-book-type" (EL or SL) should equal EL, which means only retrieve
+ : books from the extant library (and not the shadow library).
  : This query is loaded from the config file into this function and evaluated. The relevant <book>
  : nodes are retrieved and processed further to make the HTML output.
  :)
@@ -201,11 +201,11 @@ declare function library-browse:getEntries($node as node(), $model as map(*)){
                       <a class="booklinks" href="../{$bookID}/index.html">
                         <div class="imagecontainer">
                           <img class="thumb" src="{if (starts-with(util:eval-with-context($pathToThumbnail,$imgUrlContext,false()),'https')) then '' else $imgUrl/serverPath/text()}{util:eval-with-context($pathToThumbnail,$imgUrlContext,false())}"/>
-                          {if ($result/data(@type) eq "LL") then <span class="lostthumb">L<br/>O<br/>S<br/>T</span> else ()}
+                          {if ($result/data(@type) eq "SL") then <span class="shadowthumb">S<br/>H<br/>A<br/>D<br/>O<br/>W</span> else ()}
                         </div>
                         </a>
                       else 
-                        <a class="booklinks" href="../{$bookID}/index.html"><!--<a class="booknolink">--><div class="imagecontainer"><span class="noscan"/>{if ($result/data(@type) eq "LL") then <span class="lostthumb">L<br/>O<br/>S<br/>T</span> else ()}</div></a>
+                        <a class="booklinks" href="../{$bookID}/index.html"><!--<a class="booknolink">--><div class="imagecontainer"><span class="noscan"/>{if ($result/data(@type) eq "SL") then <span class="shadowthumb">S<br/>H<br/>A<br/>D<br/>O<br/>W</span> else ()}</div></a>
                       }
                    </td>
                    <td valign="top">

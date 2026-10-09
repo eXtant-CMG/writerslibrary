@@ -126,7 +126,7 @@ declare function libmgr:pages-from-iiif-manifest($manifestUrl as xs:string) {
  : Create a new book entry and store it in the library's xml collection.
  : @param $libraryId  the target library (e.g. "woolf-library")
  : @param $bookId     the unique book siglum / filename stem (e.g. "WOO-WAV")
- : @param $bookType   "EL" (extant) or "LL" (lost)
+ : @param $bookType   "EL" (extant) or "SL" (shadow library)
  : @param $firstname  author firstname
  : @param $lastname   author lastname
  : @param $title      book title
@@ -173,8 +173,8 @@ declare function libmgr:create-book(
             map { "success": false(), "message": "Invalid book ID format" }
         else if ($bookId eq "" or $libraryId eq "") then
             map { "success": false(), "message": "Book ID and library ID are required" }
-        else if (not($bookType = ("EL", "LL"))) then
-            map { "success": false(), "message": "Book type must be EL or LL" }
+        else if (not($bookType = ("EL", "SL"))) then
+            map { "success": false(), "message": "Book type must be EL or SL" }
         else
             let $booksPath := config:xml-collection($libraryId)
             let $filename  := $bookId || '.xml'

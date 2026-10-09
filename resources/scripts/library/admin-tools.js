@@ -109,7 +109,7 @@ $(document).ready(function() {
             action:            'create-book',
             libraryId:         libraryId,
             bookId:            $('#bookID').val(),
-            bookType:          $("input[name='ELLL']:checked").val(),
+            bookType:          $("input[name='ELSL']:checked").val(),
             firstname:         $('#firstname').val(),
             lastname:          $('#lastname').val(),
             title:             $('#title').val(),

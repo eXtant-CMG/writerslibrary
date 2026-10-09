@@ -16,11 +16,14 @@ declare variable $target external;
 (: Library data lives outside the app collection -- see $config:data-root
    in modules/config.xqm, which this must match. :)
 declare variable $data-root := "/db/writerslibrary-data";
+(: ...and $config:images-root :)
+declare variable $images-root := "/db/writerslibrary-images";
 
 (:~
- : Seed the data root from the packaged data/ (sample-library + libraries.xml),
- : but ONLY when it has no libraries.xml yet, i.e. on a fresh install. On an
- : upgrade this does nothing: existing library data is never overwritten.
+ : Seed the data root from the packaged data/ (sample-library + libraries.xml)
+ : and the images root from resources/images/sample-library, but ONLY when the
+ : data root has no libraries.xml yet, i.e. on a fresh install. On an upgrade
+ : this does nothing: existing library data and images are never overwritten.
  :)
 declare function local:seed-data-root() {
     if (doc-available($data-root || "/libraries.xml")) then
@@ -32,8 +35,21 @@ declare function local:seed-data-root() {
             for $lib in xmldb:get-child-collections($seed)
             where not(xmldb:collection-available($data-root || "/" || $lib))
             return xmldb:copy-collection($seed || "/" || $lib, $data-root),
-            xmldb:copy-resource($seed, "libraries.xml", $data-root, "libraries.xml")
+            xmldb:copy-resource($seed, "libraries.xml", $data-root, "libraries.xml"),
+            local:seed-images()
         )
+};
+
+declare function local:seed-images() {
+    let $seed := $target || "/resources/images/sample-library"
+    let $_ :=
+        if (xmldb:collection-available($images-root)) then ()
+        else xmldb:create-collection("/db", substring-after($images-root, "/db/"))
+    return
+        if (xmldb:collection-available($seed)
+            and not(xmldb:collection-available($images-root || "/sample-library")))
+        then xmldb:copy-collection($seed, $images-root)
+        else ()
 };
 (: Create export service account if it doesn't exist :)
 let $_ :=

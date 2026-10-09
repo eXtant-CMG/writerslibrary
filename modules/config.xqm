@@ -46,6 +46,13 @@ declare variable $config:expath-descriptor := doc(concat($config:app-root, "/exp
 :)
 declare variable $config:data-root := "/db/writerslibrary-data";
 
+(:
+    Page images, one subcollection per library: {images-root}/{libraryID}/...
+    Outside the app collection for the same reason as the data root; served
+    by modules/image.xql. Keep in sync with post-install.xq.
+:)
+declare variable $config:images-root := "/db/writerslibrary-images";
+
 (: a user created for the export to static website feature :)
 declare variable $config:export-base-url := "http://localhost:8080/exist/apps/writerslibrary";
 declare variable $config:export-user := "export-service";

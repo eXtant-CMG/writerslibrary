@@ -15,7 +15,7 @@ declare variable $target external;
 
 (: Library data lives outside the app collection -- see $config:data-root
    in modules/config.xqm, which this must match. :)
-declare variable $data-root := "/db/writerslibrary-data";
+declare variable $data-root := "/db/data/writerslibrary";
 
 declare function local:copy-resources($from as xs:string, $to as xs:string) {
     for $r in xmldb:get-child-resources($from)
@@ -38,7 +38,11 @@ declare function local:seed-data-root() {
     if (doc-available($data-root || "/libraries.xml")) then
         ()
     else
-        let $_ := xmldb:create-collection("/db", substring-after($data-root, "/db/"))
+        let $_ := (
+            if (xmldb:collection-available("/db/data")) then ()
+            else xmldb:create-collection("/db", "data"),
+            xmldb:create-collection("/db/data", "writerslibrary")
+        )
         let $seed := $target || "/data"
         return (
             for $lib in xmldb:get-child-collections($seed)

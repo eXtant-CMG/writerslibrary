@@ -40,11 +40,15 @@ declare variable $config:expath-descriptor := doc(concat($config:app-root, "/exp
     it is lost on deploy. post-install.xq seeds this collection from the
     packaged data/ (sample-library + libraries.xml) on a fresh install only.
 
-    The path must end in "data": the "module" facets in collection.xconf take
-    substring-after(util:collection-name(.), 'data/') to get "{library}/xml".
-    Keep in sync with pre-install.xq and post-install.xq.
+    /db/data/ is the parent for data that is not part of any package; this
+    app's data lives in its own subcollection there.
+
+    The "module" facets in collection.xconf take
+    substring-after(util:collection-name(.), 'data/'), which gives
+    "writerslibrary/{library}/xml": the first "data/" in the path must be the
+    /db/data/ parent. Keep in sync with pre-install.xq and post-install.xq.
 :)
-declare variable $config:data-root := "/db/writerslibrary-data";
+declare variable $config:data-root := "/db/data/writerslibrary";
 
 (:
     Layout of one library under the data root:

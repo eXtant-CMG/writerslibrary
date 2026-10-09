@@ -16,7 +16,7 @@
   <!-- Dev build (includes everything unoptimized) -->
   <target name="dev" depends="init" description="compile all source files">
     <zip destfile="${build.dir}/${project.app}-${project.version}-dev.xar">
-      <fileset dir="." excludes="**/${build.dir}/**, **/node_modules/**, .env*, data/**, resources/images/*/**"/>
+      <fileset dir="." excludes="**/${build.dir}/**, **/node_modules/**, .env*, data/**, resources/images/*/*/**"/>
       <fileset dir="." includes="data/libraries.xml, data/sample-library/**, resources/images/sample-library/**"/>
     </zip>
   </target>
@@ -27,7 +27,7 @@
          the external data and images roots on a fresh install. Library data or scans
          that happen to be in the working tree must never end up in a XAR. -->
     <zip destfile="${build.dir}/${project.app}-${project.version}.xar">
-      <fileset dir="." excludes="**/${build.dir}/**, .existdb.json, .yo-rc.json, **/node_modules/**, **/reports/**, README.md, **/.git*/**, .env*, data/**, test/**, cypress.config.js, package.json, package-lock.json, push-exist.sh, watch-exist.sh, book.rng, build.xml, resources/images/*/**"/>
+      <fileset dir="." excludes="**/${build.dir}/**, .existdb.json, .yo-rc.json, **/node_modules/**, **/reports/**, README.md, **/.git*/**, .env*, data/**, test/**, cypress.config.js, package.json, package-lock.json, push-exist.sh, watch-exist.sh, book.rng, build.xml, resources/images/*/*/**"/>
       <fileset dir="." includes="data/libraries.xml, data/sample-library/**, resources/images/sample-library/**"/>
     </zip>
   </target>

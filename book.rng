@@ -1,0 +1,856 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Bibundina book schema (writerslibrary) - Relax NG
+
+  Validated against all 67 book files:
+    data/sample-library/books/  (30)
+    joyce-library/books/        (13)
+    woolf-library/books/        (24)
+
+  Sections marked LEGACY describe constructs that exist in current data but
+  are scheduled for migration. Each says what to do and what to delete once
+  the data is clean. Nothing else in the schema depends on them.
+
+  Validate:
+      jing book.rng path/to/book.xml
+  Or inside eXist:
+      validation:jing($doc, xs:anyURI('.../book.rng'))
+-->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+  <start>
+    <ref name="book"/>
+  </start>
+
+  <!-- ================================================================
+       Document root
+       ================================================================ -->
+
+  <define name="book">
+    <element name="book">
+      <attribute name="id">
+        <a:documentation>
+          Unique within the library, and the filename stem.
+
+          The pattern below admits the underscore, which
+          libmgr:create-book's own regex ^[a-zA-Z][a-zA-Z0-9-]+$ rejects.
+          Four woolf books already use it (SAC-COL_CP1, SAC-COL_CP2,
+          SCO-ABB_CP1, SCO-ABB_CP2), so the UI currently cannot recreate
+          books that already exist. Widen the XQuery regex or rename those
+          four; until then this pattern matches reality.
+        </a:documentation>
+        <data type="token">
+          <param name="pattern">[a-zA-Z][a-zA-Z0-9_-]*</param>
+        </data>
+      </attribute>
+      <attribute name="type">
+        <a:documentation>
+          EL = extant library (the book survives and is located)
+          SL = shadow library (the agreed term; the spreadsheet uses it)
+
+          LEGACY: LL (lost library) and VL (virtual library) are earlier
+          names from the same debate, still present in the data - LL in
+          sample-library, VL on six joyce books. Both migrate to SL.
+
+          Migrating also touches:
+            - collection.xconf range field library-book-type
+            - libmgr:create-book, which hardcodes ("EL","LL")
+            - per-library config.xml browse values referencing them
+          Remove LL and VL from this list once the data is converted.
+        </a:documentation>
+        <choice>
+          <value>EL</value>
+          <value>SL</value>
+          <value>LL</value>
+          <value>VL</value>
+        </choice>
+      </attribute>
+      <oneOrMore>
+        <ref name="module"/>
+      </oneOrMore>
+      <optional>
+        <ref name="images"/>
+      </optional>
+    </element>
+  </define>
+
+  <define name="images">
+    <a:documentation>
+      LEGACY. Always empty in every file that carries it, and nothing
+      reads it. Delete from the data, then delete this pattern.
+    </a:documentation>
+    <element name="images">
+      <empty/>
+    </element>
+  </define>
+
+  <!-- ================================================================
+       Module dispatch
+
+       collection.xconf indexes module[1] positionally for author, title
+       and subtitle, so the bibl module must come first. Relax NG cannot
+       state "the first module must be bibl" without fixing the order of
+       all the others, so that stays an importer-level check.
+       ================================================================ -->
+
+  <define name="module">
+    <element name="module">
+      <choice>
+        <group>
+          <attribute name="type"><value>bibl</value></attribute>
+          <ref name="module.bibl"/>
+        </group>
+        <group>
+          <attribute name="type"><value>prop</value></attribute>
+          <ref name="module.prop"/>
+        </group>
+        <group>
+          <attribute name="type"><value>reading</value></attribute>
+          <ref name="module.reading"/>
+        </group>
+        <group>
+          <attribute name="type"><value>context</value></attribute>
+          <ref name="module.context"/>
+        </group>
+        <group>
+          <attribute name="type"><value>pages</value></attribute>
+          <ref name="module.pages"/>
+        </group>
+      </choice>
+    </element>
+  </define>
+
+  <!-- ================================================================
+       Phrase-level markup
+
+       These elements are serialised into the HTML output as-is. Browsers
+       treat unknown tags as inline, so they are styled by tag name in
+       resources/css/library-biblio.css - which is how unclear already
+       gets its square brackets.
+
+       Consequence: adding an inline element needs a CSS rule, not XQuery.
+       The one exception is ptr, which must become an anchor and therefore
+       needs library-functions:renderInline.
+       ================================================================ -->
+
+  <define name="inline">
+    <choice>
+      <element name="u">
+        <a:documentation>Underlined by the reader.</a:documentation>
+        <ref name="inline.content"/>
+      </element>
+      <element name="m">
+        <a:documentation>
+          Marginal note. Separately Lucene-indexed and powers the
+          marginalia search, so this is semantic, not presentational.
+        </a:documentation>
+        <ref name="inline.content"/>
+      </element>
+      <element name="i"><ref name="inline.content"/></element>
+      <element name="sup"><ref name="inline.content"/></element>
+      <element name="unclear">
+        <a:documentation>
+          Uncertain reading. Rendered in square brackets by CSS
+          (unclear::before / unclear::after).
+        </a:documentation>
+        <ref name="inline.content"/>
+      </element>
+      <element name="hi">
+        <attribute name="rend">
+          <a:documentation>
+            In use: italic. Also referenced for marginalia: circled.
+
+            No CSS rule for hi[rend] exists yet, so this currently renders
+            as plain text. The only "hi" rule in the stylesheets is
+            span.hi in search.css, which is search-hit highlighting and
+            unrelated. Needs, in library-biblio.css:
+              hi[rend="italic"]  {font-style: italic;}
+              hi[rend="circled"] {border:1px solid; border-radius:50%;}
+          </a:documentation>
+          <text/>
+        </attribute>
+        <ref name="inline.content"/>
+      </element>
+      <ref name="ptr"/>
+      <element name="lb">
+        <a:documentation>Line break.</a:documentation>
+        <empty/>
+      </element>
+    </choice>
+  </define>
+
+  <define name="ptr">
+    <element name="ptr">
+      <a:documentation>
+        Link to an external source.
+
+        Preferred form carries the URL in @target and the display text as
+        content. With @target and no content, the URL is shown as its own
+        label.
+
+        LEGACY: without @target, the content is treated as the URL. Two
+        joyce books use this bare form. Convert them, then make @target
+        required by removing the optional wrapper below.
+
+        Rendering requires library-functions:renderInline, since CSS
+        cannot produce an href. Every render path that can contain a ptr
+        must call it. The generic prop and context loops call it once for
+        all their children; getBibliographicInfo hardcodes each field and
+        needs it wrapped field by field.
+
+        Naming note: TEI uses an empty ptr for a bare pointer and ref with
+        @target when there is display text. This schema uses ptr for both,
+        inverting that. Fine for a custom schema; worth revisiting only if
+        TEI-legible export ever matters.
+      </a:documentation>
+      <optional>
+        <attribute name="target">
+          <data type="anyURI"/>
+        </attribute>
+      </optional>
+      <ref name="inline.content"/>
+    </element>
+  </define>
+
+  <define name="inline.content">
+    <zeroOrMore>
+      <choice>
+        <text/>
+        <ref name="inline"/>
+      </choice>
+    </zeroOrMore>
+  </define>
+
+  <define name="mixed">
+    <zeroOrMore>
+      <choice>
+        <text/>
+        <ref name="inline"/>
+      </choice>
+    </zeroOrMore>
+  </define>
+
+  <!-- ================================================================
+       Module 1: bibl - bibliographic description
+
+       interleave, not sequence: sample-library puts title first, joyce
+       and woolf put author first. Cardinality is still enforced.
+
+       Rendered by library-functions:getBibliographicInfo, which hardcodes
+       one output line per field. An element added here renders nowhere
+       until that function is extended.
+       ================================================================ -->
+
+  <define name="module.bibl">
+    <interleave>
+
+      <element name="title">
+        <optional><ref name="att.sort"/></optional>
+        <ref name="mixed"/>
+      </element>
+
+      <optional>
+        <element name="subtitle"><ref name="mixed"/></element>
+      </optional>
+
+      <oneOrMore>
+        <element name="author">
+          <a:documentation>
+            Repeat for multiple authors; @sort on the first only. The
+            spreadsheet's Author Sort column is the matching @sort.
+
+            The name is split into firstname + lastname children, both
+            required:
+              <author sort="Alighieri">
+                  <firstname>Dante</firstname>
+                  <lastname>Alighieri</lastname>
+              </author>
+            A single-name author (Aeschylus, a corporate body) keeps an
+            empty <firstname/>. Role and co-author phrasing that will not
+            split cleanly ("D. H. S., ed.", "Evelyn, and Lewis Campbell")
+            stays verbatim in firstname. This is the form sample-library,
+            the importer, and these code paths already use:
+              templates/library/tools/new-book-xml.html  - two inputs
+              modules/library-api.xql                    - two parameters
+              libmgr:create-book                         - sort key from
+                                                           $lastname
+              templates/library/documentation/documentation.html
+
+            For an unauthored work leave the element empty and use @sort
+            to file the entry under its title or editor.
+
+            LEGACY: the name as a single string ("Abbott, G. F."), found in
+            the joyce and woolf library files. Migrating means splitting
+            each into firstname + lastname. Once that is done, reduce the
+            first branch of the choice below to <empty/> (keeping the
+            unauthored case) so a bare string no longer validates.
+          </a:documentation>
+          <optional><ref name="att.sort"/></optional>
+          <choice>
+            <interleave>
+              <element name="firstname"><ref name="mixed"/></element>
+              <element name="lastname"><ref name="mixed"/></element>
+            </interleave>
+            <!-- LEGACY single string; see documentation above. -->
+            <ref name="mixed"/>
+          </choice>
+        </element>
+      </oneOrMore>
+
+      <optional>
+        <element name="type">
+          <a:documentation>
+            Publication type. Documented vocabulary: Monograph, Journal,
+            Collection of Essays, Collection of Stories, Dictionary,
+            Sheet Music, Manuscript, Typescript.
+
+            Not enumerated here: the data holds "Coll. of Essays" beside
+            "Collection of Essays", 18 of 36 real books leave it empty,
+            and the incoming spreadsheet says "Book". This drives browse
+            facets, so variants fragment the interface. Normalise the
+            values, then enumerate.
+          </a:documentation>
+          <text/>
+        </element>
+      </optional>
+
+      <optional><element name="volume"><text/></element></optional>
+      <optional><element name="series"><ref name="mixed"/></element></optional>
+      <optional><element name="edition"><text/></element></optional>
+
+      <optional>
+        <element name="firstedition">
+          <a:documentation>
+            Rendered as a bracketed suffix on the date line, not as a
+            field of its own.
+          </a:documentation>
+          <text/>
+        </element>
+      </optional>
+
+      <zeroOrMore>
+        <element name="editor">
+          <optional>
+            <attribute name="type">
+              <a:documentation>
+                Printed verbatim in parentheses; defaults to "ed." when
+                absent. The data holds three spellings of one role -
+                translator, trans., translation - plus intro. Worth
+                normalising before enumerating.
+              </a:documentation>
+              <text/>
+            </attribute>
+          </optional>
+          <ref name="mixed"/>
+        </element>
+      </zeroOrMore>
+
+      <zeroOrMore>
+        <element name="place">
+          <a:documentation>
+            Repeat for co-publication cities. With several publishers,
+            place[n] is paired positionally with publisher[n].
+          </a:documentation>
+          <text/>
+        </element>
+      </zeroOrMore>
+
+      <zeroOrMore>
+        <element name="publisher">
+          <optional>
+            <attribute name="place"><text/></attribute>
+          </optional>
+          <ref name="mixed"/>
+        </element>
+      </zeroOrMore>
+
+      <optional>
+        <element name="date">
+          <a:documentation>
+            Free text, not a typed date: "1936", "n.d.", "1902?" all
+            occur. Feeds the range index library-book-Date and the
+            DateRange browse facet, which matches on leading digits.
+          </a:documentation>
+          <optional>
+            <attribute name="FE">
+              <a:documentation>
+                "yes" renders the date in square brackets, marking it
+                inferred. Supported by getBibliographicInfo but used by no
+                book in any library - undocumented, and effectively
+                unknown to the encoders.
+              </a:documentation>
+              <value>yes</value>
+            </attribute>
+          </optional>
+          <text/>
+        </element>
+      </optional>
+
+      <optional><element name="publishersaddress"><text/></element></optional>
+      <optional><element name="centimeters"><text/></element></optional>
+      <optional><element name="nrofpages"><text/></element></optional>
+      <optional><element name="uncutpages"><text/></element></optional>
+
+      <optional>
+        <element name="location">
+          <a:documentation>
+            Current physical location: holding institution and shelfmark.
+          </a:documentation>
+          <ref name="mixed"/>
+        </element>
+      </optional>
+
+      <optional>
+        <element name="generalnote"><ref name="mixed"/></element>
+      </optional>
+
+      <optional>
+        <element name="manuscriptlink">
+          <a:documentation>
+            Book-level link out to the BDMP genetic modules, rendered by
+            library-functions:ManuscriptLinkBookLevel. Contains ref
+            children carrying @target of the form
+            library:book,page[annotation] with @type pagelink or
+            sentencelink.
+
+            No book in any library uses it. Three incompatible spellings
+            live in the codebase: module/manuscriptlink here,
+            rn/manuscriptLink at zone level, and qname="ManuscriptLink" in
+            collection.xconf - which matches neither, so that index has
+            never fired. Settle on one spelling before encoding any data.
+          </a:documentation>
+          <ref name="manuscriptlink.content"/>
+        </element>
+      </optional>
+
+      <optional>
+        <element name="imagecopyright">
+          <a:documentation>
+            LEGACY here. Two sample books carry it and nothing renders it:
+            getBibliographicInfo has no line for this field, so the credit
+            is silently dropped. Prefer module type="context", whose
+            generic renderer displays it with no code change. Kept
+            permitted so existing files validate.
+          </a:documentation>
+          <ref name="mixed"/>
+        </element>
+      </optional>
+
+      <optional>
+        <element name="IIIF">
+          <interleave>
+            <element name="IIIFmanifest"><text/></element>
+            <optional><element name="IIIFviewer"><text/></element></optional>
+          </interleave>
+        </element>
+      </optional>
+
+    </interleave>
+  </define>
+
+  <define name="att.sort">
+    <attribute name="sort">
+      <a:documentation>
+        Sort key feeding the range indexes library-book-Author and
+        library-book-Title, which drive browse order. Never displayed.
+
+        Documentation requires unaccented letters only. Not enforced here,
+        because existing data violates it: ARI-PSY carries a curly
+        apostrophe, and one woolf title sorts under a leading space. Both
+        are exactly 15 characters - the fingerprint of the
+        substring($x,2,14) truncation in libmgr:create-book, which cuts
+        sort keys mid-word. Fix that function before tightening this.
+      </a:documentation>
+      <text/>
+    </attribute>
+  </define>
+
+  <define name="manuscriptlink.content">
+    <zeroOrMore>
+      <choice>
+        <text/>
+        <element name="ref">
+          <attribute name="target"><text/></attribute>
+          <optional>
+            <attribute name="type">
+              <choice>
+                <value>pagelink</value>
+                <value>sentencelink</value>
+              </choice>
+            </attribute>
+          </optional>
+          <ref name="inline.content"/>
+        </element>
+        <ref name="inline"/>
+      </choice>
+    </zeroOrMore>
+  </define>
+
+  <!-- ================================================================
+       Module 2: prop - proprietary history and provenance
+
+       Rendered by library-functions:getProprietaryHistory, which loops
+       over all children generically: the label is the tag name with its
+       first letter capitalised, the value is the element content. Empty
+       elements are skipped. type is the one child excluded from output
+       entirely, so its value is never displayed anywhere.
+
+       That generic loop is why undocumented elements accumulated here -
+       inventing a tag was the only way to make something appear on the
+       page. The scholarly-apparatus fields have moved to module
+       type="context"; see LEGACY below.
+       ================================================================ -->
+
+  <define name="module.prop">
+    <interleave>
+
+      <optional>
+        <element name="type">
+          <a:documentation>
+            Nature of the acquisition. Documented vocabulary: received,
+            purchased, gifted, inherited.
+
+            Never rendered - getProprietaryHistory excludes it - so this
+            is currently write-only data. Real values are inconsistent and
+            conflate acquisition mode with physical evidence: Gift and
+            Gifted, Inscribed and Inscription and "Inscribed with
+            bookplate", plus Signed, Bookplate, "Presentation copy". Those
+            are arguably two separate fields. Left as text pending that
+            decision.
+          </a:documentation>
+          <text/>
+        </element>
+      </optional>
+
+      <optional>
+        <element name="dateofacquisition">
+          <a:documentation>
+            YYYY-MM-DD. The month is looked up in a map keyed with
+            zero-padded strings ("01".."12"), so a single-digit month
+            fails the lookup. The reading module uses a second map keyed
+            without padding - same concept, two incompatible conventions
+            in one file.
+          </a:documentation>
+          <text/>
+        </element>
+      </optional>
+
+      <optional>
+        <element name="origin"><ref name="mixed"/></element>
+      </optional>
+
+      <zeroOrMore>
+        <element name="inscription">
+          <a:documentation>
+            Repeatable: a book can carry several inscriptions. There is no
+            way to attach a separate type or date to each - see the note
+            on provenance events below.
+          </a:documentation>
+          <ref name="mixed"/>
+        </element>
+      </zeroOrMore>
+
+      <!--
+        PROVENANCE EVENTS
+
+        SCO-ABB_CP2 encodes two distinct events - a gift inscription from
+        Leonard Woolf dated 1915-01-25, and a separate previous owner's
+        name - as two type and two inscription children of one module,
+        with nothing tying each pair together.
+
+        This schema permits repeated inscriptions but a single type and
+        date, so that file does not validate. That is deliberate: allowing
+        repeated type with no pairing would be worse than an error.
+
+        Two ways out, when this is next revisited:
+          - allow several module type="prop", one per event. Range indexes
+            keep working unchanged, but getProprietaryHistory takes a
+            single node() and must become node()* with a loop in two call
+            sites.
+          - add a repeatable provenance wrapper. Better model, but
+            collection.xconf matches module/inscription and module/origin
+            directly, so those become module//... and every library needs
+            a reindex.
+
+        For now: delete the duplicate type from SCO-ABB_CP2. It is never
+        rendered, so nothing visible is lost.
+      -->
+
+      <!--
+        LEGACY: the five elements below are pre-migration forms.
+
+          Primary_material       -> module type="context"/primarymaterial
+          Secondary_scholarship  -> module type="context"/secondaryscholarship
+          Image_scans_credit     -> module type="context"/imagecopyright
+          Notes                  -> module type="context"/note
+          orig                   -> origin (plain typo, two woolf books)
+
+        They render today, labelled with their own tag names, underscores
+        and all - which is exactly why they were written this way.
+        joyce-library also has XanderTemplateProp, a copy-paste stub that
+        spread the pattern.
+
+        Delete this block once the data is migrated, and delete
+        XanderTemplateProp with it.
+      -->
+      <optional><element name="Primary_material"><ref name="mixed"/></element></optional>
+      <optional><element name="Secondary_scholarship"><ref name="mixed"/></element></optional>
+      <optional><element name="Image_scans_credit"><ref name="mixed"/></element></optional>
+      <optional><element name="Notes"><ref name="mixed"/></element></optional>
+      <optional><element name="orig"><ref name="mixed"/></element></optional>
+
+    </interleave>
+  </define>
+
+  <!-- ================================================================
+       Module 3: reading - reading history
+
+       One occurrence, in sample-library. Modelled from documentation.md,
+       so the least corroborated part of this schema.
+       ================================================================ -->
+
+  <define name="module.reading">
+    <interleave>
+      <optional>
+        <element name="status">
+          <choice>
+            <value>read</value>
+            <value>unread</value>
+            <value>unknown</value>
+          </choice>
+        </element>
+      </optional>
+      <zeroOrMore>
+        <element name="readingdate">
+          <a:documentation>
+            Repeatable, one per known reading period. For a single point
+            rather than a range, put identical content in from and to; the
+            interface then shows only from.
+          </a:documentation>
+          <interleave>
+            <element name="from"><ref name="datePart"/></element>
+            <optional><element name="to"><ref name="datePart"/></element></optional>
+            <optional><element name="source"><ref name="mixed"/></element></optional>
+          </interleave>
+        </element>
+      </zeroOrMore>
+    </interleave>
+  </define>
+
+  <define name="datePart">
+    <a:documentation>
+      @type declares the precision and governs which children appear:
+        exact  -> day, month, year
+        season -> season, year
+        year   -> year
+      Months here are looked up unpadded ("1".."12"), unlike
+      dateofacquisition in the prop module.
+    </a:documentation>
+    <choice>
+      <group>
+        <attribute name="type"><value>exact</value></attribute>
+        <interleave>
+          <element name="day"><text/></element>
+          <element name="month"><text/></element>
+          <element name="year"><text/></element>
+        </interleave>
+      </group>
+      <group>
+        <attribute name="type"><value>season</value></attribute>
+        <interleave>
+          <element name="season"><text/></element>
+          <element name="year"><text/></element>
+        </interleave>
+      </group>
+      <group>
+        <attribute name="type"><value>year</value></attribute>
+        <element name="year"><text/></element>
+      </group>
+    </choice>
+  </define>
+
+  <!-- ================================================================
+       Module 4: context - scholarly apparatus
+
+       New. Holds material about the book's relation to the writer's work
+       and to scholarship, which previously had no home and was encoded as
+       invented elements in the prop module.
+
+       Intended to be rendered by a generic loop like
+       getProprietaryHistory's, so a single renderInline call covers every
+       child and adding a field later costs no XQuery. That also means
+       labels come from tag names, so names must read acceptably when
+       capitalised.
+
+       BEFORE DEPLOYING: add 'context' to the collection.xconf full-text
+       condition, currently
+         if="@type='bibl' or @type='prop' or @type='reading'"
+       These fields are searchable today only because they sit in prop.
+       Moving them without that edit removes them from search silently -
+       no error, just missing results. It needs a reindex, so batch it
+       with any other collection.xconf work.
+       ================================================================ -->
+
+  <define name="module.context">
+    <interleave>
+
+      <zeroOrMore>
+        <element name="primarymaterial">
+          <a:documentation>
+            A passage in the writer's own work that draws on, quotes or
+            echoes this book, with its citation. The four Target columns
+            in the postdocs' spreadsheet (Title, KP, volume, page refs)
+            are the structured form of the same relation.
+          </a:documentation>
+          <ref name="mixed"/>
+        </element>
+      </zeroOrMore>
+
+      <zeroOrMore>
+        <element name="secondaryscholarship">
+          <a:documentation>
+            Published or forthcoming scholarship discussing this book or
+            its traces.
+          </a:documentation>
+          <ref name="mixed"/>
+        </element>
+      </zeroOrMore>
+
+      <optional>
+        <element name="imagecopyright">
+          <a:documentation>
+            Credit and rights for the page images: holding institution,
+            digitiser, source. Preferred home over the bibl element of the
+            same name, because this module's generic renderer displays it
+            with no code change.
+          </a:documentation>
+          <ref name="mixed"/>
+        </element>
+      </optional>
+
+      <zeroOrMore>
+        <element name="note"><ref name="mixed"/></element>
+      </zeroOrMore>
+
+    </interleave>
+  </define>
+
+  <!-- ================================================================
+       Module 5: pages - pages and reading traces
+       ================================================================ -->
+
+  <define name="module.pages">
+    <zeroOrMore>
+      <element name="page">
+        <a:documentation>
+          Sequence, not interleave: page blocks are machine-generated by
+          libmgr:pages-from-directory-listing and pages-from-iiif-manifest,
+          so their order is stable and worth enforcing.
+        </a:documentation>
+        <element name="pagenumber">
+          <a:documentation>
+            Not numeric: "cover", "tp", "56", "12v" all occur.
+          </a:documentation>
+          <text/>
+        </element>
+        <element name="facsimile">
+          <a:documentation>
+            Path relative to the library image folder, or a IIIF image
+            URL. Required: present in all 433 page elements across all
+            libraries, so a page without one is a generator bug worth
+            catching.
+          </a:documentation>
+          <text/>
+        </element>
+        <zeroOrMore>
+          <ref name="zone"/>
+        </zeroOrMore>
+      </element>
+    </zeroOrMore>
+  </define>
+
+  <define name="zone">
+    <element name="zone">
+      <a:documentation>
+        One reading trace. Only sample-library contains zones; joyce and
+        woolf have 368 pages and no traces yet, so this part of the schema
+        rests on demo data alone.
+      </a:documentation>
+      <interleave>
+        <element name="number">
+          <a:documentation>Order on the page, top to bottom.</a:documentation>
+          <text/>
+        </element>
+        <optional><element name="facsimile"><text/></element></optional>
+        <optional>
+          <element name="type">
+            <a:documentation>
+              Must be present with value "marginalia" when the trace
+              contains words written by the reader.
+            </a:documentation>
+            <text/>
+          </element>
+        </optional>
+        <optional>
+          <element name="position">
+            <a:documentation>
+              Vertical offset in pixels from the top of the page image.
+              Rendered at position * 3/4 as a CSS top value.
+            </a:documentation>
+            <text/>
+          </element>
+        </optional>
+        <zeroOrMore><ref name="rn"/></zeroOrMore>
+      </interleave>
+    </element>
+  </define>
+
+  <define name="rn">
+    <element name="rn">
+      <a:documentation>
+        Reading note. Unordered: documentation.md shows transcription,
+        writingtool, extracts, but FLE-BOU.xml has transcription,
+        handwriting, writingtool, extracts.
+      </a:documentation>
+      <interleave>
+        <optional>
+          <element name="transcription"><ref name="mixed"/></element>
+        </optional>
+        <optional>
+          <element name="writingtool">
+            <a:documentation>e.g. "Red ink", "Grey Pencil".</a:documentation>
+            <text/>
+          </element>
+        </optional>
+        <optional>
+          <element name="handwriting">
+            <a:documentation>Who wrote it, e.g. "SB".</a:documentation>
+            <text/>
+          </element>
+        </optional>
+        <optional>
+          <element name="extracts">
+            <a:documentation>
+              The passage being annotated. "/" separates lines as they
+              fall on the printed page.
+            </a:documentation>
+            <ref name="mixed"/>
+          </element>
+        </optional>
+        <optional>
+          <element name="manuscriptLink">
+            <a:documentation>
+              Zone-level link out to the BDMP genetic modules. Note the
+              camelCase, against the lowercase form used at book level -
+              both spellings are live in library-functions.xql.
+            </a:documentation>
+            <ref name="manuscriptlink.content"/>
+          </element>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+
+</grammar>

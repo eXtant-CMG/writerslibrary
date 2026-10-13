@@ -343,8 +343,17 @@ let $copyAssets :=
     if (xmldb:collection-available($srcResRoot || "/fonts")) then
         local:sync-collection($srcResRoot || "/fonts", $dstResRoot || "/fonts")
     else (),
+    (: the app's own images (logos etc.): top-level files only :)
     if (xmldb:collection-available($srcResRoot || "/images")) then
-        local:sync-collection($srcResRoot || "/images", $dstResRoot || "/images")
+        let $dstImages := local:ensure-collection($dstResRoot || "/images")
+        for $f in xmldb:get-child-resources($srcResRoot || "/images")
+        return xmldb:copy-resource($srcResRoot || "/images", $f, $dstImages, $f)
+    else (),
+    (: this library's page images live in the data root, not in the app;
+       the exported HTML expects them at resources/images/{libraryID}/ :)
+    if (xmldb:collection-available(config:images-collection($libraryID))) then
+        local:sync-collection(config:images-collection($libraryID),
+                              $dstResRoot || "/images/" || $libraryID)
     else ()
 )
 

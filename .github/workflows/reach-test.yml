@@ -1,0 +1,8 @@
+# .github/workflows/reach-test.yml
+name: reach-test
+on: workflow_dispatch
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -sS -o /dev/null -w '%{http_code}\n' --max-time 15 https://joyceweb.uantwerpen.be/exist/

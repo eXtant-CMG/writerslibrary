@@ -1,6 +1,6 @@
 # .github/workflows/reach-test.yml
 name: reach-test
-on: workflow_dispatch
+on: [workflow_dispatch, push]
 jobs:
   test:
     runs-on: ubuntu-latest

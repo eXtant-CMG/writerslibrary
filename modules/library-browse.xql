@@ -192,7 +192,7 @@ declare function library-browse:getEntries($node as node(), $model as map(*)){
            order by $sortString, $secondarySort
            
            return
-                <div class="entryEL">
+                <div class="{if ($result/data(@type) eq "SL") then "entryEL entrySL" else "entryEL"}">
                  <table width="100%">
                   <tr>
                    <td width="90px" valign="top">
@@ -201,11 +201,11 @@ declare function library-browse:getEntries($node as node(), $model as map(*)){
                       <a class="booklinks" href="../{$bookID}/index.html">
                         <div class="imagecontainer">
                           <img class="thumb" src="{if (starts-with(util:eval-with-context($pathToThumbnail,$imgUrlContext,false()),'https')) then '' else $imgUrl/serverPath/text()}{util:eval-with-context($pathToThumbnail,$imgUrlContext,false())}"/>
-                          {if ($result/data(@type) eq "SL") then <span class="shadowthumb">S<br/>H<br/>A<br/>D<br/>O<br/>W</span> else ()}
+                          {if ($result/data(@type) eq "SL") then <span class="shadowlabel shadowlabel-onimg">Shadow</span> else ()}
                         </div>
                         </a>
                       else 
-                        <a class="booklinks" href="../{$bookID}/index.html"><!--<a class="booknolink">--><div class="imagecontainer"><span class="noscan"/>{if ($result/data(@type) eq "SL") then <span class="shadowthumb">S<br/>H<br/>A<br/>D<br/>O<br/>W</span> else ()}</div></a>
+                        <a class="booklinks" href="../{$bookID}/index.html"><!--<a class="booknolink">-->{if ($result/data(@type) eq "SL") then <span class="shadowcover"><span class="shadowlabel">Shadow</span></span> else <div class="imagecontainer"><span class="noscan"/></div>}</a>
                       }
                    </td>
                    <td valign="top">

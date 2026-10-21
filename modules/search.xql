@@ -146,13 +146,13 @@ declare function search:search($node as node(), $model as map(*), $q as xs:strin
             (: library bibliography hits :)
             if (local-name($highlightedResults) eq "book") then 
                 <a class="booklinkssearch" href="../{$highlightedResults/data(@id)}/index.html">
-                    <table class="library" style="width:100%;">
+                    <table class="{if ($highlightedResults/@type eq "SL") then "library librarySL" else "library"}" style="width:100%;">
                         <tr>
                             <td valign="top" width="90">
                                 {if ($highlightedResults//page[1]/facsimile) then 
                                     <img height="100" style="max-width:80px;" src="{if (starts-with($highlightedResults//facsimile[1]/text(),'https')) then "" else $imgUrl}{$highlightedResults//page[1]/facsimile/text()}"/>
                                 else
-                                    if ($highlightedResults/@type eq "SL") then <div class="imagecontainer"><span class="noscan"></span><span class="shadowthumb">S<br/>H<br/>A<br/>D<br/>O<br/>W</span></div> else <span class="noscan"></span>}
+                                    if ($highlightedResults/@type eq "SL") then <span class="shadowcover"><span class="shadowlabel">Shadow</span></span> else <span class="noscan"></span>}
                             </td>
                             <td valign="top">
                                 {library-book-view:getBiblio($node, $model, $highlightedResults) }

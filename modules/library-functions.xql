@@ -54,15 +54,26 @@ let $view := request:get-parameter("view","")
  : *********
  : 
  : The convention for authors is a bit complicated (and tiresome);
- : One author: Proust, Marcel:
- : Two authors: Proust, Marcel and Harold Pinter:
- : Three authors: Proust, Marcel, Harold Pinter and John Doe:
- : Four authors: Proust, Marcel, Harold Pinter, Jane Doe and John Doe:
+ : One author: Proust, Marcel.
+ : Two authors: Proust, Marcel and Harold Pinter.
+ : Three authors: Proust, Marcel, Harold Pinter and John Doe.
+ : Four authors: Proust, Marcel, Harold Pinter, Jane Doe and John Doe.
+ : Five or more: Proust, Marcel, Harold Pinter, Jane Doe, John Doe et al.
+ : (authors in document order; capped at four, same as editors in the author spot)
  :)
 let $nrOfAuthors := count($biblModule/author)
+let $shownAuthors := subsequence($biblModule/author, 1, 4)
+let $moreAuthors := $nrOfAuthors gt 4
+(: Only editors in the editor role (no @type, or an "ed." spelling) may stand in for a missing author;
+ : translators, intro writers etc. never do. $mainEditors are all such editors, in document order. :)
+let $editorRoles := ('', 'ed', 'ed.', 'eds', 'eds.', 'editor', 'editors')
+let $mainEditors := $biblModule/editor[normalize-space(.) ne ''][lower-case(normalize-space(@type)) = $editorRoles]
+(: True when there is no author and $mainEditors are rendered in the author spot instead (see $AuthorLine) :)
+let $editorInAuthorSlot := normalize-space($biblModule/author[1]) eq "" and exists($mainEditors) and $biblModule/type/text() ne 'dictionary' and $biblModule/type/text() ne 'bible'
 let $lastRenderedName := normalize-space(string-join(
         for $x in (
-            if ($nrOfAuthors gt 1) then (if ($biblModule/author[2]/lastname) then $biblModule/author[2]/lastname else $biblModule/author[2])
+            if ($moreAuthors) then "et al."
+            else if ($nrOfAuthors gt 1) then (if ($shownAuthors[last()]/lastname) then $shownAuthors[last()]/lastname else $shownAuthors[last()])
             else if (normalize-space(string-join($biblModule/author[1]/firstname, "")) ne "") then $biblModule/author[1]/firstname
             else $biblModule/author[1]/lastname
         ) return string($x), " "))
@@ -71,21 +82,24 @@ let $AuthorLine :=
         <span class="library-{$view}author{if ($highlight eq "Author") then 'current' else ()}">
             {if ($biblModule/author[1]/lastname and $biblModule/author[1]/lastname ne "") then $biblModule/author[1]/lastname/node() else ()} 
             {if ($biblModule/author[1]/firstname and $biblModule/author[1]/firstname ne "") then <span>,  {$biblModule/author[1]/firstname/node()}</span> else ()}
-            {if ($nrOfAuthors gt 1) then 
-               (
-                if ($nrOfAuthors eq 4) then 
-                   <span>, {library-functions:furtherAuthorName($biblModule/author[4])}, {library-functions:furtherAuthorName($biblModule/author[3])}</span> else (),
-                if ($nrOfAuthors eq 3) then 
-                   <span>, {library-functions:furtherAuthorName($biblModule/author[3])}</span> else (),
-                <span> and {library-functions:furtherAuthorName($biblModule/author[2])}</span>
-                )
-             else ()}
+            {for $a at $pos in $shownAuthors[position() gt 1]
+             return <span>{if ($pos eq count($shownAuthors) - 1 and not($moreAuthors)) then " and " else ", "}{library-functions:furtherAuthorName($a)}</span>}
+            {if ($moreAuthors) then " et al." else ()}
              {if (ends-with($lastRenderedName, ".")) then " " else ". "}
             </span>
 
-(: Another scenario: there is no Author but there is an editor: put the editor + " (ed.)" in the author spot :)        
-    else if ($biblModule/editor[1] ne '' and $biblModule/type/text() ne 'dictionary' and $biblModule/type/text() ne 'bible') then
-         <span class="library-{$view}author{if ($highlight eq "Author") then 'current' else ()}">{$biblModule/editor[1]/node()} (ed.). </span>
+(: Another scenario: there is no Author but there are editors in the editor role: put all of them in the author spot,
+ : joined like authors ("A, B and C"), capped at four ("A, B, C, D et al."), followed by "(ed.)" or "(eds.)" :)        
+    else if ($editorInAuthorSlot) then
+         <span class="library-{$view}author{if ($highlight eq "Author") then 'current' else ()}">{let $shown := subsequence($mainEditors, 1, 4)
+            let $n := count($shown)
+            let $more := count($mainEditors) gt 4
+            return (
+                for $e at $pos in $shown
+                return (if ($pos eq 1) then () else if ($pos eq $n and not($more)) then " and " else ", ", $e/node()),
+                if ($more) then " et al." else ()
+            )
+           } ({if (count($mainEditors) gt 1) then "eds." else if ($mainEditors[1]/@type) then $mainEditors[1]/data(@type) else "ed."}). </span>
 
 (: Another scenario: it's a dictionary (<Type>dictionary</Type>): put "Dictionary. " in front of the title :)
     else if ($biblModule/type/text() eq "dictionary") then
@@ -161,6 +175,7 @@ let $EditionLine := if ($biblModule/edition ne "") then ($biblModule/edition,<br
 let $EditorLine := if ($biblModule/editor and $biblModule/editor[1] ne "") 
             then
                 for $Editor in $biblModule/editor
+                where not($editorInAuthorSlot and (some $m in $mainEditors satisfies $m is $Editor))
                 return
                     ($Editor/node(),' (',<span>{if ($Editor/@type) then $Editor/data(@type) else "ed."}</span>,')',<br/>)
             else ()
@@ -172,7 +187,7 @@ let $LocationLine := if ($biblModule/location ne "") then (<span class="field-ti
 return
 
     (
-$AuthorLine, $TitleLine, $PlaceAndPublisherLine, $DateLine, <br/>, $EditionLine, $EditorLine, $SeriesLine, $LocationLine
+$AuthorLine, $TitleLine, $EditorLine, $PlaceAndPublisherLine, $DateLine, <br/>, $EditionLine, $SeriesLine, $LocationLine
     )
 
 

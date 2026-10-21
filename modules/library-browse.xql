@@ -205,7 +205,7 @@ declare function library-browse:getEntries($node as node(), $model as map(*)){
                         </div>
                         </a>
                       else 
-                        <a class="booklinks" href="../{$bookID}/index.html"><!--<a class="booknolink">-->{if ($result/data(@type) eq "SL") then <span class="shadowcover"><span class="shadowlabel">Shadow</span></span> else <div class="imagecontainer"><span class="noscan"/></div>}</a>
+                        <a class="booklinks" href="../{$bookID}/index.html"><!--<a class="booknolink">-->{if ($result/data(@type) eq "SL") then <span class="shadowcover"><span class="shadowlabel">Shadow</span></span> else <span class="noscan"><span class="noscanlabel">No scan</span></span>}</a>
                       }
                    </td>
                    <td valign="top">

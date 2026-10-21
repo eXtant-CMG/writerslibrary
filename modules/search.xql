@@ -152,7 +152,7 @@ declare function search:search($node as node(), $model as map(*), $q as xs:strin
                                 {if ($highlightedResults//page[1]/facsimile) then 
                                     <img height="100" style="max-width:80px;" src="{if (starts-with($highlightedResults//facsimile[1]/text(),'https')) then "" else $imgUrl}{$highlightedResults//page[1]/facsimile/text()}"/>
                                 else
-                                    if ($highlightedResults/@type eq "SL") then <span class="shadowcover"><span class="shadowlabel">Shadow</span></span> else <span class="noscan"></span>}
+                                    if ($highlightedResults/@type eq "SL") then <span class="shadowcover"><span class="shadowlabel">Shadow</span></span> else <span class="noscan"><span class="noscanlabel">No scan</span></span>}
                             </td>
                             <td valign="top">
                                 {library-book-view:getBiblio($node, $model, $highlightedResults) }

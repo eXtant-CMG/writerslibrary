@@ -185,6 +185,79 @@ div.entrySL {
 	background-color:rgba(255,255,255,0.85);
 }
 
+/* Browse entry chips and panels (getEntryChips) */
+.entry-chips {
+	display:flex;
+	flex-wrap:wrap;
+	gap:8px;
+	margin-top:10px;
+}
+
+/* Text block tall enough that the chip row ends level with the thumbnail */
+.biblio > a.booklinks {
+	display:block;
+	min-height:68px;
+}
+
+/* Browse list: plain labels; teal is for the chips */
+.biblio .field-title {
+	color:#5c5c5c;
+	font-weight:normal;
+}
+
+.entry-chip {
+	font:inherit;
+	font-size:13px;
+	padding:4px 10px;
+	border-radius:14px;
+	cursor:pointer;
+	border:1px solid #cfe0dc;
+	background:#ffffff;
+	color:#24695e;
+}
+
+.entry-chip::before { content:"\25B8\00a0"; }
+.entry-chip[aria-expanded="true"]::before { content:"\25BE\00a0"; }
+.entry-chip[aria-expanded="true"] { background:#2a7e70; border-color:#2a7e70; color:#ffffff; }
+
+.entry-chip.chip-traces { border-color:#f2c4bd; background:#fff6f4; color:#a8352a; }
+.entry-chip.chip-traces[aria-expanded="true"] { background:#a8352a; border-color:#a8352a; color:#ffffff; }
+.entry-chip.current { font-weight:bold; }
+
+.entry-panel {
+	margin-top:12px;
+	padding:14px 18px;
+	border-radius:4px;
+	background:#f5f9f8;
+	border:1px solid #dbe8e5;
+	font-size:14px;
+}
+
+.entry-panel[hidden] { display:none; }
+
+.chip-prov-panel, .chip-context-panel {
+	display:grid;
+	grid-template-columns:repeat(2, minmax(0, 1fr));
+	column-gap:32px;
+	row-gap:14px;
+}
+
+.chip-traces-panel { background:#fdf7f6; border-color:#f2dcd8; }
+.chip-traces-panel .entry-panel-label, .chip-traces-panel a { color:#a8352a; }
+
+.entry-panel-field + .entry-panel-field { margin-top:10px; }
+.chip-prov-panel .entry-panel-field + .entry-panel-field,
+.chip-context-panel .entry-panel-field + .entry-panel-field { margin-top:0; }
+
+.entry-panel-label {
+	font-size:11px;
+	letter-spacing:0.08em;
+	text-transform:uppercase;
+	font-weight:bold;
+	color:#24695e;
+	margin-bottom:3px;
+}
+
 div.book {
 	position:relative;
 }

@@ -214,15 +214,6 @@ declare function library-browse:getEntries($node as node(), $model as map(*)){
                        { (: 1: call to getBibliography to get the main bibliographic lines :)
                         library-functions:getBibliography($result/module[@type eq "bibl"], $currentSortValue)
                        }
-                       { (: Function to check for the Proprietary History <module> tag and render its contents :)
-                        if ($result/module[@type eq "prop"]) then 
-                            library-functions:getProprietaryHistory($result/module[@type eq "prop"], "")
-                        else
-                            ()
-                       }
-                       { (: 3: check if there are reading traces, then send to function getReadingTracesList :)
-                        if ($result/module/page/zone[1]) then library-functions:getReadingTracesList($result/module[@type eq "pages"], $currentSortValue)  else()
-                       }
                        { (: 4: get GeneralNotes :)
                         if ($result/module/generalnote and $result/module/generalnote ne "") then library-functions:getGeneralNotes($result/module/generalnote) else ()
                        }
@@ -238,6 +229,7 @@ declare function library-browse:getEntries($node as node(), $model as map(*)){
                        
                        
                      </a>
+                     {library-functions:getEntryChips($result, $currentSortValue)}
                      </span>
                    </td>
                   </tr>

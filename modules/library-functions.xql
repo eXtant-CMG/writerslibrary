@@ -59,16 +59,13 @@ let $view := request:get-parameter("view","")
  : Three authors: Proust, Marcel, Harold Pinter and John Doe.
  : Four authors: Proust, Marcel, Harold Pinter, Jane Doe and John Doe.
  : Five or more: Proust, Marcel, Harold Pinter, Jane Doe, John Doe et al.
- : (authors in document order; capped at four, same as editors in the author spot)
  :)
 let $nrOfAuthors := count($biblModule/author)
 let $shownAuthors := subsequence($biblModule/author, 1, 4)
 let $moreAuthors := $nrOfAuthors gt 4
-(: Only editors in the editor role (no @type, or an "ed." spelling) may stand in for a missing author;
- : translators, intro writers etc. never do. $mainEditors are all such editors, in document order. :)
+(: Editors in the editor role; they stand in for a missing author. :)
 let $editorRoles := ('', 'ed', 'ed.', 'eds', 'eds.', 'editor', 'editors')
 let $mainEditors := $biblModule/editor[normalize-space(.) ne ''][lower-case(normalize-space(@type)) = $editorRoles]
-(: True when there is no author and $mainEditors are rendered in the author spot instead (see $AuthorLine) :)
 let $editorInAuthorSlot := normalize-space($biblModule/author[1]) eq "" and exists($mainEditors) and $biblModule/type/text() ne 'dictionary' and $biblModule/type/text() ne 'bible'
 let $lastRenderedName := normalize-space(string-join(
         for $x in (
@@ -88,8 +85,7 @@ let $AuthorLine :=
              {if (ends-with($lastRenderedName, ".")) then " " else ". "}
             </span>
 
-(: Another scenario: there is no Author but there are editors in the editor role: put all of them in the author spot,
- : joined like authors ("A, B and C"), capped at four ("A, B, C, D et al."), followed by "(ed.)" or "(eds.)" :)        
+(: No author: editors in the editor role take the author spot, capped at four. :)        
     else if ($editorInAuthorSlot) then
          <span class="library-{$view}author{if ($highlight eq "Author") then 'current' else ()}">{let $shown := subsequence($mainEditors, 1, 4)
             let $n := count($shown)
@@ -166,7 +162,10 @@ let $DateLine :=
 let $SeriesLine := if ($biblModule/series ne "") then ($biblModule/series,<br/>) else ()
 
 (: Edition :)
-let $EditionLine := if ($biblModule/edition ne "") then ($biblModule/edition,<br/>) else ()
+let $editionText := normalize-space($biblModule/edition[1])
+let $EditionLine := if ($editionText ne "") then
+        (if (matches($editionText, '^\d+(st|nd|rd|th)$')) then $editionText || " edition" else $editionText, <br/>)
+    else ()
 
 (: Editor
  : ******
@@ -196,37 +195,34 @@ $AuthorLine, $TitleLine, $EditorLine, $PlaceAndPublisherLine, $DateLine, <br/>, 
 (: This function gets the information from the (optional) second module <module type="prop"></module> Proprietary History.
  : Again with the $highlight value to put inscriptions into bold if they are the active sorting thing in the browse view. 
  :)
-declare function library-functions:getProprietaryHistory($propModule as node(), $highlight as xs:string?) {
-    let $months := map {
-        "01": "January", "02": "February", "03": "March", "04": "April",
-        "05": "May", "06": "June", "07": "July", "08": "August",
-        "09": "September", "10": "October", "11": "November", "12": "December"
-    }
-    return
-        for $element in $propModule/*[name() != 'type']
-        where fn:normalize-space($element) != ''
+declare function library-functions:propLabel($element as element()) as xs:string {
+    if (name($element) eq 'dateofacquisition') then "Date of acquisition"
+    else concat(upper-case(substring(name($element), 1, 1)), substring(name($element), 2))
+};
+
+declare function library-functions:propValue($element as element()) {
+    if (name($element) eq 'dateofacquisition') then
+        let $months := map {
+            "01": "January", "02": "February", "03": "March", "04": "April",
+            "05": "May", "06": "June", "07": "July", "08": "August",
+            "09": "September", "10": "October", "11": "November", "12": "December"
+        }
+        let $date := tokenize($element, '-')
         return
-            <span class="library-element {if ($highlight eq $element/name()) then 'current' else ()}">
-                <span class="field-title">
-                    {if (fn:name($element) eq 'dateofacquisition') then
-                        "Date of acquisition"
-                    else
-                        fn:concat(fn:upper-case(fn:substring(fn:name($element), 1, 1)), fn:substring(fn:name($element), 2))}
-                </span>:
-                {if (fn:name($element) eq 'dateofacquisition') then
-                    let $date := fn:tokenize($element, '-')
-                    return
-                        if (fn:count($date) eq 3) then
-                            fn:concat($date[3], ' ', $months($date[2]), ' ', $date[1])
-                        else if (fn:count($date) eq 2) then
-                            fn:concat('MM ', $months($date[2]), ' ', $date[1])
-                        else if (fn:count($date) eq 1) then
-                            fn:concat('YYYY ', $date[1])
-                        else
-                            'Invalid date format'
-                else
-                    $element}<br/>
-            </span>
+            if (count($date) eq 3) then concat($date[3], ' ', $months($date[2]), ' ', $date[1])
+            else if (count($date) eq 2) then concat('MM ', $months($date[2]), ' ', $date[1])
+            else if (count($date) eq 1) then concat('YYYY ', $date[1])
+            else 'Invalid date format'
+    else library-functions:renderInline($element/node())
+};
+
+declare function library-functions:getProprietaryHistory($propModule as node(), $highlight as xs:string?) {
+    for $element in $propModule/*[name() != 'type']
+    where normalize-space($element) != ''
+    return
+        <span class="library-element {if ($highlight eq $element/name()) then 'current' else ()}">
+            <span class="field-title">{library-functions:propLabel($element)}</span>: {library-functions:propValue($element)}<br/>
+        </span>
 };
 
 (: This function gets the information from the (optional) third module <module type="reading"></module> Reading History.
@@ -291,28 +287,91 @@ declare function library-functions:getReadingHistory($readingModule as node(), $
             </span>
 };
 
+(: Copies inline markup through as-is; <ptr> becomes a link (bare <ptr>URL</ptr> is LEGACY). :)
+declare function library-functions:renderInline($nodes as node()*) as node()* {
+    for $node in $nodes
+    return
+        typeswitch ($node)
+            case element(ptr) return
+                let $url := if ($node/@target) then string($node/@target) else normalize-space($node)
+                return
+                    <a class="ptr" href="{$url}" target="_blank" rel="noopener">{
+                        if (normalize-space($node) ne "" and $node/@target) then library-functions:renderInline($node/node())
+                        else $url
+                    }</a>
+            case element() return
+                element {node-name($node)} {$node/@*, library-functions:renderInline($node/node())}
+            default return $node
+};
 
+(: Field content of module type="context", fixed order and labels. :)
+declare function library-functions:getContextFields($contextModule as element()?) {
+    let $order := ("primarymaterial", "secondaryscholarship", "note", "imagecredit")
+    let $labels := map {
+        "primarymaterial": "Primary material",
+        "secondaryscholarship": "Secondary scholarship",
+        "note": "Editorial notes",
+        "imagecredit": "Image credits"
+    }
+    for $name in $order
+    let $items := $contextModule/*[local-name() eq $name][normalize-space(.) ne ""]
+    where exists($items)
+    return
+        <div class="entry-panel-field">
+            <div class="entry-panel-label">{$labels($name)}</div>
+            {for $item in $items return <div>{library-functions:renderInline($item/node())}</div>}
+        </div>
+};
 
-
-
-(: This function gets the list of pages with reading traces for the browse view.
- : For this the reading traces module (<module type="pages"></module>) node gets passed 
- : into the function. 
- :)
-declare function library-functions:getReadingTracesList($rtModule as node(), $highlight as xs:string?) {
-<span>
-    <span class="library-readingtraces{if ($highlight eq "readingTraces") then 'current' else ()}"><span class="field-title">Reading traces on</span>: </span>
-    <span class="library-rt-pagenumbers">
-       {let $nrOfPages := count($rtModule/page[zone])
-        for $page at $pos in $rtModule/page[zone]
-        let $pageNumber := $page/pagenumber/text()[1]
-        let $marginalia := if ($page//m) then "*" else ()
-        let $fullpageNumber := $pageNumber || $marginalia
-        let $comma := if ($pos lt $nrOfPages) then ', ' else '.'
-        return
-            concat($fullpageNumber,$comma)
-       }{if ($rtModule//m) then <span> (*: page contains marginalia)</span> else ()}</span>
-<br/></span>
+(: Browse entry: chip row (provenance, reading traces, scholarly context) plus one hidden panel per chip.
+ : Toggling is done by resources/scripts/entry-panels.js. :)
+declare function library-functions:getEntryChips($book as element(), $highlight as xs:string?) {
+    let $bookID := string($book/@id)
+    let $idBase := "panel-" || replace($bookID, "[^A-Za-z0-9_-]", "_")
+    let $prop := $book/module[@type eq "prop"][1]
+    let $propFields := $prop/*[name() ne "type"][normalize-space(.) ne ""]
+    let $acquired := tokenize(normalize-space($prop/dateofacquisition[1]), "-")[1]
+    let $tracePages := $book/module/page[zone]
+    let $withM := $tracePages[.//m]
+    let $withoutM := $tracePages[not(.//m)]
+    let $contextFields := library-functions:getContextFields($book/module[@type eq "context"][1])
+    let $pp := function($n) { $n || (if ($n eq 1) then " p." else " pp.") }
+    let $pageLinks := function($pages) {
+        for $page at $pos in $pages
+        let $nr := normalize-space($page/pagenumber[1])
+        return (if ($pos gt 1) then ", " else (),
+                <a href="../{$bookID}/index.html?page={replace($nr, ' ', '-_-')}">{$nr}</a>)
+    }
+    let $chips := (
+        if (exists($propFields)) then
+            map { "id": $idBase || "-prov", "class": "chip-prov",
+                  "label": "Provenance" || (if ($acquired ne "") then " · acquired " || $acquired else ""),
+                  "body": for $e in $propFields return
+                      <div class="entry-panel-field"><div class="entry-panel-label">{library-functions:propLabel($e)}</div><div>{library-functions:propValue($e)}</div></div> } else (),
+        if (exists($tracePages)) then
+            map { "id": $idBase || "-traces", "class": "chip-traces" || (if ($highlight eq "readingTraces") then " current" else ""),
+                  "label": "Reading traces · " || $pp(count($tracePages)),
+                  "body": (
+                      if (exists($withM)) then
+                          <div class="entry-panel-field"><div class="entry-panel-label">With marginalia · {$pp(count($withM))}</div><div>{$pageLinks($withM)}</div></div> else (),
+                      if (exists($withoutM)) then
+                          <div class="entry-panel-field"><div class="entry-panel-label">Other traces · {$pp(count($withoutM))}</div><div>{$pageLinks($withoutM)}</div></div> else ()) } else (),
+        if (exists($contextFields)) then
+            map { "id": $idBase || "-context", "class": "chip-context",
+                  "label": "Scholarly context · " || count($contextFields),
+                  "body": $contextFields } else ()
+    )
+    return
+        if (empty($chips)) then ()
+        else
+            <div class="entry-chips-wrap">
+                <div class="entry-chips">{
+                    for $c in $chips
+                    return <button type="button" class="entry-chip {$c?class}" aria-expanded="false" aria-controls="{$c?id}">{$c?label}</button>
+                }</div>
+                {for $c in $chips
+                 return <div id="{$c?id}" class="entry-panel {$c?class}-panel" hidden="hidden">{$c?body}</div>}
+            </div>
 };
 
 (: This function returns the value of the <GeneralNote> tag in the biblio module :)

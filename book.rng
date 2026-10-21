@@ -430,9 +430,8 @@
           <a:documentation>
             LEGACY here. Two sample books carry it and nothing renders it:
             getBibliographicInfo has no line for this field, so the credit
-            is silently dropped. Prefer module type="context", whose
-            generic renderer displays it with no code change. Kept
-            permitted so existing files validate.
+            is silently dropped. Use module type="context"/imagecredit
+            instead. Kept permitted so existing files validate.
           </a:documentation>
           <ref name="mixed"/>
         </element>
@@ -583,7 +582,7 @@
 
           Primary_material       -> module type="context"/primarymaterial
           Secondary_scholarship  -> module type="context"/secondaryscholarship
-          Image_scans_credit     -> module type="context"/imagecopyright
+          Image_scans_credit     -> module type="context"/imagecredit
           Notes                  -> module type="context"/note
           orig                   -> origin (plain typo, two woolf books)
 
@@ -678,19 +677,21 @@
        and to scholarship, which previously had no home and was encoded as
        invented elements in the prop module.
 
-       Intended to be rendered by a generic loop like
-       getProprietaryHistory's, so a single renderInline call covers every
-       child and adding a field later costs no XQuery. That also means
-       labels come from tag names, so names must read acceptably when
-       capitalised.
+       Rendered by library-functions:getContext as a collapsible
+       "Scholarly context" block in the browse list, closed by default.
+       Content goes through renderInline, so ptr becomes a link. Labels
+       and display order come from a fixed map in getContext, not from
+       tag names:
+         primarymaterial       -> Primary material
+         secondaryscholarship  -> Secondary scholarship
+         note                  -> Editorial notes
+         imagecredit           -> Image credits
+       Adding a field here therefore means adding it to that map too;
+       until then it is not rendered.
 
-       BEFORE DEPLOYING: add 'context' to the collection.xconf full-text
-       condition, currently
-         if="@type='bibl' or @type='prop' or @type='reading'"
-       These fields are searchable today only because they sit in prop.
-       Moving them without that edit removes them from search silently -
-       no error, just missing results. It needs a reindex, so batch it
-       with any other collection.xconf work.
+       Full-text search: collection.xconf includes @type='context' in
+       the library-book-biblio field condition. Changing that needs a
+       reindex.
        ================================================================ -->
 
   <define name="module.context">
@@ -719,12 +720,11 @@
       </zeroOrMore>
 
       <optional>
-        <element name="imagecopyright">
+        <element name="imagecredit">
           <a:documentation>
             Credit and rights for the page images: holding institution,
-            digitiser, source. Preferred home over the bibl element of the
-            same name, because this module's generic renderer displays it
-            with no code change.
+            digitiser, source. Replaces bibl/imagecopyright (LEGACY) and
+            prop/Image_scans_credit (LEGACY).
           </a:documentation>
           <ref name="mixed"/>
         </element>

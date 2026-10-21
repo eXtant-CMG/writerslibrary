@@ -60,6 +60,12 @@ let $view := request:get-parameter("view","")
  : Four authors: Proust, Marcel, Harold Pinter, Jane Doe and John Doe:
  :)
 let $nrOfAuthors := count($biblModule/author)
+let $lastRenderedName := normalize-space(string-join(
+        for $x in (
+            if ($nrOfAuthors gt 1) then (if ($biblModule/author[2]/lastname) then $biblModule/author[2]/lastname else $biblModule/author[2])
+            else if (normalize-space(string-join($biblModule/author[1]/firstname, "")) ne "") then $biblModule/author[1]/firstname
+            else $biblModule/author[1]/lastname
+        ) return string($x), " "))
 let $AuthorLine := 
     if (normalize-space($biblModule/author[1]) ne "") then
         <span class="library-{$view}author{if ($highlight eq "Author") then 'current' else ()}">
@@ -74,16 +80,16 @@ let $AuthorLine :=
                 <span> and {library-functions:furtherAuthorName($biblModule/author[2])}</span>
                 )
              else ()}
-             {": "}
+             {if (ends-with($lastRenderedName, ".")) then " " else ". "}
             </span>
 
 (: Another scenario: there is no Author but there is an editor: put the editor + " (ed.)" in the author spot :)        
     else if ($biblModule/editor[1] ne '' and $biblModule/type/text() ne 'dictionary' and $biblModule/type/text() ne 'bible') then
-         <span class="library-{$view}author{if ($highlight eq "Author") then 'current' else ()}">{$biblModule/editor[1]/node()} (ed.): </span>
+         <span class="library-{$view}author{if ($highlight eq "Author") then 'current' else ()}">{$biblModule/editor[1]/node()} (ed.). </span>
 
-(: Another scenario: it's a dictionary (<Type>dictionary</Type>): put "Dictionary: " in front of the title :)
+(: Another scenario: it's a dictionary (<Type>dictionary</Type>): put "Dictionary. " in front of the title :)
     else if ($biblModule/type/text() eq "dictionary") then
-        <span class="library-{$view}author{if ($highlight eq "Author") then 'current' else ()}">Dictionary: </span>
+        <span class="library-{$view}author{if ($highlight eq "Author") then 'current' else ()}">Dictionary. </span>
     else ()
 
 (: Title 
@@ -376,7 +382,7 @@ let $imgUrl := $configDoc//imgUrl/serverPath/text()
 let $xsl := doc($config:app-root || "/resources/xslt/library-search-results-readingtraces.xsl")
 
 return
-    <div><a style="text-decoration:none;" href="../../{$libraryID}/{$bookID}/index.html?page={$pagenumber}&amp;zone={$zone/number/text()}">{if ($author ne " " and $author ne "") then concat($author,": ") else ()}<i>{$title}{if ($subtitle ne "") then <span>: {$subtitle}</span> else ()}</i>, p. {$pagenumber}<br/>
+    <div><a style="text-decoration:none;" href="../../{$libraryID}/{$bookID}/index.html?page={$pagenumber}&amp;zone={$zone/number/text()}">{if ($author ne " " and $author ne "") then concat($author, if (ends-with($author, ".")) then " " else ". ") else ()}<i>{$title}{if ($subtitle ne "") then <span>: {$subtitle}</span> else ()}</i>, p. {$pagenumber}<br/>
       <table class="libraryrt">
         <tr>
             <td valign="top"><img src="{if (starts-with($zone/facsimile/text(),'https')) then "" else $imgUrl}{$zone/facsimile/text()}"/></td>

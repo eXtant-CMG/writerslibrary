@@ -15,9 +15,12 @@ Clicking the tab "All Reading Traces" will generate a list of books that contain
 
 The following information is provided for each book volume:
 
-- **Bibliographical** data: author's surname, name, title, place of publication, publishing house, year (additionally, if different, year of first edition) and editor or translator.
-- The **inscription** field signals the presence of a dedication in the author's hand or an inscription of a previous owner.
-- If there are **reading traces** in the book, a list of the page numbers on which they occur is given. The page numbers appear in red to help identify books with reading traces more easily.
+- **Bibliographical** data: author's surname, name, title, place of publication, publishing house, year (additionally, if different, year of first edition), edition, editor or translator and, where known, the book's current location.
+- Below the entry, buttons give access to further information where it exists:
+  - **Provenance**: how and when the book was acquired, its origin and any inscriptions (a dedication in the author's hand or an inscription of a previous owner).
+  - **Reading traces** (in red): the number of pages with reading traces. Clicking it shows two lists of page numbers: pages with marginalia and pages with other reading traces. Each page number opens the book at that page.
+  - **Scholarly context**: references to the writer's own work, secondary scholarship, editorial notes and image credits.
+- Books of the **shadow library**, which are not extant but which the writer is known or believed to have read, are shown on a hatched background. Books without scans show a "Shadow" or "No scan" placeholder instead of a thumbnail.
 
 ## Book view
 
@@ -30,6 +33,8 @@ In the book view, some parts of the bibliographical information above the facsim
 ## Reading traces
 
 Reading traces may consist of underlined or marked passages, dog-eared pages, and "**marginalia**", i.e. words or drawings in the margins or on separate pieces of paper, written by a previous owner of the book.
+
+Pages with reading traces can also be opened directly from the browse list, via the page numbers under **Reading traces**.
 
 If a page contains reading traces, zone numbers appear in the left margin of the image, at the same level as their corresponding trace.
 Clicking on a zone number will activate two pop-up windows on the right side of the screen. The first window is a cropped picture of the reading trace in question, while the second is a text box with a transcription of the reading trace. Clicking the zone image will **magnify** it, clicking again will undo the magnification. To hide the zone popups, click the "close" button in the top-right corner of the text box or anywhere on the left-hand facsimile.

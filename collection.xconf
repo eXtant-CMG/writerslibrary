@@ -2,7 +2,7 @@
   <index xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <lucene>
       <text qname="module" index="no">
-        <field name="library-book-biblio" if="@type='bibl' or @type='prop' or @type='reading'"/>
+        <field name="library-book-biblio" if="@type='bibl' or @type='prop' or @type='reading' or @type='context'"/>
         <field name="bookID" expression="parent::book/@id"/>
         <facet dimension="document" expression="'library-bibliography'"/>
         <facet dimension="module" expression="substring-after(util:collection-name(.),'data/')"/>

@@ -234,7 +234,7 @@ if (request:get-parameter("view","") eq "book") then
             if ($localOrIIIF eq "local") then concat("'",$imgUrl/serverPath/text(),"'")
             else "''"
         else if ($component eq "pageAndZoneLink" and $pageParam ne "") then           
-            concat('document.getElementById("',$bookID,',',$pageParam,'").click();',' document.getElementById("',$zoneParam,'").click();')
+            concat('document.getElementById("',$bookID,',',$pageParam,'").click();', if ($zoneParam ne "") then concat(' document.getElementById("',$zoneParam,'").click();') else "")
         else ()
 else ()
 };

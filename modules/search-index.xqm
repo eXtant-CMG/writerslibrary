@@ -499,7 +499,7 @@ declare %private function si:make-title(
         else ""
     return
         if ($author ne "" and $title ne "")
-        then concat($author, ": ", $title)
+        then concat($author, if (ends-with($author, ".")) then " " else ". ", $title)
         else if ($title ne "") then $title
         else if ($author ne "") then $author
         else "[no title]"

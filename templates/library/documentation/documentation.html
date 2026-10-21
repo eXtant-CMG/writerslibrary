@@ -104,6 +104,8 @@
 
 <p>The root element is <code>&lt;book&gt;</code>, which has attributes <code>type</code> and <code>id</code>. The <code>type</code> attribute specifies the type of book (<code>EL</code> (extant library) <code>SL</code> (shadow library), while the <code>id</code> attribute provides a unique identifier for the book.</p>
 
+<p>In the browse list, shadow-library books (<code>SL</code>) are shown on a hatched background, with a "Shadow" placeholder in place of the thumbnail when there are no scans. Extant books without scans get a "No scan" placeholder.</p>
+
 <div><pre><code class="language-none">&lt;book id="ARA-LIB" type="EL"&gt;
     &lt;!-- Module elements go here --&gt;
 &lt;/book&gt;</code></pre></div>
@@ -143,11 +145,12 @@
 
 <p>The <code>&lt;author&gt;</code> element contains information about the author of the book. Within the <code>&lt;author&gt;</code> element are <code>&lt;firstname&gt;</code> and <code>&lt;lastname&gt;</code> elements that contain the author's first and last names. The <code>sort</code> attribute can be used to specify a sort key for the author's name. "John O'Brien" can be sorted under "B" by supplying "Brien" in the sort attribute. Please note that the sort attribute should only contain regular letters, so in the sort attribute the last name "Dupré" should be encoded as <code>sort="Dupre"</code> or <code>sort="Dupr&amp;#233;"</code>. The value of the sort attribute is never visualized in the interface, it is only used to correctly sort authors and titles.</p>
 
-<p>If a book has <strong>no author</strong>, the <code>&lt;author&gt;</code> element can be left empty, and the sort attribute can be used to make the book appear in the author lists on the basis of its title or editor:</p>
-
-<div><pre><code class="language-none">&lt;title sort="Everyday Spanish"&gt;Everyday Spanish&lt;/title&gt;
-&lt;author sort="Collier"&gt;&lt;firstname/&gt;&lt;lastname/&gt;&lt;/author&gt;
-&lt;editor&gt;L.D. Collier&lt;/editor&gt; </code></pre></div>
+<p>If a book has <strong>no author</strong>, leave the <code>&lt;author&gt;</code> element empty and use its sort attribute to file the book under its title or editor. Editors in the editor role are then shown in the author position:</p>
+<div><pre><code class="language-none">&lt;title sort=&quot;Everyday Spanish&quot;&gt;Everyday Spanish&lt;/title&gt;
+&lt;author sort=&quot;Collier&quot;&gt;&lt;firstname/&gt;&lt;lastname/&gt;&lt;/author&gt;
+&lt;editor&gt;L.D. Collier&lt;/editor&gt;
+</code></pre></div>
+<p>This is displayed as "L.D. Collier (ed.). <em>Everyday Spanish</em>". If there are several editors in the editor role, all of them are shown (up to four, then "et al."), followed by "(eds.)". Editors with another role, such as translators, are never moved to the author position.</p>
 
 <p>If a book has <strong>multiple authors</strong>, each author should be enclosed in their own <code>&lt;author&gt;</code> element:</p>
 
@@ -160,9 +163,15 @@
     &lt;lastname&gt;Doe&lt;/lastname&gt;
 &lt;/author&gt;</code></pre></div>
 
+<p>Authors are displayed in the order in which they are encoded: the first as "Lastname, Firstname", the others as "Firstname Lastname". Up to four authors are shown; if there are more, the first four are followed by "et al.".</p>
+
 <p>The <code>&lt;volume/&gt;</code>, <code>&lt;series/&gt;</code>, <code>&lt;edition/&gt;</code>, <code>&lt;editor/&gt;</code>, <code>&lt;place&gt;</code>, <code>&lt;publisher&gt;</code>, <code>&lt;date&gt;</code>, and <code>&lt;generalnote/&gt;</code> elements can contain information about the volume number, series, edition, editor, place of publication, publisher, date of publication, and any general notes about the book, respectively.</p>
 
-<p>The <code>&lt;location&gt;</code> element specifies the current location of the book.</p>
+<p>The <code>&lt;editor&gt;</code> element can carry a <code>type</code> attribute with the editor's role, which is shown in parentheses after the name: <code>&lt;editor type="trans."&gt;Franz Werfel&lt;/editor&gt;</code> is displayed as "Franz Werfel (trans.)". Without a <code>type</code>, "ed." is shown. Editors are listed directly below the title. Only editors without a <code>type</code>, or with an editor spelling such as <code>ed.</code>, <code>eds.</code> or <code>editor</code>, can take the author position when there is no author.</p>
+<p>For <code>&lt;edition&gt;</code>, a bare ordinal such as <code>1st</code> or <code>18th</code> is displayed as "1st edition"; any other value is displayed as encoded.</p>
+<p>A book with no author whose <code>&lt;type&gt;</code> is <code>dictionary</code> (lowercase) is shown with "Dictionary." in the author position.</p>
+
+<p>The <code>&lt;location&gt;</code> element specifies the current location of the book: holding institution and shelfmark (e.g. "University of Buffalo, catalogue number PLJJ36").</p>
 
 <p>The <code>&lt;IIIF&gt;</code> element contains information about the International Image Interoperability Framework (IIIF) resources associated with the book. Within this element are <code>&lt;IIIFmanifest&gt;</code> and <code>&lt;IIIFviewer&gt;</code> elements that contain the URLs for the IIIF manifest and a stable identifier where the images can be seen in a IIIF viewer.</p>
 
@@ -170,6 +179,8 @@
     &lt;IIIFmanifest&gt;http://example.com/manifest.json&lt;/IIIFmanifest&gt;
     &lt;IIIFviewer&gt;http://example.com/viewer&lt;/IIIFviewer&gt;
 &lt;/IIIF&gt;</code></pre></div>
+
+<p><code>&lt;imagecopyright&gt;</code> is a legacy element in this module and is not displayed. Use <code>&lt;imagecredit&gt;</code> in the scholarly context module instead.</p>
 
 <h3 class="documentation" id="toc_7">Module 2: Proprietary History</h3>
 
@@ -198,6 +209,8 @@
 <p>The <code>&lt;origin&gt;</code> element provides a detailed description of the book's provenance, such as previous owners, acquisition source, or historical context.</p>
 
 <p>The <code>&lt;inscription&gt;</code> element includes any inscription written in or associated with the book. </p>
+
+<p>In the browse list, this module is shown as a <strong>Provenance</strong> button below the entry (followed by the year of acquisition, if there is one), which opens a panel with its fields. On the book page, the fields are listed below the bibliographic information. Each field is labelled with its element name, capitalised (<code>&lt;origin&gt;</code> is shown as "Origin"); <code>&lt;dateofacquisition&gt;</code> is shown as "Date of acquisition" and formatted as "15 May 1934". The <code>&lt;type&gt;</code> element is not displayed.</p>
 
 <h3 class="documentation" id="toc_8">Module 3: Reading History</h3>
 
@@ -306,7 +319,24 @@
 
 <p>The <code>&lt;readingdate&gt;</code> element can be used multiple times if the book was known to have been read more than once. To encode one period (e.g. "Summer 1934") instead of a range, fill in the same info in both <code>&lt;from&gt;</code> and <code>&lt;to&gt;</code>. If these two fields are identical, only <code>&lt;from&gt;</code> will be visualized.</p>
 
-<h3 class="documentation" id="toc_9">Module 4: Pages and Reading Traces</h3>
+<h3 class="documentation" id="toc_context">Module 4: Scholarly Context</h3>
+<p>The scholarly context module holds information about the book's relation to the writer's work and to scholarship.</p>
+<div><pre><code class="language-none">&lt;module type=&quot;context&quot;&gt;
+    &lt;primarymaterial&gt;Quoted in &lt;i&gt;Ulysses&lt;/i&gt;, &quot;Proteus&quot; episode (U 3.1–9).&lt;/primarymaterial&gt;
+    &lt;secondaryscholarship&gt;&lt;ptr target=&quot;https://example.org/article&quot;&gt;Author, &quot;Title of Article&quot;, &lt;i&gt;Journal&lt;/i&gt; 12 (2020)&lt;/ptr&gt;&lt;/secondaryscholarship&gt;
+    &lt;note&gt;An editorial note about this book.&lt;/note&gt;
+    &lt;imagecredit&gt;Images courtesy of the holding institution.&lt;/imagecredit&gt;
+&lt;/module&gt;
+</code></pre></div>
+<ul>
+<li><code>&lt;primarymaterial&gt;</code>: a passage in the writer's own work that draws on, quotes or echoes this book, with its citation. Shown as "Primary material".</li>
+<li><code>&lt;secondaryscholarship&gt;</code>: published or forthcoming scholarship discussing this book or its reading traces. Shown as "Secondary scholarship".</li>
+<li><code>&lt;note&gt;</code>: an editorial note. Shown as "Editorial notes".</li>
+<li><code>&lt;imagecredit&gt;</code>: credit and rights for the page images (holding institution, digitiser, source). Shown as "Image credits".</li>
+</ul>
+<p>All elements are optional, and all except <code>&lt;imagecredit&gt;</code> can be repeated. In the browse list, the module is shown as a <strong>Scholarly context</strong> button with the number of fields present, which opens a panel with the fields in the order above. The module is not yet shown on the book page. Its contents are included in the full-text search.</p>
+
+<h3 class="documentation" id="toc_9">Module 5: Pages and Reading Traces</h3>
 
 <p>The Pages and Reading Traces module is used to encode information about individual pages of a book and any reading traces or annotations found on those pages.</p>
 
@@ -349,9 +379,26 @@
 
 <p>A <code>&lt;type&gt;</code> element with the value "marginalia" <strong>must</strong> be added if the reading trace contains actual words written by the reader.</p>
 
+<p>Marginal text in a transcription is marked with <code>&lt;m&gt;</code>. The browse list, the "Marginalia only" filter and the marginalia search all rely on <code>&lt;m&gt;</code>, so a zone with <code>&lt;type&gt;marginalia&lt;/type&gt;</code> should also have its marginal text marked with <code>&lt;m&gt;</code>.</p>
+
 <p>The <code>&lt;position&gt;</code> element indicates the position of the reading trace on the page, expressed in pixels down from the top of the image.</p>
 
 <p>The <code>&lt;rn&gt;</code> element (reading note) contains the detailed content of the reading trace, including the transcription, writing tool, and the extract associated with the trace. The <code>&lt;transcription&gt;</code> element holds the transcribed text, with emphasis tags such as <code>&lt;u&gt;</code> for underlined text and <code>&lt;m&gt;</code> for marginalia notes. The <code>&lt;writingtool&gt;</code> element specifies the tool used to create the trace, such as "Red ink". The <code>&lt;extracts&gt;</code> element contains the text excerpts related to the reading trace.</p>
+
+<p>In the browse list, books with reading traces get a <strong>Reading traces</strong> button with the number of pages that have traces (e.g. "Reading traces · 14 pp."). It opens two lists of page numbers: pages with marginalia and pages with other traces. Each page number links to that page in the book view.</p>
+<p>The book view can be opened at a specific page, and optionally a specific reading trace, with the <code>page</code> and <code>zone</code> parameters: <code>ARA-LIB/index.html?page=24&amp;zone=1</code>. In a page identifier, each space is written as <code>-_-</code>.</p>
+<h3 class="documentation" id="toc_inline">Inline Markup</h3>
+<p>Text fields, such as titles, notes, provenance fields, transcriptions and the scholarly context fields, can contain the following inline elements:</p>
+<ul>
+<li><code>&lt;i&gt;</code>: italics, e.g. for titles of works.</li>
+<li><code>&lt;u&gt;</code>: a passage underlined by the reader.</li>
+<li><code>&lt;m&gt;</code>: a marginal note (see above).</li>
+<li><code>&lt;unclear&gt;</code>: an uncertain reading, shown in square brackets.</li>
+<li><code>&lt;hi rend="..."&gt;</code>: highlighted text, e.g. <code>rend="italic"</code> or <code>rend="circled"</code>.</li>
+<li><code>&lt;sup&gt;</code>: superscript.</li>
+<li><code>&lt;lb/&gt;</code>: a line break.</li>
+<li><code>&lt;ptr&gt;</code>: a link to an external source: <code>&lt;ptr target="https://..."&gt;label&lt;/ptr&gt;</code>. Without content, the URL itself is shown. Links are currently rendered in the provenance and scholarly context fields, and open in a new tab.</li>
+</ul>
 
 <h2 class="documentation" id="toc_10">Including Images</h2>
 
@@ -467,7 +514,7 @@ ProxyPassReverse    /sample-library-images http://localhost:8080/sample-library-
 
 <h3 class="documentation" id="toc_15">Manage Library Collections</h3>
 
-<p>The <strong>Manage Library Collections</strong> window provides an overview of all library collections available in the app. Each collection is listed by its <strong>human-readable name</strong> and its <strong>library ID</strong>, which corresponds to the folder name under the app’s <code>data/</code> directory. The table also indicates which collection is currently <strong>active</strong> and which one is set as the <strong>default</strong>.</p>
+<p>The <strong>Manage Library Collections</strong> window provides an overview of all library collections available in the app. Each collection is listed by its <strong>human-readable name</strong> and its <strong>library ID</strong>, which corresponds to the folder name under <code>/db/data/writerslibrary/</code>. The table also indicates which collection is currently <strong>active</strong> and which one is set as the <strong>default</strong>.</p>
 
 <p>From this window, administrators can:</p>
 
@@ -478,7 +525,7 @@ ProxyPassReverse    /sample-library-images http://localhost:8080/sample-library-
 <li><strong>Export a library collection to a static site</strong></li>
 </ul>
 
-<p>When creating a new library, Bibundina initializes a new directory named after the library ID and populates it with a default <code>config.xml</code>, <code>home.xml</code>, and a <code>books/</code> folder with one sample book file (<code>ADA-MYF.xml</code>). Library IDs must consist of normal letters, digits, and hyphens, and may not contain spaces.</p>
+<p>When creating a new library, Bibundina initializes a new directory named after the library ID and populates it with a default <code>config.xml</code>, <code>home.xml</code>, an <code>xml/</code> folder with one sample book file (<code>ADA-MYF.xml</code>), and an <code>images/</code> folder. Library IDs must consist of normal letters, digits, and hyphens, and may not contain spaces.</p>
 
 <p>The <strong>sample library</strong> (<code>sample-library</code>) is included by default and is marked as both active and default upon installation. While it can be used for experimentation or testing, it is recommended to create a separate library collection for real-world data in order to keep sample material and production data clearly separated.</p>
 
@@ -518,6 +565,7 @@ Library collections cannot be deleted or reordered directly via the interface.</
 <li>If you close the browser window or navigate away during an export, the export will continue running on the server. You can reopen the Manage Library Collections window at any time to check progress and download the result when it is done.</li>
 <li>The static export includes a full-text search engine (powered by <a href="https://github.com/projectEndings/staticSearch">staticSearch</a> covering all text content in the library's book XML files. Search results link to book pages but do not yet highlight matched terms within those pages — hit highlighting is planned for a future release. <strong>Search requires a local web server</strong> and will not function when files are opened directly from the filesystem; if you open <code>search/index.html</code> without a server, a warning with instructions will be displayed. The simplest option is to run <code>python3 -m http.server 8000</code> from the export folder and open <code>http://localhost:8000</code> in your browser.</li>
 <li>Images referenced via IIIF URLs are included as links in the static output and will load from their original IIIF server. All images are listed in <code>manifests/image-manifest.xml</code> and must be downloaded separately using the included <code>_download-images.py</code> script (see <code>README-PHASE2.md</code> inside the ZIP for instructions).</li>
+<li>Links to a specific page of a book (<code>?page=...</code>, used for instance by the page numbers under <strong>Reading traces</strong> in the browse list) do not work in the static export; they open the book at its first page.</li>
 </ul>
 
 <blockquote>
@@ -527,15 +575,15 @@ The first time an export is triggered, Bibundina creates a <code>static/</code> 
 
 <h3 class="documentation" id="toc_17">Create a New Book Entry</h3>
 
-<p>This tool helps you generate the XML for a new book entry. You can copy the result to your clipboard, paste it into eXide and save it as a new <code>.xml</code> file in the <code>books/</code> folder of your library collection, named after the book’s ID (e.g., <code>ARA-LIB.xml</code>).</p>
+<p>This tool helps you generate the XML for a new book entry. You can copy the result to your clipboard, paste it into eXide and save it as a new <code>.xml</code> file in the <code>xml/</code> folder of your library collection, named after the book’s ID (e.g., <code>ARA-LIB.xml</code>).</p>
 
-<p><strong>Note</strong>: This tool doesn’t automatically create book files in the library. You must manually save the generated XML as a new file in the <code>books/</code> folder.</p>
+<p><strong>Note</strong>: This tool doesn’t automatically create book files in the library. You must manually save the generated XML as a new file in the <code>xml/</code> folder.</p>
 
 <p>First, choose a valid and unique ID that starts with a letter and contains only letters, numbers and hyphens. Then enter the main bibliographic information and (optionally) import images from a IIIF manifest. This feature can also be used separately (see below).</p>
 
 <h3 class="documentation" id="toc_18">Import image links from a IIIF manifest</h3>
 
-<p>This tool extracts image links from a IIIF manifest and formats them into the correct XML schema (<code>&lt;module type="pages"&gt;</code>). You can then paste the result directly into the relevant book XML file in your library’s <code>books/</code> folder. However, due to structural differences in IIIF manifests, extraction may not always be successful.</p>
+<p>This tool extracts image links from a IIIF manifest and formats them into the correct XML schema (<code>&lt;module type="pages"&gt;</code>). You can then paste the result directly into the relevant book XML file in your library’s <code>xml/</code> folder. However, due to structural differences in IIIF manifests, extraction may not always be successful.</p>
 
 <p>For every image declared in the manifest, the tool will create the following XML:</p>
 
@@ -568,7 +616,7 @@ The first time an export is triggered, Bibundina creates a <code>static/</code> 
 <h2 class="documentation" id="toc_20">Structure of the App</h2>
 
 <ul>
-<li><code>collection.xconf</code>: This file is used to configure collection-specific settings, such as indexing options and triggers.</li>
+<li><code>collection.xconf</code>: This file is used to configure collection-specific settings, such as indexing options and triggers. Installing or upgrading the package reindexes the library data.</li>
 <li><code>controller.xq</code>: This file is used to control the flow of requests and responses within the app.</li>
 <li><code>data/</code>: Seed data (the sample library and <code>libraries.xml</code>). On a fresh install it is copied to <code>/db/data/writerslibrary</code>, which is where the app reads and writes all library data. Library data is kept outside the app collection so that upgrading the app does not delete it.</li>
 <li><code>data/sample-library/config.xml</code>: This file contains configuration settings, such as the title of the app and the browsing and sorting options.</li>
@@ -586,6 +634,10 @@ The first time an export is triggered, Bibundina creates a <code>static/</code> 
 <li><code>modules/admin-tools.xql</code>: This module contains code for administrative tools within the app, including the Manage Library Collections modal.</li>
 <li><code>modules/import-iiif.xql</code>: This module contains code for importing data using the IIIF (International Image Interoperability Framework) protocol.</li>
 <li><code>resources/</code>: This folder contains resources such as CSS files, images, JavaScript files, and XSLT files.</li>
+<li><code>book.rng</code>: The Relax NG schema for book XML files. It is the authoritative reference for the encoding.</li>
+<li><code>modules/image.xql</code>: Serves page images from each library's <code>images/</code> collection.</li>
+<li><code>pre-install.xq</code> and <code>post-install.xq</code>: Run when the package is installed. On a fresh install, <code>post-install.xq</code> copies the seed data to <code>/db/data/writerslibrary</code>; on every install it reindexes the library data.</li>
+<li><code>resources/scripts/entry-panels.js</code>: Opens and closes the Provenance, Reading traces and Scholarly context panels in the browse list.</li>
 <li><code>static/</code>: This folder is created automatically the first time a static export is triggered. It contains export output, status files, and ZIP archives for each exported library collection. It is not present on a fresh installation.</li>
 <li><code>templates/</code>: This folder contains HTML templates used to generate pages within the app.</li>
 </ul>

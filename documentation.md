@@ -4,11 +4,11 @@
 
 After installation, Bibundina opens with a welcome page and loads a **sample library collection** containing example records that demonstrate the encoding schema. This sample library is fully functional and can be used to encode your own material, but we recommend creating a **separate library collection** for production use. Bibundina supports working with **multiple library collections**, and you can switch between them at any time using the admin tools (see the *Admin Tools* section for details). Throughout this documentation, the sample library (`sample-library`) is used to illustrate the app’s features.
 
-Data entry in Bibundina is done by creating and editing individual XML files, one per book. Each book file is stored in the `books/` subfolder of its library collection, and is named after the book's unique ID (e.g., `ARA-LIB.xml`). Some library-specific settings can be configured in `config.xml` and the contents of the home page can be edited in `home.xml`. In the case of the sample library, the relevant files and folders are located at:
+Data entry in Bibundina is done by creating and editing individual XML files, one per book. Each book file is stored in the `xml/` subfolder of its library collection, and is named after the book's unique ID (e.g., `ARA-LIB.xml`). Some library-specific settings can be configured in `config.xml` and the contents of the home page can be edited in `home.xml`. In the case of the sample library, the relevant files and folders are located at:
 
-- `/db/apps/writerslibrary/data/sample-library/books/` (one `.xml` file per book)
-- `/db/apps/writerslibrary/data/sample-library/config.xml`
-- `/db/apps/writerslibrary/data/sample-library/home.xml`
+- `/db/data/writerslibrary/sample-library/xml/` (one `.xml` file per book)
+- `/db/data/writerslibrary/sample-library/config.xml`
+- `/db/data/writerslibrary/sample-library/home.xml`
 
 ### Editing the XML files in eXide
 You can open and edit book XML files in `eXide`, eXist-db's code editor. To open eXide, go to the eXist-db **Dashboard** and click on the eXide icon.
@@ -71,9 +71,11 @@ Advanced users who are familiar with search indexes and range queries can add an
 
 ## Encoding Schema: Book XML Files
 
-Each book in the library is stored as a separate XML file in the `books/` folder of the library collection. Book files are named after the book’s unique ID (e.g., `ARA-LIB.xml`). Add book entries following the custom encoding scheme documented in the “Encoding manual” section.
+Each book in the library is stored as a separate XML file in the `xml/` folder of the library collection. Book files are named after the book’s unique ID (e.g., `ARA-LIB.xml`). Add book entries following the custom encoding scheme documented in the “Encoding manual” section.
 
 The root element is `<book>`, which has attributes `type` and `id`. The `type` attribute specifies the type of book (`EL` (extant library) `SL` (shadow library), while the `id` attribute provides a unique identifier for the book.
+
+In the browse list, shadow-library books (`SL`) are shown on a hatched background, with a "Shadow" placeholder in place of the thumbnail when there are no scans. Extant books without scans get a "No scan" placeholder.
 
 	<book id="ARA-LIB" type="EL">
 		<!-- Module elements go here -->
@@ -113,11 +115,15 @@ The `<type>` element specifies the type of publication, such as "Monograph", "Jo
 
 The `<author>` element contains information about the author of the book. Within the `<author>` element are `<firstname>` and `<lastname>` elements that contain the author's first and last names. The `sort` attribute can be used to specify a sort key for the author's name. "John O'Brien" can be sorted under "B" by supplying "Brien" in the sort attribute. Please note that the sort attribute should only contain regular letters, so in the sort attribute the last name "Dupré" should be encoded as `sort="Dupre"` or `sort="Dupr&#233;"`. The value of the sort attribute is never visualized in the interface, it is only used to correctly sort authors and titles.
 
-If a book has **no author**, the `<author>` element can be left empty, and the sort attribute can be used to make the book appear in the author lists on the basis of its title or editor:
+If a book has **no author**, leave the `<author>` element empty and use its sort attribute to file the book under its title or editor. Editors in the editor role are then shown in the author position:
 
-	<title sort="Everyday Spanish">Everyday Spanish</title>
-	<author sort="Collier"><firstname/><lastname/></author>
-	<editor>L.D. Collier</editor> 
+```xml
+<title sort="Everyday Spanish">Everyday Spanish</title>
+<author sort="Collier"><firstname/><lastname/></author>
+<editor>L.D. Collier</editor>
+```
+
+This is displayed as "L.D. Collier (ed.). *Everyday Spanish*". If there are several editors in the editor role, all of them are shown (up to four, then "et al."), followed by "(eds.)". Editors with another role, such as translators, are never moved to the author position.
 
 If a book has **multiple authors**, each author should be enclosed in their own `<author>` element:
 
@@ -130,9 +136,17 @@ If a book has **multiple authors**, each author should be enclosed in their own 
 		<lastname>Doe</lastname>
 	</author>
 
+Authors are displayed in the order in which they are encoded: the first as "Lastname, Firstname", the others as "Firstname Lastname". Up to four authors are shown; if there are more, the first four are followed by "et al.".
+
 The `<volume/>`, `<series/>`, `<edition/>`, `<editor/>`, `<place>`, `<publisher>`, `<date>`, and `<generalnote/>` elements can contain information about the volume number, series, edition, editor, place of publication, publisher, date of publication, and any general notes about the book, respectively.
 
-The `<location>` element specifies the current location of the book.
+The `<editor>` element can carry a `type` attribute with the editor's role, which is shown in parentheses after the name: `<editor type="trans.">Franz Werfel</editor>` is displayed as "Franz Werfel (trans.)". Without a `type`, "ed." is shown. Editors are listed directly below the title. Only editors without a `type`, or with an editor spelling such as `ed.`, `eds.` or `editor`, can take the author position when there is no author.
+
+For `<edition>`, a bare ordinal such as `1st` or `18th` is displayed as "1st edition"; any other value is displayed as encoded.
+
+A book with no author whose `<type>` is `dictionary` (lowercase) is shown with "Dictionary." in the author position.
+
+The `<location>` element specifies the current location of the book: holding institution and shelfmark (e.g. "University of Buffalo, catalogue number PLJJ36").
 
 The `<IIIF>` element contains information about the International Image Interoperability Framework (IIIF) resources associated with the book. Within this element are `<IIIFmanifest>` and `<IIIFviewer>` elements that contain the URLs for the IIIF manifest and a stable identifier where the images can be seen in a IIIF viewer.
 
@@ -140,6 +154,8 @@ The `<IIIF>` element contains information about the International Image Interope
 		<IIIFmanifest>http://example.com/manifest.json</IIIFmanifest>
 		<IIIFviewer>http://example.com/viewer</IIIFviewer>
 	</IIIF>
+
+`<imagecopyright>` is a legacy element in this module and is not displayed. Use `<imagecredit>` in the scholarly context module instead.
 
 ### Module 2: Proprietary History
 
@@ -167,6 +183,8 @@ The `<dateofacquisition>` element contains the date when the book was acquired. 
 The `<origin>` element provides a detailed description of the book's provenance, such as previous owners, acquisition source, or historical context.
 
 The `<inscription>` element includes any inscription written in or associated with the book. 
+
+In the browse list, this module is shown as a **Provenance** button below the entry (followed by the year of acquisition, if there is one), which opens a panel with its fields. On the book page, the fields are listed below the bibliographic information. Each field is labelled with its element name, capitalised (`<origin>` is shown as "Origin"); `<dateofacquisition>` is shown as "Date of acquisition" and formatted as "15 May 1934". The `<type>` element is not displayed.
 
 ### Module 3: Reading History
 
@@ -260,7 +278,27 @@ Within the `<book>` element, the `<module>` element with an attribute `type` set
 
 The `<readingdate>` element can be used multiple times if the book was known to have been read more than once. To encode one period (e.g. "Summer 1934") instead of a range, fill in the same info in both `<from>` and `<to>`. If these two fields are identical, only `<from>` will be visualized.
 
-### Module 4: Pages and Reading Traces
+### Module 4: Scholarly Context
+
+The scholarly context module holds information about the book's relation to the writer's work and to scholarship.
+
+```xml
+<module type="context">
+    <primarymaterial>Quoted in <i>Ulysses</i>, "Proteus" episode (U 3.1–9).</primarymaterial>
+    <secondaryscholarship><ptr target="https://example.org/article">Author, "Title of Article", <i>Journal</i> 12 (2020)</ptr></secondaryscholarship>
+    <note>An editorial note about this book.</note>
+    <imagecredit>Images courtesy of the holding institution.</imagecredit>
+</module>
+```
+
+- `<primarymaterial>`: a passage in the writer's own work that draws on, quotes or echoes this book, with its citation. Shown as "Primary material".
+- `<secondaryscholarship>`: published or forthcoming scholarship discussing this book or its reading traces. Shown as "Secondary scholarship".
+- `<note>`: an editorial note. Shown as "Editorial notes".
+- `<imagecredit>`: credit and rights for the page images (holding institution, digitiser, source). Shown as "Image credits".
+
+All elements are optional, and all except `<imagecredit>` can be repeated. In the browse list, the module is shown as a **Scholarly context** button with the number of fields present, which opens a panel with the fields in the order above. The module is not yet shown on the book page. Its contents are included in the full-text search.
+
+### Module 5: Pages and Reading Traces
 
 The Pages and Reading Traces module is used to encode information about individual pages of a book and any reading traces or annotations found on those pages.
 
@@ -305,9 +343,28 @@ The `<facsimile>` element within a `<zone>` provides a reference to an image fil
 
 A `<type>` element with the value "marginalia" **must** be added if the reading trace contains actual words written by the reader.
 
+Marginal text in a transcription is marked with `<m>`. The browse list, the "Marginalia only" filter and the marginalia search all rely on `<m>`, so a zone with `<type>marginalia</type>` should also have its marginal text marked with `<m>`.
+
 The `<position>` element indicates the position of the reading trace on the page, expressed in pixels down from the top of the image.
 
 The `<rn>` element (reading note) contains the detailed content of the reading trace, including the transcription, writing tool, and the extract associated with the trace. The `<transcription>` element holds the transcribed text, with emphasis tags such as `<u>` for underlined text and `<m>` for marginalia notes. The `<writingtool>` element specifies the tool used to create the trace, such as "Red ink". The `<extracts>` element contains the text excerpts related to the reading trace.
+
+In the browse list, books with reading traces get a **Reading traces** button with the number of pages that have traces (e.g. "Reading traces · 14 pp."). It opens two lists of page numbers: pages with marginalia and pages with other traces. Each page number links to that page in the book view.
+
+The book view can be opened at a specific page, and optionally a specific reading trace, with the `page` and `zone` parameters: `ARA-LIB/index.html?page=24&zone=1`. In a page identifier, each space is written as `-_-`.
+
+### Inline Markup
+
+Text fields, such as titles, notes, provenance fields, transcriptions and the scholarly context fields, can contain the following inline elements:
+
+- `<i>`: italics, e.g. for titles of works.
+- `<u>`: a passage underlined by the reader.
+- `<m>`: a marginal note (see above).
+- `<unclear>`: an uncertain reading, shown in square brackets.
+- `<hi rend="...">`: highlighted text, e.g. `rend="italic"` or `rend="circled"`.
+- `<sup>`: superscript.
+- `<lb/>`: a line break.
+- `<ptr>`: a link to an external source: `<ptr target="https://...">label</ptr>`. Without content, the URL itself is shown. Links are currently rendered in the provenance and scholarly context fields, and open in a new tab.
 
 
 ## Including Images
@@ -323,7 +380,7 @@ The book with id `ARA-LIB`, for instance, contains `<page>` elements such as thi
 		<facsimile>ARA-LIB/cover.jpg</facsimile>
 	</page>
 
-The app is set to search for the contents of the `<facsimile>` element (e.g., `ARA-LIB/cover.jpg`) in the `db/writerslibrary/resources/images/sample-library/` folder. Admins can add images to this folder via eXide by clicking `Manage` under the `File` menu and navigating to the folder in the DB Manager window (click the upload icon to upload files or folders). Images can also be added by dropping them into the folder when using the app via oXygen. The `<facsimile>` element must reference the correct image location and file name.
+The app is set to search for the contents of the `<facsimile>` element (e.g., `ARA-LIB/cover.jpg`) in the `/db/data/writerslibrary/sample-library/images/` collection (each library keeps its images in its own `images/` subcollection, outside the app so that upgrading the app does not delete them). Admins can add images to this folder via eXide by clicking `Manage` under the `File` menu and navigating to the folder in the DB Manager window (click the upload icon to upload files or folders). Images can also be added by dropping them into the folder when using the app via oXygen. The `<facsimile>` element must reference the correct image location and file name.
 
 **Note**: Storing large amounts of images in the writer’s library app is **not recommended**. This is because eXist-db is not designed to host images and doing so can increase the file size of the app instance. To incorporate a substantial collection of images in the app, it is preferable to host them in a static folder on the server (or local machine), or on a IIIF server.
 
@@ -332,12 +389,13 @@ The app can be set up to retrieve images from a folder outside of eXist-db. Howe
 
 By following the outlined steps, the app can retrieve images from a static folder named `library-images` (on a computer or on a server).
 
-In the file `db/writerslibrary/controller.xq` the following statement specifies that paths to images in `<facsimile>` elements must be preceded by `db/writerslibrary/resources/images/sample-library/`:
+In the file `db/writerslibrary/controller.xq` the following statement specifies that paths to images in `<facsimile>` elements are served by `modules/image.xql` from `/db/data/writerslibrary/{library-id}/images/`:
 
 	    else if (contains($exist:path, "/$library-images/")) then
         <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-            <forward url="{$exist:controller}/resources/images/sample-library/{substring-after($exist:path, '/$library-images/')}">
-                <set-header name="Cache-Control" value="max-age=3600, must-revalidate"/>
+            <forward url="{$exist:controller}/modules/image.xql">
+                <add-parameter name="library" value="{$imageLibraryID}"/>
+                <add-parameter name="path" value="{substring-after($exist:path, '/$library-images/')}"/>
             </forward>
         </dispatch>
 
@@ -416,7 +474,7 @@ The available tools are:
 
 ### Manage Library Collections
 
-The **Manage Library Collections** window provides an overview of all library collections available in the app. Each collection is listed by its **human-readable name** and its **library ID**, which corresponds to the folder name under the app’s `data/` directory. The table also indicates which collection is currently **active** and which one is set as the **default**.
+The **Manage Library Collections** window provides an overview of all library collections available in the app. Each collection is listed by its **human-readable name** and its **library ID**, which corresponds to the folder name under `/db/data/writerslibrary/`. The table also indicates which collection is currently **active** and which one is set as the **default**.
 
 From this window, administrators can:
 
@@ -425,15 +483,15 @@ From this window, administrators can:
 * **Create a new library collection** by providing a name and a unique library ID
 * **Export a library collection to a static site**
 
-When creating a new library, Bibundina initializes a new directory named after the library ID and populates it with a default `config.xml`, `home.xml`, and a `books/` folder with one sample book file (`ADA-MYF.xml`). Library IDs must consist of normal letters, digits, and hyphens, and may not contain spaces.
+When creating a new library, Bibundina initializes a new directory named after the library ID and populates it with a default `config.xml`, `home.xml`, an `xml/` folder with one sample book file (`ADA-MYF.xml`), and an `images/` folder. Library IDs must consist of normal letters, digits, and hyphens, and may not contain spaces.
 
 The **sample library** (`sample-library`) is included by default and is marked as both active and default upon installation. While it can be used for experimentation or testing, it is recommended to create a separate library collection for real-world data in order to keep sample material and production data clearly separated.
 
 > **Note on deletion and defaults**
 > Library collections cannot be deleted or reordered directly via the interface.
 >
-> * To **delete** a library collection, remove the folder named after the library ID and delete the corresponding `<library/>` entry in `data/libraries.xml`.
-> * To make a library collection the **default**, move its `<library/>` entry to the first position in `data/libraries.xml`.
+> * To **delete** a library collection, remove the folder named after the library ID and delete the corresponding `<library/>` entry in `/db/data/writerslibrary/libraries.xml`.
+> * To make a library collection the **default**, move its `<library/>` entry to the first position in `/db/data/writerslibrary/libraries.xml`.
 
 ### Export to Static Site
 
@@ -462,6 +520,7 @@ The exported ZIP contains the following structure:
 - If you close the browser window or navigate away during an export, the export will continue running on the server. You can reopen the Manage Library Collections window at any time to check progress and download the result when it is done.
 - The static export includes a full-text search engine (powered by [staticSearch](https://github.com/projectEndings/staticSearch)) covering all text content in the library's book XML files. Search results link to book pages but do not yet highlight matched terms within those pages — hit highlighting is planned for a future release. **Search requires a local web server** and will not function when files are opened directly from the filesystem; if you open `search/index.html` without a server, a warning with instructions will be displayed. The simplest option is to run `python3 -m http.server 8000` from the export folder and open `http://localhost:8000` in your browser.
 - Images referenced via IIIF URLs are included as links in the static output and will load from their original IIIF server. All images are listed in `manifests/image-manifest.xml` and must be downloaded separately using the included `_download-images.py` script (see `README-PHASE2.md` inside the ZIP for instructions). After running the Phase 2 script, IIIF cover images will also appear correctly as thumbnails in search results.
+- Links to a specific page of a book (`?page=...`, used for instance by the page numbers under **Reading traces** in the browse list) do not work in the static export; they open the book at its first page.
 
 > **Note on the `static/` folder**
 > The first time an export is triggered, Bibundina creates a `static/` folder inside the app's database collection to store the output. This folder is not present on a fresh installation — its presence indicates that at least one export has been run. The exported ZIP file is also stored here temporarily and can be re-downloaded by running the export again.
@@ -469,15 +528,15 @@ The exported ZIP contains the following structure:
 
 ### Create a New Book Entry
 
-This tool helps you generate the XML for a new book entry. You can copy the result to your clipboard, paste it into eXide and save it as a new `.xml` file in the `books/` folder of your library collection, named after the book’s ID (e.g., `ARA-LIB.xml`).
+This tool helps you generate the XML for a new book entry. You can copy the result to your clipboard, paste it into eXide and save it as a new `.xml` file in the `xml/` folder of your library collection, named after the book’s ID (e.g., `ARA-LIB.xml`).
 
-**Note**: This tool doesn’t automatically create book files in the library. You must manually save the generated XML as a new file in the `books/` folder.
+**Note**: This tool doesn’t automatically create book files in the library. You must manually save the generated XML as a new file in the `xml/` folder.
 
 First, choose a valid and unique ID that starts with a letter and contains only letters, numbers and hyphens. Then enter the main bibliographic information and (optionally) import images from a IIIF manifest. This feature can also be used separately (see below).
 
 ### Import image links from a IIIF manifest
 
-This tool extracts image links from a IIIF manifest and formats them into the correct XML schema (`<module type="pages">`). You can then paste the result directly into the relevant book XML file in your library’s `books/` folder. However, due to structural differences in IIIF manifests, extraction may not always be successful.
+This tool extracts image links from a IIIF manifest and formats them into the correct XML schema (`<module type="pages">`). You can then paste the result directly into the relevant book XML file in your library’s `xml/` folder. However, due to structural differences in IIIF manifests, extraction may not always be successful.
 
 For every image declared in the manifest, the tool will create the following XML:
 
@@ -511,8 +570,9 @@ For every zone selection, the tool will create the following XML:
 
 ## Structure of the App
 
-- `collection.xconf`: This file is used to configure collection-specific settings, such as indexing options and triggers.
+- `collection.xconf`: This file is used to configure collection-specific settings, such as indexing options and triggers. Installing or upgrading the package reindexes the library data.
 - `controller.xq`: This file is used to control the flow of requests and responses within the app.
+- `data/`: Seed data (the sample library and `libraries.xml`). On a fresh install it is copied to `/db/data/writerslibrary`, which is where the app reads and writes all library data. Library data is kept outside the app collection so that upgrading the app does not delete it.
 - `data/sample-library/config.xml`: This file contains configuration settings, such as the title of the app and the browsing and sorting options.
 - `data/sample-library/books/`: This folder contains one XML file per book, each named after the book’s unique ID (e.g., `ARA-LIB.xml`). Together these files form the library’s book database.
 - `data/sample-library/home.xml`: Holds the HTML code that appears on the library's home page.
@@ -528,5 +588,9 @@ For every zone selection, the tool will create the following XML:
 - `modules/admin-tools.xql`: This module contains code for administrative tools within the app, including the Manage Library Collections modal.
 - `modules/import-iiif.xql`: This module contains code for importing data using the IIIF (International Image Interoperability Framework) protocol.
 - `resources/`: This folder contains resources such as CSS files, images, JavaScript files, and XSLT files.
+- `book.rng`: The Relax NG schema for book XML files. It is the authoritative reference for the encoding.
+- `modules/image.xql`: Serves page images from each library's `images/` collection.
+- `pre-install.xq` and `post-install.xq`: Run when the package is installed. On a fresh install, `post-install.xq` copies the seed data to `/db/data/writerslibrary`; on every install it reindexes the library data.
+- `resources/scripts/entry-panels.js`: Opens and closes the Provenance, Reading traces and Scholarly context panels in the browse list.
 - `static/`: This folder is created automatically the first time a static export is triggered. It contains export output, status files, and ZIP archives for each exported library collection. It is not present on a fresh installation.
 - `templates/`: This folder contains HTML templates used to generate pages within the app.

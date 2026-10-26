@@ -637,7 +637,7 @@ The first time an export is triggered, Bibundina creates a <code>static/</code> 
 <li><code>book.rng</code>: The Relax NG schema for book XML files. It is the authoritative reference for the encoding.</li>
 <li><code>modules/image.xql</code>: Serves page images from each library's <code>images/</code> collection.</li>
 <li><code>pre-install.xq</code> and <code>post-install.xq</code>: Run when the package is installed. On a fresh install, <code>post-install.xq</code> copies the seed data to <code>/db/data/writerslibrary</code>; on every install it reindexes the library data.</li>
-<li><code>resources/scripts/entry-panels.js</code>: Opens and closes the Provenance, Reading traces and Scholarly context panels in the browse list.</li>
+<li><code>resources/scripts/entry-panels.js</code>: Opens and closes the Provenance, Reading traces and Scholarly context panels in the browse list, and the Reading history, Provenance, Available scans and Scholarly context panels on the book page.</li>
 <li><code>static/</code>: This folder is created automatically the first time a static export is triggered. It contains export output, status files, and ZIP archives for each exported library collection. It is not present on a fresh installation.</li>
 <li><code>templates/</code>: This folder contains HTML templates used to generate pages within the app.</li>
 </ul>

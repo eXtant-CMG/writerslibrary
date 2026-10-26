@@ -93,7 +93,6 @@
                 $("#" + nr).click(function(){
                 $(".rt").hide();
                 $("#results" + nr).css('display','block');
-                $(".faclistBody").hide();$("#FLcaret").removeClass( 'upcaret' );
                 });
                 $("#bookbody").mouseup(function (e)
                 {
@@ -138,8 +137,6 @@
     
     
     });
-    
-    $('.faclistHeader').click(function(){$(".faclistBody").toggle();$("#FLcaret").toggleClass( 'upcaret' );});
     
     <span data-template="library-book-view:getJS" data-template-component="pageAndZoneLink"/>
     });

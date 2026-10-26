@@ -228,6 +228,13 @@ declare function library-functions:getProprietaryHistory($propModule as node(), 
 (: This function gets the information from the (optional) third module <module type="reading"></module> Reading History.
  :)
 declare function library-functions:getReadingHistory($readingModule as node(), $highlight as xs:string?) {
+    <span class="readingHistory"><span class="readingHistoryHeader">Reading history</span>
+        {library-functions:getReadingPeriods($readingModule, $highlight)}
+    </span>
+};
+
+(: Reading periods with their source, without the box (used by the book page panel). :)
+declare function library-functions:getReadingPeriods($readingModule as node(), $highlight as xs:string?) {
     let $months := map {
         "1": "January", "2": "February", "3": "March", "4": "April",
         "5": "May", "6": "June", "7": "July", "8": "August",
@@ -236,10 +243,6 @@ declare function library-functions:getReadingHistory($readingModule as node(), $
     let $status := $readingModule/status
     let $readingDates := $readingModule/readingdate
     return
-
-            <span class="readingHistory"><span class="readingHistoryHeader">Reading history</span>
-
-            {
                 for $readingDate in $readingDates
                 let $from := $readingDate/from
                 let $to := $readingDate/to
@@ -283,8 +286,6 @@ declare function library-functions:getReadingHistory($readingModule as node(), $
                         </span><br/>
                         <span><span class="field-title">Source</span>: <span class="{if ($highlight eq 'source') then 'highlight' else ()}">{$source}</span></span><br/><br/>
                     </span>
-            }
-            </span>
 };
 
 (: Copies inline markup through as-is; <ptr> becomes a link (bare <ptr>URL</ptr> is LEGACY). :)

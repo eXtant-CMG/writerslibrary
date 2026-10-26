@@ -249,6 +249,9 @@ div.entrySL {
 .chip-prov-panel .entry-panel-field + .entry-panel-field,
 .chip-context-panel .entry-panel-field + .entry-panel-field { margin-top:0; }
 
+.entry-panel-list { margin:0; padding-left:18px; }
+.entry-panel-list li + li { margin-top:4px; }
+
 .entry-panel-label {
 	font-size:11px;
 	letter-spacing:0.08em;

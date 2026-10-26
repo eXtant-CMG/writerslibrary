@@ -320,7 +320,9 @@ declare function library-functions:getContextFields($contextModule as element()?
     return
         <div class="entry-panel-field">
             <div class="entry-panel-label">{$labels($name)}</div>
-            {for $item in $items return <div>{library-functions:renderInline($item/node())}</div>}
+            {if (count($items) gt 1) then
+                <ul class="entry-panel-list">{for $item in $items return <li>{library-functions:renderInline($item/node())}</li>}</ul>
+             else <div>{library-functions:renderInline($items/node())}</div>}
         </div>
 };
 

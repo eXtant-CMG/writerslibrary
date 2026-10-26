@@ -296,7 +296,7 @@ The scholarly context module holds information about the book's relation to the 
 - `<note>`: an editorial note. Shown as "Editorial notes".
 - `<imagecredit>`: credit and rights for the page images (holding institution, digitiser, source). Shown as "Image credits".
 
-All elements are optional, and all except `<imagecredit>` can be repeated. In the browse list, the module is shown as a **Scholarly context** button with the number of fields present, which opens a panel with the fields in the order above. The module is not yet shown on the book page. Its contents are included in the full-text search.
+All elements are optional, and all except `<imagecredit>` can be repeated. In the browse list, the module is shown as a **Scholarly context** button with the number of fields present, which opens a panel with the fields in the order above. On the book page it is the **Scholarly context** panel in the right-hand column. When a field is repeated, its entries are shown as a bulleted list; a single entry is shown as plain text. Its contents are included in the full-text search.
 
 ### Module 5: Pages and Reading Traces
 

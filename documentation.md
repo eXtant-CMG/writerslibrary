@@ -591,6 +591,6 @@ For every zone selection, the tool will create the following XML:
 - `book.rng`: The Relax NG schema for book XML files. It is the authoritative reference for the encoding.
 - `modules/image.xql`: Serves page images from each library's `images/` collection.
 - `pre-install.xq` and `post-install.xq`: Run when the package is installed. On a fresh install, `post-install.xq` copies the seed data to `/db/data/writerslibrary`; on every install it reindexes the library data.
-- `resources/scripts/entry-panels.js`: Opens and closes the Provenance, Reading traces and Scholarly context panels in the browse list.
+- `resources/scripts/entry-panels.js`: Opens and closes the Provenance, Reading traces and Scholarly context panels in the browse list, and the Reading history, Provenance, Available scans and Scholarly context panels on the book page.
 - `static/`: This folder is created automatically the first time a static export is triggered. It contains export output, status files, and ZIP archives for each exported library collection. It is not present on a fresh installation.
 - `templates/`: This folder contains HTML templates used to generate pages within the app.

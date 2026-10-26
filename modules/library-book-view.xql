@@ -54,9 +54,99 @@ return
                         if ($bookNode/module/generalnote and $bookNode/module/generalnote ne "") then library-functions:getGeneralNotes($bookNode/module/generalnote) else ()
                        }
                        { (: 4: get IIIF manifest link :)
-                        if ($bookNode/module/IIIF and $bookNode/module/IIIF/IIIFmanifest ne "") then (<a href="{$bookNode/module/IIIF/IIIFviewer/text()}?manifest={$bookNode/module/IIIF/IIIFmanifest/node()}" target="_blank"><img src="$resources/images/logo-iiif-34x30.png" title="{if ($bookNode/module/IIIF/IIIFviewer/text() ne "") then "Click or " else ""}Drag and Drop"/></a>,<br/>) else ()
+                        library-book-view:iiifLink($bookNode)
                        }
           </span>
+};
+
+declare function library-book-view:iiifLink($bookNode as node()?) {
+    if ($bookNode/module/IIIF and $bookNode/module/IIIF/IIIFmanifest ne "") then (<a href="{$bookNode/module/IIIF/IIIFviewer/text()}?manifest={$bookNode/module/IIIF/IIIFmanifest/node()}" target="_blank"><img src="$resources/images/logo-iiif-34x30.png" title="{if ($bookNode/module/IIIF/IIIFviewer/text() ne "") then "Click or " else ""}Drag and Drop"/></a>,<br/>) else ()
+};
+
+(: The book's image list, from the paths in config.xml (see getImage). :)
+declare function library-book-view:getImages($bookNode as node()?) {
+    let $libraryID := request:get-parameter("libraryID", "sample-library")
+    let $imgUrl := doc($config:data-root || '/' || $libraryID || '/config.xml')//imgUrl
+    let $imgUrlContext := <static-context><variable name="bookNode">{$bookNode}</variable></static-context>
+    return util:eval-with-context(concat('$bookNode/',$imgUrl/pathToList/text(),'/',$imgUrl/pathToItem/text()),$imgUrlContext,false())
+};
+
+declare function library-book-view:hasScans($bookNode as node()?) as xs:boolean {
+    exists(library-book-view:getImages($bookNode)[normalize-space(facsimile) ne ""])
+};
+
+(: Book page top: bibliography, general note and IIIF link. Reading history and
+   provenance live in the panels (getPanels). Without scans, a Shadow / No scan
+   cover goes next to the citation. :)
+declare function library-book-view:getCitation($node as node(), $model as map(*)) {
+let $bookNode := library-book-view:getBookNode(request:get-parameter("bookID",""))
+let $isSL := $bookNode/@type eq "SL"
+let $citation := (
+    library-functions:getBibliography($bookNode/module[@type eq "bibl"], ""),
+    if ($bookNode/module/generalnote and $bookNode/module/generalnote ne "") then library-functions:getGeneralNotes($bookNode/module/generalnote) else (),
+    library-book-view:iiifLink($bookNode)
+)
+return
+    if (library-book-view:hasScans($bookNode)) then <span>{$citation}</span>
+    else
+        <div class="book-head-noscan{if ($isSL) then ' book-head-SL' else ()}">
+            {if ($isSL) then <span class="shadowcover"><span class="shadowlabel">Shadow</span></span>
+             else <span class="noscan"><span class="noscanlabel">No scan</span></span>}
+            <div class="book-head-text">
+                {$citation}
+                {if ($isSL) then <div class="book-head-note">Shadow library: not extant; the writer is known or believed to have read it.</div> else ()}
+            </div>
+        </div>
+};
+
+(: One collapsible panel in the browse-chip style; toggled by entry-panels.js. :)
+declare function library-book-view:panel($id as xs:string, $headClass as xs:string, $bodyClass as xs:string,
+        $label as xs:string, $count as xs:string?, $open as xs:boolean, $body as item()*) {
+    <div class="book-panel">
+        <button type="button" class="book-panel-head {$headClass}" aria-expanded="{$open}" aria-controls="book-panel-{$id}">
+            <span class="book-panel-label">{$label}</span>
+            {if ($count) then <span class="book-panel-count">{$count}</span> else ()}
+        </button>
+        <div id="book-panel-{$id}" class="entry-panel {$bodyClass}">
+            {if ($open) then () else attribute hidden {"hidden"}}
+            {$body}
+        </div>
+    </div>
+};
+
+(: Book page right column: reading history, provenance, available scans, scholarly context.
+   Without scans the column takes the viewer's place and Scholarly context starts open. :)
+declare function library-book-view:getPanels($node as node(), $model as map(*)) {
+let $bookNode := library-book-view:getBookNode(request:get-parameter("bookID",""))
+let $reading := $bookNode/module[@type eq "reading"][1]
+let $periods := count($reading/readingdate)
+let $prop := $bookNode/module[@type eq "prop"][1]
+let $propFields := $prop/*[name() ne "type"][normalize-space(.) ne ""]
+let $acquired := tokenize(normalize-space($prop/dateofacquisition[1]), "-")[1]
+let $contextFields := library-functions:getContextFields($bookNode/module[@type eq "context"][1])
+let $scans := library-book-view:hasScans($bookNode)
+return
+  <div class="bibliobook{if ($scans) then () else ' bibliobook-noscan'}">
+    <div id="rtcontainer"/>
+    <div class="book-panels">
+        {if ($periods gt 0) then
+            library-book-view:panel("reading", "", "book-reading-panel", "Reading history",
+                $periods || (if ($periods eq 1) then " period" else " periods"), true(),
+                library-functions:getReadingPeriods($reading, ""))
+         else ()}
+        {if (exists($propFields)) then
+            library-book-view:panel("prov", "", "chip-prov-panel", "Provenance",
+                if ($acquired ne "") then "acquired " || $acquired else (), true(),
+                for $e in $propFields return
+                    <div class="entry-panel-field"><div class="entry-panel-label">{library-functions:propLabel($e)}</div><div>{library-functions:propValue($e)}</div></div>)
+         else ()}
+        {library-book-view:getFacList($node, $model)}
+        {if (exists($contextFields)) then
+            library-book-view:panel("context", "", "chip-context-panel", "Scholarly context",
+                string(count($contextFields)), not($scans), $contextFields)
+         else ()}
+    </div>
+  </div>
 };
 
 (: This function constructs the image viewer, puts the first image into it, 
@@ -113,7 +203,7 @@ if (util:eval-with-context($pathToFirstImage,$imgUrlContext,false()) ne "") then
 else ()
 };
 
-(: this function produces the list in the "available scans" tab in the book view. 
+(: this function produces the "Available scans" panel in the book view (called from getPanels). 
    Like the previous function, it constructs this list by putting together the 
    paths from the variables declared in config.xml and the facs lists in 
    the book nodes in library.xml :)
@@ -128,21 +218,27 @@ let $imgUrl := $configDoc//imgUrl
 let $imgUrlContext := <static-context><variable name="bookNode">{$bookNode}</variable></static-context>
 let $pathToImages := concat('$bookNode/',$imgUrl/pathToList/text(),'/',$imgUrl/pathToItem/text())
 let $nrOfImages := count(util:eval-with-context($pathToImages,$imgUrlContext,false()))
+let $images := util:eval-with-context($pathToImages,$imgUrlContext,false())
+let $isM := function($image) { exists($image//m) or $image//type = "marginalia" }
+let $nrM := count($images[$isM(.)])
 return
 if ($nrOfImages ne 0) then
-    <span class="faclist">
-        <span class="faclistHeader">Available scans <span id="FLcaret" class="FLcaret">▿</span></span>
-        <span class="faclistBody">
+    library-book-view:panel("scans", if (exists($images[zone])) then "chip-traces" else "",
+        "book-scans-panel" || (if (exists($images[zone])) then " book-scans-traces" else ""),
+        "Available scans", $nrOfImages || (if ($nrM gt 0) then " · " || $nrM || " with marginalia" else ""), true(), (
+        if ($nrM gt 0) then <button type="button" class="panel-help" aria-label="Pages in red contain marginalia" data-tip="Pages in red contain marginalia">?</button> else (),
+        <div class="book-scans-list">
            {
-            for $image at $pos in util:eval-with-context($pathToImages,$imgUrlContext,false())
+            for $image at $pos in $images
             let $comma := if ($pos lt $nrOfImages) then ', ' else '.'
-            let $imageLink := <a href="{if (starts-with($image/facsimile/text(),'https')) then $image/facsimile/text() else concat($imgUrl/serverPath/text(),$image/facsimile/text())}" id="{concat($bookID,',',$image/pagenumber/text())}" data-image="{concat($bookID,',',$image/pagenumber/text())}" class="faclink">{$image/pagenumber/text()}{if ($image//m or $image//type eq "marginalia") then "*" else ()}</a>
+            let $imageLink := <a href="{if (starts-with($image/facsimile/text(),'https')) then $image/facsimile/text() else concat($imgUrl/serverPath/text(),$image/facsimile/text())}" id="{concat($bookID,',',$image/pagenumber/text())}" data-image="{concat($bookID,',',$image/pagenumber/text())}" class="faclink{if ($isM($image)) then ' faclink-m' else ()}">{$image/pagenumber/text()}</a>
             return
                 ($imageLink,$comma)
            }
-           {if (admin-tools:userIsAdmin() eq true() and $bookNode//IIIF) then <span class="admin-tools-open-in-zone-tool"><span class="admin-tools-heading">Admin Tool: </span> <a id="page-to-open-link" href="tools/zone-coordinates-tool?pageID={$bookID},{$bookNode//page[1]/pagenumber/text()}">open page <span id="page-to-open">{$bookNode//page[1]/pagenumber/text()}</span> in the <span class="admin-tools-zone-tool-name">Zone coordinates tool</span></a></span> else ()}
-        </span>
-    </span>
+        </div>,
+        library-book-view:getMarginaliaLink($node, $model),
+        if (admin-tools:userIsAdmin() eq true() and $bookNode//IIIF) then <span class="admin-tools-open-in-zone-tool"><span class="admin-tools-heading">Admin Tool: </span> <a id="page-to-open-link" href="tools/zone-coordinates-tool?pageID={$bookID},{$bookNode//page[1]/pagenumber/text()}">open page <span id="page-to-open">{$bookNode//page[1]/pagenumber/text()}</span> in the <span class="admin-tools-zone-tool-name">Zone coordinates tool</span></a></span> else ()
+    ))
 else ()
 };
 
@@ -278,7 +374,7 @@ let $bookID := request:get-parameter("bookID","")
 let $bookNode := library-book-view:getBookNode($bookID)
 return
     if ($bookNode//m) then
-    <span>&gt; <a class="show-all-marginalia"  href="../../{$libraryID}/search/index.html?q=marginalia&amp;index=library&amp;doc=library-readingtraces-{$bookID}">Show <b>all marginalia</b> in this book</a><br/></span>
+    <div class="show-all-marginalia-wrap"><a class="show-all-marginalia" href="../../{$libraryID}/search/index.html?q=marginalia&amp;index=library&amp;doc=library-readingtraces-{$bookID}">Show <b>all marginalia</b> in this book</a></div>
     else ()
 };
 

@@ -258,6 +258,95 @@ div.entrySL {
 	margin-bottom:3px;
 }
 
+/* Book page panels (getPanels): browse chip look, each opens on its own */
+.book-panels { width:440px; }
+.book-panel { margin-bottom:10px; }
+
+.book-panel-head {
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+	width:100%;
+	font:inherit;
+	font-size:14px;
+	text-align:left;
+	padding:5px 14px;
+	border-radius:14px;
+	cursor:pointer;
+	border:1px solid #cfe0dc;
+	background:#ffffff;
+	color:#24695e;
+}
+.book-panel-label::before { content:"\25B8\00a0"; }
+.book-panel-head[aria-expanded="true"] .book-panel-label::before { content:"\25BE\00a0"; }
+.book-panel-head[aria-expanded="true"] { background:#2a7e70; border-color:#2a7e70; color:#ffffff; }
+.book-panel-head.chip-traces { border-color:#f2c4bd; background:#fff6f4; color:#a8352a; }
+.book-panel-head.chip-traces[aria-expanded="true"] { background:#a8352a; border-color:#a8352a; color:#ffffff; }
+.book-panel-count { font-size:12px; opacity:0.85; margin-left:12px; }
+
+.book-panel .entry-panel { margin-top:6px; position:relative; }
+.book-reading-panel > span:last-child > br:nth-last-child(-n+2) { display:none; }
+.book-scans-traces { background:#fdf7f6; border-color:#f2dcd8; }
+.book-scans-list { font-size:15px; padding-right:28px; }
+a.faclink.faclink-m { color:#a8352a; font-weight:bold; }
+.show-all-marginalia-wrap { margin-top:8px; }
+
+/* Book page without scans: cover placeholder next to the citation, panels below */
+.book-head-noscan {
+	display:flex;
+	gap:24px;
+	align-items:flex-start;
+	padding:16px;
+	margin-bottom:12px;
+}
+.book-head-SL {
+	background-color:#f4f8f7;
+	background-image:repeating-linear-gradient(-45deg, rgba(42,126,112,0.12) 0 1px, transparent 1px 7px);
+	border-bottom:1px dashed black;
+}
+.book-head-noscan .shadowcover, .book-head-noscan span.noscan {
+	flex:none;
+	width:120px;
+	height:150px;
+}
+.book-head-noscan .shadowcover { border-left-width:7px; }
+.book-head-noscan .shadowlabel, .book-head-noscan .noscanlabel { font-size:12px; }
+.book-head-text { min-width:0; }
+.book-head-note { margin-top:8px; font-size:14px; color:#5c5c5c; }
+.bibliobook.bibliobook-noscan { position:static; display:block; }
+.bibliobook-noscan .book-panels { width:680px; max-width:100%; }
+
+.panel-help {
+	position:absolute;
+	top:8px;
+	right:8px;
+	width:20px;
+	height:20px;
+	padding:0;
+	border-radius:50%;
+	border:1px solid #a8352a;
+	background:#ffffff;
+	color:#a8352a;
+	font:inherit;
+	font-size:12px;
+	font-weight:bold;
+	line-height:18px;
+	cursor:help;
+}
+.panel-help:hover::after, .panel-help:focus::after {
+	content:attr(data-tip);
+	position:absolute;
+	right:0;
+	top:26px;
+	white-space:nowrap;
+	padding:4px 8px;
+	border-radius:3px;
+	background:#333333;
+	color:#ffffff;
+	font-weight:normal;
+	z-index:10;
+}
+
 div.book {
 	position:relative;
 }

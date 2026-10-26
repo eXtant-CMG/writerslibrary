@@ -63,16 +63,40 @@ declare function library-book-view:iiifLink($bookNode as node()?) {
     if ($bookNode/module/IIIF and $bookNode/module/IIIF/IIIFmanifest ne "") then (<a href="{$bookNode/module/IIIF/IIIFviewer/text()}?manifest={$bookNode/module/IIIF/IIIFmanifest/node()}" target="_blank"><img src="$resources/images/logo-iiif-34x30.png" title="{if ($bookNode/module/IIIF/IIIFviewer/text() ne "") then "Click or " else ""}Drag and Drop"/></a>,<br/>) else ()
 };
 
+(: The book's image list, from the paths in config.xml (see getImage). :)
+declare function library-book-view:getImages($bookNode as node()?) {
+    let $libraryID := request:get-parameter("libraryID", "sample-library")
+    let $imgUrl := doc($config:data-root || '/' || $libraryID || '/config.xml')//imgUrl
+    let $imgUrlContext := <static-context><variable name="bookNode">{$bookNode}</variable></static-context>
+    return util:eval-with-context(concat('$bookNode/',$imgUrl/pathToList/text(),'/',$imgUrl/pathToItem/text()),$imgUrlContext,false())
+};
+
+declare function library-book-view:hasScans($bookNode as node()?) as xs:boolean {
+    exists(library-book-view:getImages($bookNode)[normalize-space(facsimile) ne ""])
+};
+
 (: Book page top: bibliography, general note and IIIF link. Reading history and
-   provenance live in the panels on the right (getPanels). :)
+   provenance live in the panels (getPanels). Without scans, a Shadow / No scan
+   cover goes next to the citation. :)
 declare function library-book-view:getCitation($node as node(), $model as map(*)) {
 let $bookNode := library-book-view:getBookNode(request:get-parameter("bookID",""))
+let $isSL := $bookNode/@type eq "SL"
+let $citation := (
+    library-functions:getBibliography($bookNode/module[@type eq "bibl"], ""),
+    if ($bookNode/module/generalnote and $bookNode/module/generalnote ne "") then library-functions:getGeneralNotes($bookNode/module/generalnote) else (),
+    library-book-view:iiifLink($bookNode)
+)
 return
-    <span>
-        {library-functions:getBibliography($bookNode/module[@type eq "bibl"], "")}
-        {if ($bookNode/module/generalnote and $bookNode/module/generalnote ne "") then library-functions:getGeneralNotes($bookNode/module/generalnote) else ()}
-        {library-book-view:iiifLink($bookNode)}
-    </span>
+    if (library-book-view:hasScans($bookNode)) then <span>{$citation}</span>
+    else
+        <div class="book-head-noscan{if ($isSL) then ' book-head-SL' else ()}">
+            {if ($isSL) then <span class="shadowcover"><span class="shadowlabel">Shadow</span></span>
+             else <span class="noscan"><span class="noscanlabel">No scan</span></span>}
+            <div class="book-head-text">
+                {$citation}
+                {if ($isSL) then <div class="book-head-note">Shadow library: not extant; the writer is known or believed to have read it.</div> else ()}
+            </div>
+        </div>
 };
 
 (: One collapsible panel in the browse-chip style; toggled by entry-panels.js. :)
@@ -90,7 +114,8 @@ declare function library-book-view:panel($id as xs:string, $headClass as xs:stri
     </div>
 };
 
-(: Book page right column: reading history, provenance, available scans, scholarly context. :)
+(: Book page right column: reading history, provenance, available scans, scholarly context.
+   Without scans the column takes the viewer's place and Scholarly context starts open. :)
 declare function library-book-view:getPanels($node as node(), $model as map(*)) {
 let $bookNode := library-book-view:getBookNode(request:get-parameter("bookID",""))
 let $reading := $bookNode/module[@type eq "reading"][1]
@@ -99,7 +124,10 @@ let $prop := $bookNode/module[@type eq "prop"][1]
 let $propFields := $prop/*[name() ne "type"][normalize-space(.) ne ""]
 let $acquired := tokenize(normalize-space($prop/dateofacquisition[1]), "-")[1]
 let $contextFields := library-functions:getContextFields($bookNode/module[@type eq "context"][1])
+let $scans := library-book-view:hasScans($bookNode)
 return
+  <div class="bibliobook{if ($scans) then () else ' bibliobook-noscan'}">
+    <div id="rtcontainer"/>
     <div class="book-panels">
         {if ($periods gt 0) then
             library-book-view:panel("reading", "", "book-reading-panel", "Reading history",
@@ -115,9 +143,10 @@ return
         {library-book-view:getFacList($node, $model)}
         {if (exists($contextFields)) then
             library-book-view:panel("context", "", "chip-context-panel", "Scholarly context",
-                string(count($contextFields)), false(), $contextFields)
+                string(count($contextFields)), not($scans), $contextFields)
          else ()}
     </div>
+  </div>
 };
 
 (: This function constructs the image viewer, puts the first image into it, 

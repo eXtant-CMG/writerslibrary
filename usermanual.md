@@ -24,7 +24,9 @@ The following information is provided for each book volume:
 
 ## Book view
 
-All books in the index for which scans are available can be clicked to enter the "**book view**". In this view the screen is split in two, with facsimiles on the left side and a description on the right.
+All books in the index can be clicked to enter the "**book view**". In this view the screen is split in two, with facsimiles on the left side and a description on the right.
+
+Books without scans also have a book view. It shows a "Shadow" or "No scan" placeholder next to the bibliographical information, with the panels below it. For these books the **Scholarly context** panel is open by default, since that is where the evidence for the book is recorded.
 
 By default the cover of the book will be the opening facsimile on the left. In the case of multiple scans, users can navigate through the facsimiles using the "**previous**" and "**next**" buttons in the top corners of the images or by clicking the page numbers in the "**Available scans**" panel on the right. Pages with marginalia are shown in red.
 

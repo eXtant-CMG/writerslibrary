@@ -291,6 +291,31 @@ div.entrySL {
 a.faclink.faclink-m { color:#a8352a; font-weight:bold; }
 .show-all-marginalia-wrap { margin-top:8px; }
 
+/* Book page without scans: cover placeholder next to the citation, panels below */
+.book-head-noscan {
+	display:flex;
+	gap:24px;
+	align-items:flex-start;
+	padding:16px;
+	margin-bottom:12px;
+}
+.book-head-SL {
+	background-color:#f4f8f7;
+	background-image:repeating-linear-gradient(-45deg, rgba(42,126,112,0.12) 0 1px, transparent 1px 7px);
+	border-bottom:1px dashed black;
+}
+.book-head-noscan .shadowcover, .book-head-noscan span.noscan {
+	flex:none;
+	width:120px;
+	height:150px;
+}
+.book-head-noscan .shadowcover { border-left-width:7px; }
+.book-head-noscan .shadowlabel, .book-head-noscan .noscanlabel { font-size:12px; }
+.book-head-text { min-width:0; }
+.book-head-note { margin-top:8px; font-size:14px; color:#5c5c5c; }
+.bibliobook.bibliobook-noscan { position:static; display:block; }
+.bibliobook-noscan .book-panels { width:680px; max-width:100%; }
+
 .panel-help {
 	position:absolute;
 	top:8px;

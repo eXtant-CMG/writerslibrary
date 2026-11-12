@@ -11,7 +11,9 @@
             <publisher>"The Studio" LTD</publisher>
             <date>1920</date>
             <edition>Second Edition</edition>
-            <generalnote>This is a book with one publisher and three placenames.</generalnote>
+        </module>
+        <module type="context">
+            <note>This is a book with one publisher and three placenames.</note>
         </module>
         <module type="pages">
             <page>

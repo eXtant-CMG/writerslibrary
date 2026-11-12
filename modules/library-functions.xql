@@ -311,7 +311,7 @@ declare function library-functions:getContextFields($contextModule as element()?
     let $labels := map {
         "primarymaterial": "Primary material",
         "secondaryscholarship": "Secondary scholarship",
-        "note": "Editorial notes",
+        "note": "Notes",
         "imagecredit": "Image credits"
     }
     for $name in $order
@@ -375,11 +375,6 @@ declare function library-functions:getEntryChips($book as element(), $highlight 
                 {for $c in $chips
                  return <div id="{$c?id}" class="entry-panel {$c?class}-panel" hidden="hidden">{$c?body}</div>}
             </div>
-};
-
-(: This function returns the value of the <GeneralNote> tag in the biblio module :)
-declare function library-functions:getGeneralNotes($GeneralNote as node()) {
-<span><span class="field-title">Notes</span>: {$GeneralNote} <br/></span>
 };
 
 

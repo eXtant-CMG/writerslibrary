@@ -10,8 +10,10 @@
             <place>Dublin</place>
             <location>Lilly Library - Indiana University Bloomington</location>
             <date>1932</date>
-           <generalnote>This entry illustrates how to encode the current location of a book.</generalnote>
             <edition>Sixth and revised edition</edition>
+        </module>
+        <module type="context">
+            <note>This entry illustrates how to encode the current location of a book.</note>
         </module>
         <module type="pages">
             <page>

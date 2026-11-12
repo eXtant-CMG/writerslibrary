@@ -36,7 +36,6 @@ return
         let $place       := request:get-parameter("place", "")
         let $publisher   := request:get-parameter("publisher", "")
         let $date        := request:get-parameter("date", "")
-        let $generalnote := request:get-parameter("generalnote", "")
         let $location    := request:get-parameter("location", "")
         let $iiifManifest     := request:get-parameter("iiifManifest", "")
         let $iiifViewer       := request:get-parameter("iiifViewer", "")
@@ -45,7 +44,7 @@ return
             $libraryId, $bookId, $bookType,
             $firstname, $lastname, $title, $subtitle,
             $type, $volume, $series, $edition, $editor,
-            $place, $publisher, $date, $generalnote, $location,
+            $place, $publisher, $date, $location,
             $iiifManifest, $iiifViewer, $importIIIFImages
         )
 

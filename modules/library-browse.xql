@@ -214,9 +214,6 @@ declare function library-browse:getEntries($node as node(), $model as map(*)){
                        { (: 1: call to getBibliography to get the main bibliographic lines :)
                         library-functions:getBibliography($result/module[@type eq "bibl"], $currentSortValue)
                        }
-                       { (: 4: get GeneralNotes :)
-                        if ($result/module/generalnote and $result/module/generalnote ne "") then library-functions:getGeneralNotes($result/module/generalnote) else ()
-                       }
                        { (: 5: get ManuscriptLinks :)
                         (: first up: ManuscriptLinks on book level :)
                         if ($result/module/manuscriptlink) then 

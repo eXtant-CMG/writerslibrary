@@ -11,12 +11,14 @@
             <edition>1st</edition>
             <nrofpages>20</nrofpages>
             <location>University of Buffalo, catalogue number PLJJ299</location>
-            <generalnote>Inscribed to James Joyce by the author.</generalnote>
         </module>
         <module type="prop">
             <type>received</type>
             <origin>This book was sent to Joyce by Paul Valéry.</origin>
             <inscription>A JAMES JOYCE <lb/> Paul Valéry <lb/> "JE MORDS CE QUE JE PUIS!"</inscription>
+        </module>
+        <module type="context">
+            <note>Inscribed to James Joyce by the author.</note>
         </module>
         <module type="pages">
             <page>

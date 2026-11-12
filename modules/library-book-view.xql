@@ -49,10 +49,6 @@ return
                         if ($bookNode/module[@type eq "prop"]) then 
                             library-functions:getProprietaryHistory($bookNode/module[@type eq "prop"], "") else ()
                        }
-                       
-                       { (: 3: get GeneralNotes :)
-                        if ($bookNode/module/generalnote and $bookNode/module/generalnote ne "") then library-functions:getGeneralNotes($bookNode/module/generalnote) else ()
-                       }
                        { (: 4: get IIIF manifest link :)
                         library-book-view:iiifLink($bookNode)
                        }
@@ -75,7 +71,7 @@ declare function library-book-view:hasScans($bookNode as node()?) as xs:boolean 
     exists(library-book-view:getImages($bookNode)[normalize-space(facsimile) ne ""])
 };
 
-(: Book page top: bibliography, general note and IIIF link. Reading history and
+(: Book page top: bibliography and IIIF link. Reading history and
    provenance live in the panels (getPanels). Without scans, a Shadow / No scan
    cover goes next to the citation. :)
 declare function library-book-view:getCitation($node as node(), $model as map(*)) {
@@ -83,7 +79,6 @@ let $bookNode := library-book-view:getBookNode(request:get-parameter("bookID",""
 let $isSL := $bookNode/@type eq "SL"
 let $citation := (
     library-functions:getBibliography($bookNode/module[@type eq "bibl"], ""),
-    if ($bookNode/module/generalnote and $bookNode/module/generalnote ne "") then library-functions:getGeneralNotes($bookNode/module/generalnote) else (),
     library-book-view:iiifLink($bookNode)
 )
 return

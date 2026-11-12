@@ -36,6 +36,18 @@ declare function library-functions:furtherAuthorName($author as element()?) {
    In the browse view it also gets a parameter $highlight, to create the highlighting in bold of the
    current sorting category.
 :)
+(: Abbreviated role printed before an editor's name; unknown roles verbatim, none = "ed.". :)
+declare function library-functions:editorRole($type as xs:string?) as xs:string {
+    let $t := lower-case(normalize-space($type))
+    return
+        if ($t = ('', 'ed', 'ed.', 'editor', 'edited')) then "ed."
+        else if ($t = ('eds', 'eds.', 'editors')) then "eds."
+        else if ($t = ('trans', 'trans.', 'tr.', 'translator', 'translation', 'translated')) then "trans."
+        else if ($t = ('ill', 'ill.', 'illus.', 'illustrator', 'illustrations', 'illustrated')) then "ill."
+        else if ($t = ('intro', 'intro.', 'introduction')) then "intro."
+        else normalize-space($type)
+};
+
 declare function library-functions:getBibliography($biblModule as node(), $highlight as xs:string?) {
 
 (: $biblModule: this function gets passed the node <module type="bibl">...</module>.
@@ -176,7 +188,7 @@ let $EditorLine := if ($biblModule/editor and $biblModule/editor[1] ne "")
                 for $Editor in $biblModule/editor
                 where not($editorInAuthorSlot and (some $m in $mainEditors satisfies $m is $Editor))
                 return
-                    ($Editor/node(),' (',<span>{if ($Editor/@type) then $Editor/data(@type) else "ed."}</span>,')',<br/>)
+                    (<span>{library-functions:editorRole($Editor/@type)}</span>,' ',$Editor/node(),<br/>)
             else ()
 
 (: Location :)

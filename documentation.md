@@ -139,7 +139,7 @@ Authors are displayed in the order in which they are encoded: the first as "Last
 
 The `<volume/>`, `<series/>`, `<edition/>`, `<editor/>`, `<place>`, `<publisher>` and `<date>` elements can contain information about the volume number, series, edition, editor, place of publication, publisher and date of publication, respectively. General notes about the book go in `<note>` in the scholarly context module.
 
-The `<editor>` element can carry a `type` attribute with the editor's role, which is shown in parentheses after the name: `<editor type="trans.">Franz Werfel</editor>` is displayed as "Franz Werfel (trans.)". Without a `type`, "ed." is shown. Editors are listed directly below the title. Only editors without a `type`, or with an editor spelling such as `ed.`, `eds.` or `editor`, can take the author position when there is no author.
+The `<editor>` element can carry a `type` attribute with the editor's role, which is shown before the name: `<editor type="trans.">Franz Werfel</editor>` is displayed as "trans. Franz Werfel". Without a `type`, "ed." is shown. Common spellings are abbreviated (`translator` and `translation` show as "trans.", `illustrator` as "ill.", `editor` as "ed."); any other value is shown as written. Editors are listed directly below the title. Only editors without a `type`, or with an editor spelling such as `ed.`, `eds.` or `editor`, can take the author position when there is no author.
 
 For `<edition>`, a bare ordinal such as `1st` or `18th` is displayed as "1st edition"; any other value is displayed as encoded.
 

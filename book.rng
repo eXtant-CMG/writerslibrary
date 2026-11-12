@@ -335,10 +335,14 @@
           <optional>
             <attribute name="type">
               <a:documentation>
-                Printed verbatim in parentheses; defaults to "ed." when
-                absent. The data holds three spellings of one role -
-                translator, trans., translation - plus intro. Worth
-                normalising before enumerating.
+                Printed before the name ("trans. Franz Werfel"); "ed." when
+                absent. library-functions:editorRole abbreviates common
+                spellings (translator/translation -> trans., illustrator ->
+                ill.) and prints anything else verbatim. The data holds
+                three spellings of one role - translator, trans.,
+                translation - plus intro. Worth normalising before
+                enumerating. When editors take the empty author slot the
+                role stays in parentheses after the names: "X (ed.)".
               </a:documentation>
               <text/>
             </attribute>

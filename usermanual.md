@@ -19,7 +19,8 @@ The following information is provided for each book volume:
 - Below the entry, buttons give access to further information where it exists:
   - **Provenance**: how and when the book was acquired, its origin and any inscriptions (a dedication in the author's hand or an inscription of a previous owner).
   - **Reading traces** (in red): the number of pages with reading traces. Clicking it shows two lists of page numbers: pages with marginalia and pages with other reading traces. Each page number opens the book at that page.
-  - **Scholarly context**: references to the writer's own work, secondary scholarship, notes and image credits.
+  - **Scholarly context**: references to the writer's own work, secondary scholarship and notes.
+  - **Image credits**: the source and rights of the page images.
 - Books of the **shadow library**, which are not extant but which the writer is known or believed to have read, are shown on a hatched background. Books without scans show a "Shadow" or "No scan" placeholder instead of a thumbnail.
 
 ## Book view
@@ -30,7 +31,7 @@ Books without scans also have a book view. It shows a "Shadow" or "No scan" plac
 
 By default the cover of the book will be the opening facsimile on the left. In the case of multiple scans, users can navigate through the facsimiles using the "**previous**" and "**next**" buttons in the top corners of the images or by clicking the page numbers in the "**Available scans**" panel on the right. Pages with marginalia are shown in red.
 
-The right-hand column also holds the **Reading history**, **Provenance** and **Scholarly context** of the book. Each panel can be opened and closed by clicking its heading.
+The right-hand column also holds the **Reading history**, **Provenance**, **Scholarly context** and **Image credits** of the book. Each panel can be opened and closed by clicking its heading.
 
 In the book view, some parts of the bibliographical information above the facsimile can be clicked to produce a list of volumes that share the same author, place or date of publication.
 

@@ -10,7 +10,9 @@
             <date>1929</date>
             <edition/>
             <centimeters/>
-            <imagecopyright>Image taken from http://wwwmanhattanrarebooks-literature.com</imagecopyright>
+        </module>
+        <module type="credit">
+            <imagecredit>Image taken from http://wwwmanhattanrarebooks-literature.com</imagecredit>
         </module>
         <module type="pages">
         <page>

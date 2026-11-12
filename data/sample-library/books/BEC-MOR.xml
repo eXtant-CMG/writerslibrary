@@ -12,7 +12,9 @@
             <publisher>Chatto and Windus</publisher>
             <date>1934</date>
             <location>University of Buffalo, catalogue number PLJJ18</location>
-            <imagecopyright>Image taken from http://www.abebooks.co.uk/</imagecopyright>
+        </module>
+        <module type="credit">
+            <imagecredit>Image taken from http://www.abebooks.co.uk/</imagecredit>
         </module>
         <module type="pages">
             <page>

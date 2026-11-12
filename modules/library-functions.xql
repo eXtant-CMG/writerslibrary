@@ -319,12 +319,11 @@ declare function library-functions:renderInline($nodes as node()*) as node()* {
 
 (: Field content of module type="context", fixed order and labels. :)
 declare function library-functions:getContextFields($contextModule as element()?) {
-    let $order := ("primarymaterial", "secondaryscholarship", "note", "imagecredit")
+    let $order := ("primarymaterial", "secondaryscholarship", "note")
     let $labels := map {
         "primarymaterial": "Primary material",
         "secondaryscholarship": "Secondary scholarship",
-        "note": "Notes",
-        "imagecredit": "Image credits"
+        "note": "Notes"
     }
     for $name in $order
     let $items := $contextModule/*[local-name() eq $name][normalize-space(.) ne ""]
@@ -338,7 +337,13 @@ declare function library-functions:getContextFields($contextModule as element()?
         </div>
 };
 
-(: Browse entry: chip row (provenance, reading traces, scholarly context) plus one hidden panel per chip.
+(: Content of module type="credit"; the chip or panel heading is the label. :)
+declare function library-functions:getCreditFields($creditModule as element()?) {
+    for $item in $creditModule/imagecredit[normalize-space(.) ne ""]
+    return <div>{library-functions:renderInline($item/node())}</div>
+};
+
+(: Browse entry: chip row (provenance, reading traces, scholarly context, image credits) plus one hidden panel per chip.
  : Toggling is done by resources/scripts/entry-panels.js. :)
 declare function library-functions:getEntryChips($book as element(), $highlight as xs:string?) {
     let $bookID := string($book/@id)
@@ -350,6 +355,7 @@ declare function library-functions:getEntryChips($book as element(), $highlight 
     let $withM := $tracePages[.//m]
     let $withoutM := $tracePages[not(.//m)]
     let $contextFields := library-functions:getContextFields($book/module[@type eq "context"][1])
+    let $creditFields := library-functions:getCreditFields($book/module[@type eq "credit"][1])
     let $pp := function($n) { $n || (if ($n eq 1) then " p." else " pp.") }
     let $pageLinks := function($pages) {
         for $page at $pos in $pages
@@ -374,7 +380,11 @@ declare function library-functions:getEntryChips($book as element(), $highlight 
         if (exists($contextFields)) then
             map { "id": $idBase || "-context", "class": "chip-context",
                   "label": "Scholarly context · " || count($contextFields),
-                  "body": $contextFields } else ()
+                  "body": $contextFields } else (),
+        if (exists($creditFields)) then
+            map { "id": $idBase || "-credit", "class": "chip-credit",
+                  "label": "Image credits",
+                  "body": $creditFields } else ()
     )
     return
         if (empty($chips)) then ()

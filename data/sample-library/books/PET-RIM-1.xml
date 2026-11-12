@@ -8,7 +8,9 @@
             <publisher>Nicolò Bettoni</publisher>
             <date>1824</date>
             <location>The private collection of Anne Atik, Paris</location>
-            <generalnote>This entry illustrates how to encode the current location of a book.</generalnote>
+        </module>
+        <module type="context">
+            <note>This entry illustrates how to encode the current location of a book.</note>
         </module>
         <module type="pages">
             <page>

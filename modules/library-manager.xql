@@ -139,7 +139,6 @@ declare function libmgr:pages-from-iiif-manifest($manifestUrl as xs:string) {
  : @param $place      place of publication
  : @param $publisher  publisher
  : @param $date       publication date (YYYY or n.d.)
- : @param $generalnote general note (may be empty)
  : @param $location   current location / holding institution
  : @param $iiifManifest IIIF manifest URL (may be empty)
  : @param $iiifViewer   IIIF viewer URL (may be empty)
@@ -161,7 +160,6 @@ declare function libmgr:create-book(
     $place        as xs:string,
     $publisher    as xs:string,
     $date         as xs:string,
-    $generalnote  as xs:string,
     $location     as xs:string,
     $iiifManifest      as xs:string,
     $iiifViewer        as xs:string,
@@ -220,7 +218,6 @@ declare function libmgr:create-book(
                                 <place>{$place}</place>
                                 <publisher>{$publisher}</publisher>
                                 <date>{$date}</date>
-                                <generalnote>{$generalnote}</generalnote>
                                 <location>{$location}</location>
                                 {$iiifElement}
                             </module>
@@ -264,7 +261,6 @@ declare function libmgr:create-library-directory($libraryId as xs:string, $libra
               <publisher>My Publisher</publisher>
               <date>1924</date>
               <edition/>
-              <generalnote/>
             </module>
           </book>
 

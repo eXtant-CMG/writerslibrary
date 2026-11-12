@@ -15,8 +15,10 @@
             <centimeters/>
             <publishersaddress>Curzon Street Mayfair</publishersaddress>
             <location>University of Buffalo, catalogue number PLJJ36</location>
-            <generalnote>This book illustates how to encode the date of the first edition.</generalnote>
             <uncutpages/>
+        </module>
+        <module type="context">
+            <note>This book illustates how to encode the date of the first edition.</note>
         </module>
         <module type="pages">
             <page>

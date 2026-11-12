@@ -17,7 +17,9 @@
             <date>1924</date>
             <edition/>
             <publishersaddress>8, Rue Garancière - 6e, Paris</publishersaddress>
-            <generalnote>This book has two authors.</generalnote>
+        </module>
+        <module type="context">
+            <note>This book has two authors.</note>
         </module>
         <module type="pages">
             <page>

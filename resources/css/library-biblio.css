@@ -1470,7 +1470,7 @@ span.selection {
     font-weight:600;
 }
 
-/* GeneralNote visualisation css */
+/* Inline markup */
 
 lb::after {content:"\A"; white-space:pre;}
 

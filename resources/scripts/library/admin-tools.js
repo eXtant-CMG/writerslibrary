@@ -122,7 +122,6 @@ $(document).ready(function() {
             place:             $('#place').val(),
             publisher:         $('#publisher').val(),
             date:              $('#date').val(),
-            generalnote:       $('#generalnote').val(),
             location:          $('#location').val(),
             iiifManifest:      $('#IIIFmanifest').val(),
             iiifViewer:        $('#IIIFviewer').val(),

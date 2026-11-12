@@ -7,7 +7,9 @@
             <publisher>François Bernouard</publisher>
             <date>1928</date>
             <edition/>
-            <generalnote>This is number 379 of 3075 copies</generalnote>
+        </module>
+        <module type="context">
+            <note>This is number 379 of 3075 copies</note>
         </module>
         <module type="pages">
             <page>

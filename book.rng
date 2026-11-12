@@ -403,10 +403,6 @@
       </optional>
 
       <optional>
-        <element name="generalnote"><ref name="mixed"/></element>
-      </optional>
-
-      <optional>
         <element name="manuscriptlink">
           <a:documentation>
             Book-level link out to the BDMP genetic modules, rendered by
@@ -684,7 +680,7 @@
        tag names:
          primarymaterial       -> Primary material
          secondaryscholarship  -> Secondary scholarship
-         note                  -> Editorial notes
+         note                  -> Notes
          imagecredit           -> Image credits
        Adding a field here therefore means adding it to that map too;
        until then it is not rendered.

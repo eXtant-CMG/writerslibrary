@@ -99,7 +99,6 @@ This XML schema is used to encode a book's bibliographical data.
         <place/>
         <publisher/>
         <date/>
-        <generalnote/>
         <location/>
         <IIIF>
             <IIIFmanifest/>
@@ -138,7 +137,7 @@ If a book has **multiple authors**, each author should be enclosed in their own 
 
 Authors are displayed in the order in which they are encoded: the first as "Lastname, Firstname", the others as "Firstname Lastname". Up to four authors are shown; if there are more, the first four are followed by "et al.".
 
-The `<volume/>`, `<series/>`, `<edition/>`, `<editor/>`, `<place>`, `<publisher>`, `<date>`, and `<generalnote/>` elements can contain information about the volume number, series, edition, editor, place of publication, publisher, date of publication, and any general notes about the book, respectively.
+The `<volume/>`, `<series/>`, `<edition/>`, `<editor/>`, `<place>`, `<publisher>` and `<date>` elements can contain information about the volume number, series, edition, editor, place of publication, publisher and date of publication, respectively. General notes about the book go in `<note>` in the scholarly context module.
 
 The `<editor>` element can carry a `type` attribute with the editor's role, which is shown in parentheses after the name: `<editor type="trans.">Franz Werfel</editor>` is displayed as "Franz Werfel (trans.)". Without a `type`, "ed." is shown. Editors are listed directly below the title. Only editors without a `type`, or with an editor spelling such as `ed.`, `eds.` or `editor`, can take the author position when there is no author.
 
@@ -286,14 +285,14 @@ The scholarly context module holds information about the book's relation to the 
 <module type="context">
     <primarymaterial>Quoted in <i>Ulysses</i>, "Proteus" episode (U 3.1–9).</primarymaterial>
     <secondaryscholarship><ptr target="https://example.org/article">Author, "Title of Article", <i>Journal</i> 12 (2020)</ptr></secondaryscholarship>
-    <note>An editorial note about this book.</note>
+    <note>A note about this book.</note>
     <imagecredit>Images courtesy of the holding institution.</imagecredit>
 </module>
 ```
 
 - `<primarymaterial>`: a passage in the writer's own work that draws on, quotes or echoes this book, with its citation. Shown as "Primary material".
 - `<secondaryscholarship>`: published or forthcoming scholarship discussing this book or its reading traces. Shown as "Secondary scholarship".
-- `<note>`: an editorial note. Shown as "Editorial notes".
+- `<note>`: a note about the book. Shown as "Notes".
 - `<imagecredit>`: credit and rights for the page images (holding institution, digitiser, source). Shown as "Image credits".
 
 All elements are optional, and all except `<imagecredit>` can be repeated. In the browse list, the module is shown as a **Scholarly context** button with the number of fields present, which opens a panel with the fields in the order above. On the book page it is the **Scholarly context** panel in the right-hand column. When a field is repeated, its entries are shown as a bulleted list; a single entry is shown as plain text. Its contents are included in the full-text search.

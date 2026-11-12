@@ -179,7 +179,7 @@
     &lt;IIIFviewer&gt;http://example.com/viewer&lt;/IIIFviewer&gt;
 &lt;/IIIF&gt;</code></pre></div>
 
-<p><code>&lt;imagecopyright&gt;</code> is a legacy element in this module and is not displayed. Use <code>&lt;imagecredit&gt;</code> in the scholarly context module instead.</p>
+<p><code>&lt;imagecopyright&gt;</code> is a legacy element in this module and is not displayed. Use the image credits module instead.</p>
 
 <h3 class="documentation" id="toc_7">Module 2: Proprietary History</h3>
 
@@ -324,18 +324,24 @@
     &lt;primarymaterial&gt;Quoted in &lt;i&gt;Ulysses&lt;/i&gt;, &quot;Proteus&quot; episode (U 3.1–9).&lt;/primarymaterial&gt;
     &lt;secondaryscholarship&gt;&lt;ptr target=&quot;https://example.org/article&quot;&gt;Author, &quot;Title of Article&quot;, &lt;i&gt;Journal&lt;/i&gt; 12 (2020)&lt;/ptr&gt;&lt;/secondaryscholarship&gt;
     &lt;note&gt;A note about this book.&lt;/note&gt;
-    &lt;imagecredit&gt;Images courtesy of the holding institution.&lt;/imagecredit&gt;
 &lt;/module&gt;
 </code></pre></div>
 <ul>
 <li><code>&lt;primarymaterial&gt;</code>: a passage in the writer's own work that draws on, quotes or echoes this book, with its citation. Shown as "Primary material".</li>
 <li><code>&lt;secondaryscholarship&gt;</code>: published or forthcoming scholarship discussing this book or its reading traces. Shown as "Secondary scholarship".</li>
 <li><code>&lt;note&gt;</code>: a note about the book. Shown as "Notes".</li>
-<li><code>&lt;imagecredit&gt;</code>: credit and rights for the page images (holding institution, digitiser, source). Shown as "Image credits".</li>
 </ul>
-<p>All elements are optional, and all except <code>&lt;imagecredit&gt;</code> can be repeated. In the browse list, the module is shown as a <strong>Scholarly context</strong> button with the number of fields present, which opens a panel with the fields in the order above. On the book page it is the <strong>Scholarly context</strong> panel in the right-hand column. When a field is repeated, its entries are shown as a bulleted list; a single entry is shown as plain text. Its contents are included in the full-text search.</p>
+<p>All elements are optional and can be repeated. In the browse list, the module is shown as a <strong>Scholarly context</strong> button with the number of fields present, which opens a panel with the fields in the order above. On the book page it is the <strong>Scholarly context</strong> panel in the right-hand column. When a field is repeated, its entries are shown as a bulleted list; a single entry is shown as plain text. Its contents are included in the full-text search.</p>
 
-<h3 class="documentation" id="toc_9">Module 5: Pages and Reading Traces</h3>
+<h3 class="documentation" id="toc_credit">Module 5: Image Credits</h3>
+<p>The image credits module holds the credit and rights for the page images: holding institution, digitiser, source.</p>
+<div><pre><code class="language-none">&lt;module type=&quot;credit&quot;&gt;
+    &lt;imagecredit&gt;Images courtesy of the holding institution.&lt;/imagecredit&gt;
+&lt;/module&gt;
+</code></pre></div>
+<p><code>&lt;imagecredit&gt;</code> is required in this module and cannot be repeated. In the browse list, the module is shown as an <strong>Image credits</strong> button next to the other buttons; on the book page it is the <strong>Image credits</strong> panel at the bottom of the right-hand column, closed by default. Links (<code>&lt;ptr&gt;</code>) are rendered as in the scholarly context module. Its contents are not included in the full-text search.</p>
+
+<h3 class="documentation" id="toc_9">Module 6: Pages and Reading Traces</h3>
 
 <p>The Pages and Reading Traces module is used to encode information about individual pages of a book and any reading traces or annotations found on those pages.</p>
 

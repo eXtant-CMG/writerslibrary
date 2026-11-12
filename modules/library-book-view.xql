@@ -109,7 +109,7 @@ declare function library-book-view:panel($id as xs:string, $headClass as xs:stri
     </div>
 };
 
-(: Book page right column: reading history, provenance, available scans, scholarly context.
+(: Book page right column: reading history, provenance, available scans, scholarly context, image credits.
    Without scans the column takes the viewer's place and Scholarly context starts open. :)
 declare function library-book-view:getPanels($node as node(), $model as map(*)) {
 let $bookNode := library-book-view:getBookNode(request:get-parameter("bookID",""))
@@ -119,6 +119,7 @@ let $prop := $bookNode/module[@type eq "prop"][1]
 let $propFields := $prop/*[name() ne "type"][normalize-space(.) ne ""]
 let $acquired := tokenize(normalize-space($prop/dateofacquisition[1]), "-")[1]
 let $contextFields := library-functions:getContextFields($bookNode/module[@type eq "context"][1])
+let $creditFields := library-functions:getCreditFields($bookNode/module[@type eq "credit"][1])
 let $scans := library-book-view:hasScans($bookNode)
 return
   <div class="bibliobook{if ($scans) then () else ' bibliobook-noscan'}">
@@ -139,6 +140,9 @@ return
         {if (exists($contextFields)) then
             library-book-view:panel("context", "", "chip-context-panel", "Scholarly context",
                 string(count($contextFields)), not($scans), $contextFields)
+         else ()}
+        {if (exists($creditFields)) then
+            library-book-view:panel("credit", "", "chip-credit-panel", "Image credits", (), false(), $creditFields)
          else ()}
     </div>
   </div>

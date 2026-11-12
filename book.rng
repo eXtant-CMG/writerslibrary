@@ -115,6 +115,10 @@
           <ref name="module.context"/>
         </group>
         <group>
+          <attribute name="type"><value>credit</value></attribute>
+          <ref name="module.credit"/>
+        </group>
+        <group>
           <attribute name="type"><value>pages</value></attribute>
           <ref name="module.pages"/>
         </group>
@@ -430,7 +434,7 @@
           <a:documentation>
             LEGACY here. Two sample books carry it and nothing renders it:
             getBibliographicInfo has no line for this field, so the credit
-            is silently dropped. Use module type="context"/imagecredit
+            is silently dropped. Use module type="credit"/imagecredit
             instead. Kept permitted so existing files validate.
           </a:documentation>
           <ref name="mixed"/>
@@ -582,7 +586,7 @@
 
           Primary_material       -> module type="context"/primarymaterial
           Secondary_scholarship  -> module type="context"/secondaryscholarship
-          Image_scans_credit     -> module type="context"/imagecredit
+          Image_scans_credit     -> module type="credit"/imagecredit
           Notes                  -> module type="context"/note
           orig                   -> origin (plain typo, two woolf books)
 
@@ -677,15 +681,14 @@
        and to scholarship, which previously had no home and was encoded as
        invented elements in the prop module.
 
-       Rendered by library-functions:getContext as a collapsible
+       Rendered by library-functions:getContextFields as a collapsible
        "Scholarly context" block in the browse list, closed by default.
        Content goes through renderInline, so ptr becomes a link. Labels
-       and display order come from a fixed map in getContext, not from
+       and display order come from a fixed map in getContextFields, not from
        tag names:
          primarymaterial       -> Primary material
          secondaryscholarship  -> Secondary scholarship
          note                  -> Notes
-         imagecredit           -> Image credits
        Adding a field here therefore means adding it to that map too;
        until then it is not rendered.
 
@@ -719,17 +722,6 @@
         </element>
       </zeroOrMore>
 
-      <optional>
-        <element name="imagecredit">
-          <a:documentation>
-            Credit and rights for the page images: holding institution,
-            digitiser, source. Replaces bibl/imagecopyright (LEGACY) and
-            prop/Image_scans_credit (LEGACY).
-          </a:documentation>
-          <ref name="mixed"/>
-        </element>
-      </optional>
-
       <zeroOrMore>
         <element name="note"><ref name="mixed"/></element>
       </zeroOrMore>
@@ -738,7 +730,27 @@
   </define>
 
   <!-- ================================================================
-       Module 5: pages - pages and reading traces
+       Module 5: credit - image credits
+
+       Rendered by library-functions:getCreditFields as an "Image
+       credits" chip in the browse list and a closed panel on the book
+       page, after Scholarly context. Content goes through renderInline.
+       Not in the collection.xconf full-text condition, so not searchable.
+       ================================================================ -->
+
+  <define name="module.credit">
+    <element name="imagecredit">
+      <a:documentation>
+        Credit and rights for the page images: holding institution,
+        digitiser, source. Replaces context/imagecredit,
+        bibl/imagecopyright (LEGACY) and prop/Image_scans_credit (LEGACY).
+      </a:documentation>
+      <ref name="mixed"/>
+    </element>
+  </define>
+
+  <!-- ================================================================
+       Module 6: pages - pages and reading traces
        ================================================================ -->
 
   <define name="module.pages">

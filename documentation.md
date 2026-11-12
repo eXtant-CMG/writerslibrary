@@ -154,7 +154,7 @@ The `<IIIF>` element contains information about the International Image Interope
 		<IIIFviewer>http://example.com/viewer</IIIFviewer>
 	</IIIF>
 
-`<imagecopyright>` is a legacy element in this module and is not displayed. Use `<imagecredit>` in the scholarly context module instead.
+`<imagecopyright>` is a legacy element in this module and is not displayed. Use the image credits module instead.
 
 ### Module 2: Proprietary History
 
@@ -286,18 +286,28 @@ The scholarly context module holds information about the book's relation to the 
     <primarymaterial>Quoted in <i>Ulysses</i>, "Proteus" episode (U 3.1–9).</primarymaterial>
     <secondaryscholarship><ptr target="https://example.org/article">Author, "Title of Article", <i>Journal</i> 12 (2020)</ptr></secondaryscholarship>
     <note>A note about this book.</note>
-    <imagecredit>Images courtesy of the holding institution.</imagecredit>
 </module>
 ```
 
 - `<primarymaterial>`: a passage in the writer's own work that draws on, quotes or echoes this book, with its citation. Shown as "Primary material".
 - `<secondaryscholarship>`: published or forthcoming scholarship discussing this book or its reading traces. Shown as "Secondary scholarship".
 - `<note>`: a note about the book. Shown as "Notes".
-- `<imagecredit>`: credit and rights for the page images (holding institution, digitiser, source). Shown as "Image credits".
 
-All elements are optional, and all except `<imagecredit>` can be repeated. In the browse list, the module is shown as a **Scholarly context** button with the number of fields present, which opens a panel with the fields in the order above. On the book page it is the **Scholarly context** panel in the right-hand column. When a field is repeated, its entries are shown as a bulleted list; a single entry is shown as plain text. Its contents are included in the full-text search.
+All elements are optional and can be repeated. In the browse list, the module is shown as a **Scholarly context** button with the number of fields present, which opens a panel with the fields in the order above. On the book page it is the **Scholarly context** panel in the right-hand column. When a field is repeated, its entries are shown as a bulleted list; a single entry is shown as plain text. Its contents are included in the full-text search.
 
-### Module 5: Pages and Reading Traces
+### Module 5: Image Credits
+
+The image credits module holds the credit and rights for the page images: holding institution, digitiser, source.
+
+```xml
+<module type="credit">
+    <imagecredit>Images courtesy of the holding institution.</imagecredit>
+</module>
+```
+
+`<imagecredit>` is required in this module and cannot be repeated. In the browse list, the module is shown as an **Image credits** button next to the other buttons; on the book page it is the **Image credits** panel at the bottom of the right-hand column, closed by default. Links (`<ptr>`) are rendered as in the scholarly context module. Its contents are not included in the full-text search.
+
+### Module 6: Pages and Reading Traces
 
 The Pages and Reading Traces module is used to encode information about individual pages of a book and any reading traces or annotations found on those pages.
 

@@ -1121,6 +1121,12 @@ a:hover {
     color:inherit;
 }
 
+/* Links from <ptr> (renderInline): always underlined */
+a.ptr {
+	text-decoration:underline;
+	text-underline-offset:2px;
+}
+
 sup {
 	vertical-align:super;
 }
